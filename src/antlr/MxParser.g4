@@ -3,7 +3,7 @@ options {
 	tokenVocab = MxLexer;
 }
 
-translationUnit: (declaration+)? EOF;
+translationUnit: statement+ EOF;
 
 primaryExpression:
 	Identifier
@@ -88,7 +88,6 @@ conditionalExpression
 assignmentExpression
     :   conditionalExpression
     |   unaryExpression assignmentOperator assignmentExpression
-    |   DigitSequence // for
     ;
 
 assignmentOperator
@@ -122,26 +121,11 @@ initDeclarator
 	;
 
 initializer
-    :   assignmentExpression
-    |   '{' initializerList ','? '}'
+    :   literal | arrayInitializer
     ;
 
-initializerList
-    :   designation? initializer (',' designation? initializer)*
-    ;
-
-designation
-    :   designatorList '='
-    ;
-
-designatorList
-    :   designator+
-    ;
-
-designator
-    :   '[' constantExpression ']'
-    |   '.' Identifier
-    ;
+arrayInitializer:
+	'new' typeSpecifier;
 
 statement:
 	declarationStatment
@@ -168,18 +152,27 @@ jumpStatement:
 	) ';' ;
 
 iterationStatement:
-	'while' '(' expression ')' statement
+	'while' '(' whileCondition ')' statement
 	| 'for' '(' forCondition ')' statement;
+
+whileCondition:
+	expression| (typeSpecifier initDeclaratorList );
 
 forCondition:
 	((typeSpecifier initDeclaratorList) | expression)? ';' expression? ';' expression?;
 
-typeSpecifier
+typeSpecifier:
+	uniTypeSpecifier ('[' arrayLength? ']')?;
+
+arrayLength:
+	IntergerLiteral;
+
+uniTypeSpecifier
 	: ('void'
     | 'string'
     | 'bool'
-    | 'int')
-    | typedefName
+    | 'int'
+    | typedefName)
     ;
 
 typedefName
@@ -198,7 +191,7 @@ classContent:
 	| classMethodDel;
 
 classMemberDel:
-    memberType memberName (',' memberName)*;
+    memberType memberName (',' memberName)* ';';
 
 memberType:
 	typeSpecifier;
@@ -213,14 +206,22 @@ classMethodDel:
 	functionDeclaration;
 
 functionDeclaration:
-	returnType functionName  '(' parameterDecList ')' '{'functionBody '}';
+	returnType? functionName  '(' parameterDecList? ')' '{'functionBody '}';
 
 parameterDecList:
-	typeSpecifier parameterName (',' parameterName)*
+	typeSpecifier parameterName (',' typeSpecifier parameterName)*;
 
+returnType:
+	typeSpecifier;
 
+functionName:
+	Identifier;
 
+functionBody:
+	statement+;
 
+parameterName:
+	Identifier;
 
 theOperator:
 	New (LeftBracket RightBracket)?

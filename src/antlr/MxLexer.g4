@@ -1,7 +1,7 @@
 lexer grammar MxLexer;
 
 
-IntergerLiteral: NonzeroDigit (Digit)*;
+IntergerLiteral: ((SIGN)? NonzeroDigit (Digit)*)|'0';
 
 StringLiteral: '"' Schar* '"';
 
@@ -23,6 +23,7 @@ True_ : 'true';
 False_ : 'false';
 New : 'new';
 This : 'this';
+Class: 'class';
 
 LeftParen : '(';
 RightParen : ')';
@@ -85,7 +86,7 @@ DigitSequence: Digit+;
 
 fragment EscapeSequence: '\\' ["n\\];
 
-Schar: [ -~] | EscapeSequence;
+fragment Schar: [ -~] | EscapeSequence;
 
 Whitespace: [ \t]+ -> skip;
 
