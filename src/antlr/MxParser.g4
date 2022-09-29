@@ -9,7 +9,21 @@ primaryExpression:
 	Identifier
 	| literal+
 	| 'this'
-	| '(' expression ')';
+	| '(' expression ')'
+	| lambdaExpression
+	;
+
+lambdaExpression:
+	lambdaHead '{' functionBody '}';
+
+lambdaHead:
+	lambdaHeadRefer | lambdaHeadValue;
+
+lambdaHeadValue:
+	'[' ']' '(' parameterDecList ')' '->';
+
+lambdaHeadRefer:
+	'[' '&' ']' '(' parameterDecList ')' '->';
 
 postfixExpression:
     primaryExpression
@@ -24,13 +38,16 @@ argumentExpressionList
     :   assignmentExpression (',' assignmentExpression)*
     ;
 
-unaryExpression
-    :
+unaryExpression:
+    newExpression |
     ('++' |  '--' )*
     (postfixExpression
     |   unaryOperator castExpression
     )
     ;
+
+newExpression:
+	'new' typeSpecifier;
 
 unaryOperator
     :   '&' | '*' | '+' | '-' | '~' | '!'
@@ -38,56 +55,66 @@ unaryOperator
 
 castExpression
     :   unaryExpression
-    |   DigitSequence // for
     ;
 
 multiplicativeExpression
-    :   castExpression (('*'|'/'|'%') castExpression)*
+    :   castExpression      #multiplicativeExpression_miss
+    |   castExpression (('*'|'/'|'%') castExpression)*      #multiplicativeExpression_
     ;
 
 additiveExpression
-    :   multiplicativeExpression (('+'|'-') multiplicativeExpression)*
+    :   multiplicativeExpression    #additiveExpression_miss
+    |   multiplicativeExpression (('+'|'-') multiplicativeExpression)*      #additiveExpression_
     ;
 
 shiftExpression
-    :   additiveExpression (('<<'|'>>') additiveExpression)*
+    :   additiveExpression  #shiftExpression_miss
+    |   additiveExpression (('<<'|'>>') additiveExpression)*    #shiftExpression_
     ;
 
 relationalExpression
-    :   shiftExpression (('<'|'>'|'<='|'>=') shiftExpression)*
+    :   shiftExpression    #relationalExpression_miss
+    |   shiftExpression (('<'|'>'|'<='|'>=') shiftExpression)*     #relationalExpression_
     ;
 
 equalityExpression
-    :   relationalExpression (('=='| '!=') relationalExpression)*
+    :   relationalExpression    #equalityExpression_miss
+    |   relationalExpression (('=='| '!=') relationalExpression)*   #equalityExpression_
     ;
 
 andExpression
-    :   equalityExpression ( '&' equalityExpression)*
+    :   equalityExpression  #andExpression_miss
+    |   equalityExpression ( '&' equalityExpression)*   #andExpression_
     ;
 
 exclusiveOrExpression
-    :   andExpression ('^' andExpression)*
+    :   andExpression   #exclusiveOrExpression_miss
+    |   andExpression ('^' andExpression)*    #exclusiveOrExpression_
     ;
 
 inclusiveOrExpression
-    :   exclusiveOrExpression ('|' exclusiveOrExpression)*
+    :   exclusiveOrExpression   #inclusiveOrExpression_miss
+    |   exclusiveOrExpression ('|' exclusiveOrExpression)*   #inclusiveOrExpression_
     ;
 
 logicalAndExpression
-    :   inclusiveOrExpression ('&&' inclusiveOrExpression)*
+    :   inclusiveOrExpression   #logicalAndExpression_miss
+    |   inclusiveOrExpression ('&&' inclusiveOrExpression)*    #logicalAndExpression_
     ;
 
 logicalOrExpression
-    :   logicalAndExpression ( '||' logicalAndExpression)*
+    :   logicalAndExpression    #logicalOrExpression_miss
+    |   logicalAndExpression ( '||' logicalAndExpression)*  #logicalOrExpression_
     ;
 
 conditionalExpression
-    :   logicalOrExpression ('?' expression ':' conditionalExpression)?
+    :   logicalOrExpression    #conditionalExpression_miss
+    |   logicalOrExpression ('?' expression ':' conditionalExpression)? #conditionalExpression_
     ;
 
 assignmentExpression
-    :   conditionalExpression
-    |   unaryExpression assignmentOperator assignmentExpression
+    :   conditionalExpression   #assignmentExpression_miss
+    |   unaryExpression assignmentOperator assignmentExpression #assignmentExpression_
     ;
 
 assignmentOperator
@@ -95,7 +122,8 @@ assignmentOperator
     ;
 
 expression
-    :   assignmentExpression (',' assignmentExpression)*
+    :   assignmentExpression (',' assignmentExpression)*|
+    newExpression
     ;
 
 constantExpression
@@ -111,7 +139,6 @@ declarationStatment
 varDeclaration:
 	typeSpecifier initDeclaratorList ';';
 
-//todo why use Identifier rather than declaration
 initDeclaratorList
 	:   initDeclarator (',' initDeclarator)*
 	;
@@ -121,7 +148,7 @@ initDeclarator
 	;
 
 initializer
-    :   literal | arrayInitializer
+    :   expression
     ;
 
 arrayInitializer:
@@ -162,7 +189,7 @@ forCondition:
 	((typeSpecifier initDeclaratorList) | expression)? ';' expression? ';' expression?;
 
 typeSpecifier:
-	uniTypeSpecifier ('[' arrayLength? ']')?;
+	uniTypeSpecifier ('[' arrayLength? ']')*;
 
 arrayLength:
 	IntergerLiteral;

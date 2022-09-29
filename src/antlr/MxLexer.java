@@ -1,4 +1,5 @@
-package src.antlr.gen;// Generated from E:/�γ�����/�����/������/Compiler-Design-Implementation/src/antlr\MxLexer.g4 by ANTLR 4.10.1
+// Generated from E:/课程资料/大二上/编译器/Compiler-Design-Implementation/src/antlr\MxLexer.g4 by ANTLR 4.10.1
+package src.antlr;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

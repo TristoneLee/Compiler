@@ -1,4 +1,5 @@
-package src.antlr.gen;// Generated from E:/�γ�����/�����/������/Compiler-Design-Implementation/src/antlr\MxParser.g4 by ANTLR 4.10.1
+// Generated from E:/课程资料/大二上/编译器/Compiler-Design-Implementation/src/antlr\MxParser.g4 by ANTLR 4.10.1
+package src.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -26,6 +27,46 @@ public interface MxParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPrimaryExpression(MxParser.PrimaryExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxParser#lambdaExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLambdaExpression(MxParser.LambdaExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#lambdaExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLambdaExpression(MxParser.LambdaExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxParser#lambdaHead}.
+	 * @param ctx the parse tree
+	 */
+	void enterLambdaHead(MxParser.LambdaHeadContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#lambdaHead}.
+	 * @param ctx the parse tree
+	 */
+	void exitLambdaHead(MxParser.LambdaHeadContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxParser#lambdaHeadValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterLambdaHeadValue(MxParser.LambdaHeadValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#lambdaHeadValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitLambdaHeadValue(MxParser.LambdaHeadValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxParser#lambdaHeadRefer}.
+	 * @param ctx the parse tree
+	 */
+	void enterLambdaHeadRefer(MxParser.LambdaHeadReferContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#lambdaHeadRefer}.
+	 * @param ctx the parse tree
+	 */
+	void exitLambdaHeadRefer(MxParser.LambdaHeadReferContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MxParser#postfixExpression}.
 	 * @param ctx the parse tree
@@ -57,6 +98,16 @@ public interface MxParserListener extends ParseTreeListener {
 	 */
 	void exitUnaryExpression(MxParser.UnaryExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MxParser#newExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNewExpression(MxParser.NewExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#newExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNewExpression(MxParser.NewExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MxParser#unaryOperator}.
 	 * @param ctx the parse tree
 	 */
@@ -77,125 +128,293 @@ public interface MxParserListener extends ParseTreeListener {
 	 */
 	void exitCastExpression(MxParser.CastExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#multiplicativeExpression}.
+	 * Enter a parse tree produced by the {@code multiplicativeExpression_miss}
+	 * labeled alternative in {@link MxParser#multiplicativeExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterMultiplicativeExpression(MxParser.MultiplicativeExpressionContext ctx);
+	void enterMultiplicativeExpression_miss(MxParser.MultiplicativeExpression_missContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#multiplicativeExpression}.
+	 * Exit a parse tree produced by the {@code multiplicativeExpression_miss}
+	 * labeled alternative in {@link MxParser#multiplicativeExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitMultiplicativeExpression(MxParser.MultiplicativeExpressionContext ctx);
+	void exitMultiplicativeExpression_miss(MxParser.MultiplicativeExpression_missContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#additiveExpression}.
+	 * Enter a parse tree produced by the {@code multiplicativeExpression_}
+	 * labeled alternative in {@link MxParser#multiplicativeExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterAdditiveExpression(MxParser.AdditiveExpressionContext ctx);
+	void enterMultiplicativeExpression_(MxParser.MultiplicativeExpression_Context ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#additiveExpression}.
+	 * Exit a parse tree produced by the {@code multiplicativeExpression_}
+	 * labeled alternative in {@link MxParser#multiplicativeExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitAdditiveExpression(MxParser.AdditiveExpressionContext ctx);
+	void exitMultiplicativeExpression_(MxParser.MultiplicativeExpression_Context ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#shiftExpression}.
+	 * Enter a parse tree produced by the {@code additiveExpression_miss}
+	 * labeled alternative in {@link MxParser#additiveExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterShiftExpression(MxParser.ShiftExpressionContext ctx);
+	void enterAdditiveExpression_miss(MxParser.AdditiveExpression_missContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#shiftExpression}.
+	 * Exit a parse tree produced by the {@code additiveExpression_miss}
+	 * labeled alternative in {@link MxParser#additiveExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitShiftExpression(MxParser.ShiftExpressionContext ctx);
+	void exitAdditiveExpression_miss(MxParser.AdditiveExpression_missContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#relationalExpression}.
+	 * Enter a parse tree produced by the {@code additiveExpression_}
+	 * labeled alternative in {@link MxParser#additiveExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterRelationalExpression(MxParser.RelationalExpressionContext ctx);
+	void enterAdditiveExpression_(MxParser.AdditiveExpression_Context ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#relationalExpression}.
+	 * Exit a parse tree produced by the {@code additiveExpression_}
+	 * labeled alternative in {@link MxParser#additiveExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitRelationalExpression(MxParser.RelationalExpressionContext ctx);
+	void exitAdditiveExpression_(MxParser.AdditiveExpression_Context ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#equalityExpression}.
+	 * Enter a parse tree produced by the {@code shiftExpression_miss}
+	 * labeled alternative in {@link MxParser#shiftExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterEqualityExpression(MxParser.EqualityExpressionContext ctx);
+	void enterShiftExpression_miss(MxParser.ShiftExpression_missContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#equalityExpression}.
+	 * Exit a parse tree produced by the {@code shiftExpression_miss}
+	 * labeled alternative in {@link MxParser#shiftExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitEqualityExpression(MxParser.EqualityExpressionContext ctx);
+	void exitShiftExpression_miss(MxParser.ShiftExpression_missContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#andExpression}.
+	 * Enter a parse tree produced by the {@code shiftExpression_}
+	 * labeled alternative in {@link MxParser#shiftExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterAndExpression(MxParser.AndExpressionContext ctx);
+	void enterShiftExpression_(MxParser.ShiftExpression_Context ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#andExpression}.
+	 * Exit a parse tree produced by the {@code shiftExpression_}
+	 * labeled alternative in {@link MxParser#shiftExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitAndExpression(MxParser.AndExpressionContext ctx);
+	void exitShiftExpression_(MxParser.ShiftExpression_Context ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#exclusiveOrExpression}.
+	 * Enter a parse tree produced by the {@code relationalExpression_miss}
+	 * labeled alternative in {@link MxParser#relationalExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExclusiveOrExpression(MxParser.ExclusiveOrExpressionContext ctx);
+	void enterRelationalExpression_miss(MxParser.RelationalExpression_missContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#exclusiveOrExpression}.
+	 * Exit a parse tree produced by the {@code relationalExpression_miss}
+	 * labeled alternative in {@link MxParser#relationalExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExclusiveOrExpression(MxParser.ExclusiveOrExpressionContext ctx);
+	void exitRelationalExpression_miss(MxParser.RelationalExpression_missContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#inclusiveOrExpression}.
+	 * Enter a parse tree produced by the {@code relationalExpression_}
+	 * labeled alternative in {@link MxParser#relationalExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterInclusiveOrExpression(MxParser.InclusiveOrExpressionContext ctx);
+	void enterRelationalExpression_(MxParser.RelationalExpression_Context ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#inclusiveOrExpression}.
+	 * Exit a parse tree produced by the {@code relationalExpression_}
+	 * labeled alternative in {@link MxParser#relationalExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitInclusiveOrExpression(MxParser.InclusiveOrExpressionContext ctx);
+	void exitRelationalExpression_(MxParser.RelationalExpression_Context ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#logicalAndExpression}.
+	 * Enter a parse tree produced by the {@code equalityExpression_miss}
+	 * labeled alternative in {@link MxParser#equalityExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterLogicalAndExpression(MxParser.LogicalAndExpressionContext ctx);
+	void enterEqualityExpression_miss(MxParser.EqualityExpression_missContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#logicalAndExpression}.
+	 * Exit a parse tree produced by the {@code equalityExpression_miss}
+	 * labeled alternative in {@link MxParser#equalityExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitLogicalAndExpression(MxParser.LogicalAndExpressionContext ctx);
+	void exitEqualityExpression_miss(MxParser.EqualityExpression_missContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#logicalOrExpression}.
+	 * Enter a parse tree produced by the {@code equalityExpression_}
+	 * labeled alternative in {@link MxParser#equalityExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterLogicalOrExpression(MxParser.LogicalOrExpressionContext ctx);
+	void enterEqualityExpression_(MxParser.EqualityExpression_Context ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#logicalOrExpression}.
+	 * Exit a parse tree produced by the {@code equalityExpression_}
+	 * labeled alternative in {@link MxParser#equalityExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitLogicalOrExpression(MxParser.LogicalOrExpressionContext ctx);
+	void exitEqualityExpression_(MxParser.EqualityExpression_Context ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#conditionalExpression}.
+	 * Enter a parse tree produced by the {@code andExpression_miss}
+	 * labeled alternative in {@link MxParser#andExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterConditionalExpression(MxParser.ConditionalExpressionContext ctx);
+	void enterAndExpression_miss(MxParser.AndExpression_missContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#conditionalExpression}.
+	 * Exit a parse tree produced by the {@code andExpression_miss}
+	 * labeled alternative in {@link MxParser#andExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitConditionalExpression(MxParser.ConditionalExpressionContext ctx);
+	void exitAndExpression_miss(MxParser.AndExpression_missContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#assignmentExpression}.
+	 * Enter a parse tree produced by the {@code andExpression_}
+	 * labeled alternative in {@link MxParser#andExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssignmentExpression(MxParser.AssignmentExpressionContext ctx);
+	void enterAndExpression_(MxParser.AndExpression_Context ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#assignmentExpression}.
+	 * Exit a parse tree produced by the {@code andExpression_}
+	 * labeled alternative in {@link MxParser#andExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssignmentExpression(MxParser.AssignmentExpressionContext ctx);
+	void exitAndExpression_(MxParser.AndExpression_Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code exclusiveOrExpression_miss}
+	 * labeled alternative in {@link MxParser#exclusiveOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExclusiveOrExpression_miss(MxParser.ExclusiveOrExpression_missContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code exclusiveOrExpression_miss}
+	 * labeled alternative in {@link MxParser#exclusiveOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExclusiveOrExpression_miss(MxParser.ExclusiveOrExpression_missContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code exclusiveOrExpression_}
+	 * labeled alternative in {@link MxParser#exclusiveOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExclusiveOrExpression_(MxParser.ExclusiveOrExpression_Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code exclusiveOrExpression_}
+	 * labeled alternative in {@link MxParser#exclusiveOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExclusiveOrExpression_(MxParser.ExclusiveOrExpression_Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code inclusiveOrExpression_miss}
+	 * labeled alternative in {@link MxParser#inclusiveOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterInclusiveOrExpression_miss(MxParser.InclusiveOrExpression_missContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code inclusiveOrExpression_miss}
+	 * labeled alternative in {@link MxParser#inclusiveOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitInclusiveOrExpression_miss(MxParser.InclusiveOrExpression_missContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code inclusiveOrExpression_}
+	 * labeled alternative in {@link MxParser#inclusiveOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterInclusiveOrExpression_(MxParser.InclusiveOrExpression_Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code inclusiveOrExpression_}
+	 * labeled alternative in {@link MxParser#inclusiveOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitInclusiveOrExpression_(MxParser.InclusiveOrExpression_Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code logicalAndExpression_miss}
+	 * labeled alternative in {@link MxParser#logicalAndExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLogicalAndExpression_miss(MxParser.LogicalAndExpression_missContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code logicalAndExpression_miss}
+	 * labeled alternative in {@link MxParser#logicalAndExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLogicalAndExpression_miss(MxParser.LogicalAndExpression_missContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code logicalAndExpression_}
+	 * labeled alternative in {@link MxParser#logicalAndExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLogicalAndExpression_(MxParser.LogicalAndExpression_Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code logicalAndExpression_}
+	 * labeled alternative in {@link MxParser#logicalAndExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLogicalAndExpression_(MxParser.LogicalAndExpression_Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code logicalOrExpression_miss}
+	 * labeled alternative in {@link MxParser#logicalOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLogicalOrExpression_miss(MxParser.LogicalOrExpression_missContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code logicalOrExpression_miss}
+	 * labeled alternative in {@link MxParser#logicalOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLogicalOrExpression_miss(MxParser.LogicalOrExpression_missContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code logicalOrExpression_}
+	 * labeled alternative in {@link MxParser#logicalOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLogicalOrExpression_(MxParser.LogicalOrExpression_Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code logicalOrExpression_}
+	 * labeled alternative in {@link MxParser#logicalOrExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLogicalOrExpression_(MxParser.LogicalOrExpression_Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code conditionalExpression_miss}
+	 * labeled alternative in {@link MxParser#conditionalExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionalExpression_miss(MxParser.ConditionalExpression_missContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code conditionalExpression_miss}
+	 * labeled alternative in {@link MxParser#conditionalExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionalExpression_miss(MxParser.ConditionalExpression_missContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code conditionalExpression_}
+	 * labeled alternative in {@link MxParser#conditionalExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionalExpression_(MxParser.ConditionalExpression_Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code conditionalExpression_}
+	 * labeled alternative in {@link MxParser#conditionalExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionalExpression_(MxParser.ConditionalExpression_Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code assignmentExpression_miss}
+	 * labeled alternative in {@link MxParser#assignmentExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentExpression_miss(MxParser.AssignmentExpression_missContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code assignmentExpression_miss}
+	 * labeled alternative in {@link MxParser#assignmentExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentExpression_miss(MxParser.AssignmentExpression_missContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code assignmentExpression_}
+	 * labeled alternative in {@link MxParser#assignmentExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentExpression_(MxParser.AssignmentExpression_Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code assignmentExpression_}
+	 * labeled alternative in {@link MxParser#assignmentExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentExpression_(MxParser.AssignmentExpression_Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link MxParser#assignmentOperator}.
 	 * @param ctx the parse tree
@@ -346,6 +565,16 @@ public interface MxParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIterationStatement(MxParser.IterationStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxParser#whileCondition}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhileCondition(MxParser.WhileConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#whileCondition}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhileCondition(MxParser.WhileConditionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MxParser#forCondition}.
 	 * @param ctx the parse tree

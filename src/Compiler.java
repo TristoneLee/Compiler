@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.io.IOException;
 import java.io.InputStream;
 
-import src.antlr.gen.*;
+import src.antlr.*;
 
 
 public class Compiler {
@@ -22,6 +22,6 @@ public class Compiler {
         MxParser parser = new MxParser(tokens);
         ParseTreeWalker walker = new ParseTreeWalker();
         MxParserListener listener=new MxParserBaseListener();
-
+        ParseTree tree = parser.translationUnit();
     }
 }
