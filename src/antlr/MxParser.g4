@@ -26,12 +26,13 @@ lambdaHeadRefer:
 	'[' '&' ']' '(' parameterDecList ')' '->';
 
 postfixExpression:
-    primaryExpression
+    primaryExpression   #postfixExpression_miss
+    | primaryExpression
 	('[' expression ']'
     | '(' argumentExpressionList? ')'
     | ('.' | '->') Identifier
     | ('++' | '--')
-    )*
+    )*  #postfixExpression_
     ;
 
 argumentExpressionList
@@ -39,11 +40,10 @@ argumentExpressionList
     ;
 
 unaryExpression:
-    newExpression |
-    ('++' |  '--' )*
-    (postfixExpression
-    |   unaryOperator castExpression
-    )
+    newExpression   #unaryExpression_miss
+    | postfixExpression     #unaryExpression_miss
+    |   ('++' |  '--' )*
+    ( postfixExpression | unaryOperator unaryExpression ) #unaryExpression_
     ;
 
 newExpression:
@@ -53,13 +53,9 @@ unaryOperator
     :   '&' | '*' | '+' | '-' | '~' | '!'
     ;
 
-castExpression
-    :   unaryExpression
-    ;
-
 multiplicativeExpression
-    :   castExpression      #multiplicativeExpression_miss
-    |   castExpression (('*'|'/'|'%') castExpression)*      #multiplicativeExpression_
+    :   unaryExpression      #multiplicativeExpression_miss
+    |   unaryExpression (('*'|'/'|'%') unaryExpression)*      #multiplicativeExpression_
     ;
 
 additiveExpression
