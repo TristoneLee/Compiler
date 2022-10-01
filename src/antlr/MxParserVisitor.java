@@ -47,11 +47,19 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLambdaHeadRefer(MxParser.LambdaHeadReferContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MxParser#postfixExpression}.
+	 * Visit a parse tree produced by the {@code postfixExpression_miss}
+	 * labeled alternative in {@link MxParser#postfixExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPostfixExpression(MxParser.PostfixExpressionContext ctx);
+	T visitPostfixExpression_miss(MxParser.PostfixExpression_missContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code postfixExpression_}
+	 * labeled alternative in {@link MxParser#postfixExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPostfixExpression_(MxParser.PostfixExpression_Context ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#argumentExpressionList}.
 	 * @param ctx the parse tree
@@ -59,11 +67,19 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArgumentExpressionList(MxParser.ArgumentExpressionListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MxParser#unaryExpression}.
+	 * Visit a parse tree produced by the {@code unaryExpression_miss}
+	 * labeled alternative in {@link MxParser#unaryExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitUnaryExpression(MxParser.UnaryExpressionContext ctx);
+	T visitUnaryExpression_miss(MxParser.UnaryExpression_missContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code unaryExpression_}
+	 * labeled alternative in {@link MxParser#unaryExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryExpression_(MxParser.UnaryExpression_Context ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#newExpression}.
 	 * @param ctx the parse tree
@@ -76,12 +92,6 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUnaryOperator(MxParser.UnaryOperatorContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MxParser#castExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCastExpression(MxParser.CastExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code multiplicativeExpression_miss}
 	 * labeled alternative in {@link MxParser#multiplicativeExpression}.

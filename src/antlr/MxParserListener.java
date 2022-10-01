@@ -68,15 +68,29 @@ public interface MxParserListener extends ParseTreeListener {
 	 */
 	void exitLambdaHeadRefer(MxParser.LambdaHeadReferContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#postfixExpression}.
+	 * Enter a parse tree produced by the {@code postfixExpression_miss}
+	 * labeled alternative in {@link MxParser#postfixExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterPostfixExpression(MxParser.PostfixExpressionContext ctx);
+	void enterPostfixExpression_miss(MxParser.PostfixExpression_missContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#postfixExpression}.
+	 * Exit a parse tree produced by the {@code postfixExpression_miss}
+	 * labeled alternative in {@link MxParser#postfixExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitPostfixExpression(MxParser.PostfixExpressionContext ctx);
+	void exitPostfixExpression_miss(MxParser.PostfixExpression_missContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code postfixExpression_}
+	 * labeled alternative in {@link MxParser#postfixExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPostfixExpression_(MxParser.PostfixExpression_Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code postfixExpression_}
+	 * labeled alternative in {@link MxParser#postfixExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPostfixExpression_(MxParser.PostfixExpression_Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link MxParser#argumentExpressionList}.
 	 * @param ctx the parse tree
@@ -88,15 +102,29 @@ public interface MxParserListener extends ParseTreeListener {
 	 */
 	void exitArgumentExpressionList(MxParser.ArgumentExpressionListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#unaryExpression}.
+	 * Enter a parse tree produced by the {@code unaryExpression_miss}
+	 * labeled alternative in {@link MxParser#unaryExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnaryExpression(MxParser.UnaryExpressionContext ctx);
+	void enterUnaryExpression_miss(MxParser.UnaryExpression_missContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#unaryExpression}.
+	 * Exit a parse tree produced by the {@code unaryExpression_miss}
+	 * labeled alternative in {@link MxParser#unaryExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnaryExpression(MxParser.UnaryExpressionContext ctx);
+	void exitUnaryExpression_miss(MxParser.UnaryExpression_missContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code unaryExpression_}
+	 * labeled alternative in {@link MxParser#unaryExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnaryExpression_(MxParser.UnaryExpression_Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code unaryExpression_}
+	 * labeled alternative in {@link MxParser#unaryExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnaryExpression_(MxParser.UnaryExpression_Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link MxParser#newExpression}.
 	 * @param ctx the parse tree
@@ -117,16 +145,6 @@ public interface MxParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnaryOperator(MxParser.UnaryOperatorContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MxParser#castExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterCastExpression(MxParser.CastExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MxParser#castExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitCastExpression(MxParser.CastExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code multiplicativeExpression_miss}
 	 * labeled alternative in {@link MxParser#multiplicativeExpression}.
