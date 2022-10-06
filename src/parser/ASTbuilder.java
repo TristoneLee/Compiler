@@ -2,11 +2,12 @@ package src.parser;
 
 import src.AST.*;
 import src.antlr.MxParser;
-import src.antlr.MxParserBaseListener;
+import src.antlr.MxParserBaseVisitor;
 
+import java.util.Objects;
 import java.util.Stack;
 
-public class ASTbuilder extends MxParserBaseListener {
+public class ASTbuilder extends MxParserBaseVisitor<ASN> {
     Stack<ASN> buffer;
     ASN root;
 
@@ -15,21 +16,29 @@ public class ASTbuilder extends MxParserBaseListener {
         buffer.push(node);
     }
 
-    private void pop (){
-        if(buffer.size()==1){
-            root= buffer.peek();
-            buffer.pop();
-            return;
-        }
-        ASN tem=buffer.pop();
-        buffer.peek().attachChild(tem);
-    }
-
     public void enterTranslationUnit(MxParser.TranslationUnitContext ctx){
         root=new ASNTransUnit();
     }
 
     public void exitTranslationUnit(MxParser.TranslationUnitContext ctx) {
-        pop();
+        root=buffer.pop();
+    }
+
+    public void enterLambdaExpression (MxParser.LambdaExpressionContext cxt) {
+        push(new ASNLambdaExpr());
+    }
+
+    public void exitLambdaExpression (MxParser.LambdaExpressionContext cxt) {
+        ASNLambdaExpr tmpNode = (ASNLambdaExpr) buffer.pop();
+        tmpNode.SetType(cxt.lambdaHead().lambdaReferMark() != null? ASNLambdaExpr.LambdaType.vaule: ASNLambdaExpr.LambdaType.refer);
+        tmpNode.build();
+    }
+
+    public void enterParameter(MxParser.ParameterContext cxt) {
+        buffer.push (new ASNParameter());
+    }
+
+    public void exitParameter(MxParser.ParameterContext cxt){
+
     }
 }

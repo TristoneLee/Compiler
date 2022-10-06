@@ -29,6 +29,4 @@ abstract public class ASN {
     public void attachChild (ASN child_){
         this.children.add(child_);
     }
-
-    public String getType(){return type;}
 }

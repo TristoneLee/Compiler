@@ -17,11 +17,26 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTranslationUnit(MxParser.TranslationUnitContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MxParser#primaryExpression}.
+	 * Visit a parse tree produced by the {@code primaryExpression_Iden}
+	 * labeled alternative in {@link MxParser#primaryExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrimaryExpression(MxParser.PrimaryExpressionContext ctx);
+	T visitPrimaryExpression_Iden(MxParser.PrimaryExpression_IdenContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code primaryExpression_miss}
+	 * labeled alternative in {@link MxParser#primaryExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrimaryExpression_miss(MxParser.PrimaryExpression_missContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code primaryExpression_this}
+	 * labeled alternative in {@link MxParser#primaryExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrimaryExpression_this(MxParser.PrimaryExpression_thisContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#lambdaExpression}.
 	 * @param ctx the parse tree
@@ -35,17 +50,11 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLambdaHead(MxParser.LambdaHeadContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MxParser#lambdaHeadValue}.
+	 * Visit a parse tree produced by {@link MxParser#lambdaReferMark}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLambdaHeadValue(MxParser.LambdaHeadValueContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MxParser#lambdaHeadRefer}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLambdaHeadRefer(MxParser.LambdaHeadReferContext ctx);
+	T visitLambdaReferMark(MxParser.LambdaReferMarkContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code postfixExpression_miss}
 	 * labeled alternative in {@link MxParser#postfixExpression}.
@@ -446,6 +455,12 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParameterDecList(MxParser.ParameterDecListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#parameter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameter(MxParser.ParameterContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#returnType}.
 	 * @param ctx the parse tree

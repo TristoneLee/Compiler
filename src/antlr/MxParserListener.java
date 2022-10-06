@@ -18,15 +18,41 @@ public interface MxParserListener extends ParseTreeListener {
 	 */
 	void exitTranslationUnit(MxParser.TranslationUnitContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#primaryExpression}.
+	 * Enter a parse tree produced by the {@code primaryExpression_Iden}
+	 * labeled alternative in {@link MxParser#primaryExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterPrimaryExpression(MxParser.PrimaryExpressionContext ctx);
+	void enterPrimaryExpression_Iden(MxParser.PrimaryExpression_IdenContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#primaryExpression}.
+	 * Exit a parse tree produced by the {@code primaryExpression_Iden}
+	 * labeled alternative in {@link MxParser#primaryExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitPrimaryExpression(MxParser.PrimaryExpressionContext ctx);
+	void exitPrimaryExpression_Iden(MxParser.PrimaryExpression_IdenContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code primaryExpression_miss}
+	 * labeled alternative in {@link MxParser#primaryExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimaryExpression_miss(MxParser.PrimaryExpression_missContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code primaryExpression_miss}
+	 * labeled alternative in {@link MxParser#primaryExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimaryExpression_miss(MxParser.PrimaryExpression_missContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code primaryExpression_this}
+	 * labeled alternative in {@link MxParser#primaryExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimaryExpression_this(MxParser.PrimaryExpression_thisContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code primaryExpression_this}
+	 * labeled alternative in {@link MxParser#primaryExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimaryExpression_this(MxParser.PrimaryExpression_thisContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MxParser#lambdaExpression}.
 	 * @param ctx the parse tree
@@ -48,25 +74,15 @@ public interface MxParserListener extends ParseTreeListener {
 	 */
 	void exitLambdaHead(MxParser.LambdaHeadContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#lambdaHeadValue}.
+	 * Enter a parse tree produced by {@link MxParser#lambdaReferMark}.
 	 * @param ctx the parse tree
 	 */
-	void enterLambdaHeadValue(MxParser.LambdaHeadValueContext ctx);
+	void enterLambdaReferMark(MxParser.LambdaReferMarkContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#lambdaHeadValue}.
+	 * Exit a parse tree produced by {@link MxParser#lambdaReferMark}.
 	 * @param ctx the parse tree
 	 */
-	void exitLambdaHeadValue(MxParser.LambdaHeadValueContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MxParser#lambdaHeadRefer}.
-	 * @param ctx the parse tree
-	 */
-	void enterLambdaHeadRefer(MxParser.LambdaHeadReferContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MxParser#lambdaHeadRefer}.
-	 * @param ctx the parse tree
-	 */
-	void exitLambdaHeadRefer(MxParser.LambdaHeadReferContext ctx);
+	void exitLambdaReferMark(MxParser.LambdaReferMarkContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code postfixExpression_miss}
 	 * labeled alternative in {@link MxParser#postfixExpression}.
@@ -743,6 +759,16 @@ public interface MxParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParameterDecList(MxParser.ParameterDecListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxParser#parameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameter(MxParser.ParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#parameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameter(MxParser.ParameterContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MxParser#returnType}.
 	 * @param ctx the parse tree

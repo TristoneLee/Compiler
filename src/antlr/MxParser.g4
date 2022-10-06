@@ -6,33 +6,27 @@ options {
 translationUnit: statement+ EOF;
 
 primaryExpression:
-	Identifier
-	| literal+
-	| 'this'
-	| '(' expression ')'
-	| lambdaExpression
+	Identifier  #primaryExpression_Iden
+	| literal   #primaryExpression_miss
+	| 'this' #primaryExpression_this
+	| '(' expression ')'  #primaryExpression_miss
+	| lambdaExpression  #primaryExpression_miss
 	;
 
 lambdaExpression:
 	lambdaHead '{' functionBody '}';
 
 lambdaHead:
-	lambdaHeadRefer | lambdaHeadValue;
+	'[' lambdaReferMark? ']' '(' parameterDecList? ')' '->';
 
-lambdaHeadValue:
-	'[' ']' '(' parameterDecList ')' '->';
-
-lambdaHeadRefer:
-	'[' '&' ']' '(' parameterDecList ')' '->';
+lambdaReferMark: '&';
 
 postfixExpression:
     primaryExpression   #postfixExpression_miss
-    | primaryExpression
-	('[' expression ']'
-    | '(' argumentExpressionList? ')'
-    | ('.' | '->') Identifier
-    | ('++' | '--')
-    )*  #postfixExpression_
+    | primaryExpression ('[' expression ']'
+                          | '(' argumentExpressionList? ')'
+                          | ('.' | '->') Identifier
+                          | ('++' | '--'))*  #postfixExpression_
     ;
 
 argumentExpressionList
@@ -232,7 +226,10 @@ functionDeclaration:
 	returnType? functionName  '(' parameterDecList? ')' '{'functionBody '}';
 
 parameterDecList:
-	typeSpecifier parameterName (',' typeSpecifier parameterName)*;
+	parameter (',' parameter)*;
+
+parameter:
+	typeSpecifier parameterName;
 
 returnType:
 	typeSpecifier;
