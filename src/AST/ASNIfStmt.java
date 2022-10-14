@@ -1,21 +1,23 @@
 package src.AST;
 
 import java.util.List;
-import java.util.Objects;
 
-public class ASNWhileStmt extends ASN{
-    ASNExpr whileCondition;
+public class ASNIfStmt extends ASNStmt{
+    ASNExpr ifCondition;
     List<ASNStmt> statements;
-    public ASNWhileStmt(){
-        super("WhileStmt");
+
+    public ASNIfStmt(){
+        super("IfStmt");
     }
+
     public void build(){
         for(ASN child :children){
             if(child instanceof ASNStmt){
                 statements.add((ASNStmt) child);
             }else if(child instanceof ASNExpr){
-                whileCondition=(ASNExpr) child;
+                ifCondition=(ASNExpr) child;
             }
         }
     }
+
 }

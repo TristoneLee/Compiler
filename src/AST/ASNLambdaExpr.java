@@ -3,9 +3,10 @@ package src.AST;
 import src.utility.Parameter;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ASNLambdaExpr extends ASN{
-    public enum LambdaType {refer,vaule};
+    public enum LambdaType {refer,value};
     LambdaType lambdaType;
     List<Parameter> parameters;
     ASNFuncBody funcBody;
@@ -18,11 +19,14 @@ public class ASNLambdaExpr extends ASN{
     }
 
     public void build(){
+        lambdaType=LambdaType.value;
         for (ASN child : children) {
-            if (child instanceof ASNParameter) {
+            if (Objects.equals(child.type,"Parameter")) {
                 parameters.add(((ASNParameter) child).getParamter());
-            } else if (child instanceof ASNFuncBody) {
+            } else if (Objects.equals(child.type,"FunctionBody")) {
                 funcBody = (ASNFuncBody) child;
+            }else if (Objects.equals(child.type,"LambdaReferMark")){
+                lambdaType=LambdaType.refer;
             }
         }
     }

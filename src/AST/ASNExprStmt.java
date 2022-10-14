@@ -2,10 +2,11 @@ package src.AST;
 
 import src.utility.Exception.CompileException;
 
-public class ASNReturnStmt extends ASNStmt {
+public class ASNExprStmt extends ASNStmt{
     ASNExpr expr;
-    public ASNReturnStmt() {
-        super("RetuenStmt");
+
+    public ASNExprStmt(){
+        super("ExprStmt");
     }
 
     @Override

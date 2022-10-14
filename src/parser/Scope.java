@@ -1,38 +1,52 @@
 package src.parser;
 
+import src.utility.Exception.CompileException;
+import src.utility.Exception.Redeclarification;
 import src.utility.Parameter;
 import src.utility.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public class Scope {
-    Map<String, Symbol> symbolTable;
+    public enum symbolType {Class, Variable, Function}
+
+    Set<String> classTable;
+    Set<String> variableTable;
+    Set<String> functionTable;
     Scope parent;
     List<Scope> children;
 
-    public Scope getParent(){
+    public Scope getParent() {
         return parent;
     }
 
-    public void setParent(Scope parent_){
-        parent=parent_;
+    public void setParent(Scope parent_) {
+        parent = parent_;
     }
 
-    public void addChild (Scope child_){
+    public void addChild(Scope child_) {
         children.add(child_);
     }
 
-    public void add (Parameter para){
-        symbolTable.put(para.name,new Symbol(Symbol.symbolType.Variable,para.type));
-    }
 
-    public void add (String name, String type){
-        symbolTable.put(name,new Symbol(Symbol.symbolType.Variable,type));
-    }
-
-    public boolean ifHave(String name){
-        return symbolTable.containsKey(name);
+    public void add(symbolType type, String name) throws CompileException {
+        switch (type) {
+            case Class -> {
+                if (classTable.contains(name) || variableTable.contains(name) || functionTable.contains(name))
+                    throw new Redeclarification(name);
+                else classTable.add(name);
+            }
+            case Function -> {
+                if (classTable.contains(name) || functionTable.contains(name)) throw new Redeclarification(name);
+                else functionTable.add(name);
+            }
+            case Variable -> {
+                if (classTable.contains(name) || variableTable.contains(name)) throw new Redeclarification(name);
+                else variableTable.add(name);
+            }
+        }
     }
 }

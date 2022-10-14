@@ -23,10 +23,10 @@ lambdaReferMark: '&';
 
 postfixExpression:
     primaryExpression   #postfixExpression_miss
-    | primaryExpression ('[' expression ']'
-                          | '(' argumentExpressionList? ')'
-                          | ('.' | '->') Identifier
-                          | ('++' | '--'))*  #postfixExpression_
+    | postfixExpression  '[' expression ']' #postfixExpression_arrayAccess
+                          | '.'  Identifier  #postfixExpression_member
+                          | ('++' | '--')  #postfixExpression_
+                          | '(' argumentExpressionList? ')'  #functionCall
     ;
 
 argumentExpressionList
@@ -34,11 +34,10 @@ argumentExpressionList
     ;
 
 unaryExpression:
-    newExpression   #unaryExpression_miss
-    | postfixExpression     #unaryExpression_miss
-    |   ('++' |  '--' )*
-    ( postfixExpression | unaryOperator unaryExpression ) #unaryExpression_
-    ;
+     postfixExpression     #unaryExpression_miss
+    |   ('++' |  '--' | unaryOperator) unaryExpression  #unaryExpression_
+    |    newExpression   #unaryExpression_miss;
+
 
 newExpression:
 	'new' typeSpecifier;
@@ -49,52 +48,62 @@ unaryOperator
 
 multiplicativeExpression
     :   unaryExpression      #multiplicativeExpression_miss
-    |   unaryExpression (('*'|'/'|'%') unaryExpression)*      #multiplicativeExpression_
+    |   multiplicativeExpression multiplicativeOp unaryExpression     #multiplicativeExpression_
     ;
 
+multiplicativeOp: '*'|'/'|'%';
+
 additiveExpression
-    :   multiplicativeExpression    #additiveExpression_miss
-    |   multiplicativeExpression (('+'|'-') multiplicativeExpression)*      #additiveExpression_
+    :   additiveExpression additiveOp multiplicativeExpression      #additiveExpression_
+    |   multiplicativeExpression    #additiveExpression_miss
     ;
+
+additiveOp: '+' | '-';
 
 shiftExpression
     :   additiveExpression  #shiftExpression_miss
-    |   additiveExpression (('<<'|'>>') additiveExpression)*    #shiftExpression_
+    |   shiftExpression shiftOp additiveExpression    #shiftExpression_
     ;
+
+shiftOp: '<<' | '>>';
 
 relationalExpression
     :   shiftExpression    #relationalExpression_miss
-    |   shiftExpression (('<'|'>'|'<='|'>=') shiftExpression)*     #relationalExpression_
+    |   relationalExpression relationOp shiftExpression     #relationalExpression_
     ;
+
+relationOp: '<' | '>' | '<=' | '>=';
 
 equalityExpression
     :   relationalExpression    #equalityExpression_miss
-    |   relationalExpression (('=='| '!=') relationalExpression)*   #equalityExpression_
+    |   equalityExpression equalityOp relationalExpression   #equalityExpression_
     ;
+
+equalityOp: '==' | '!=';
 
 andExpression
     :   equalityExpression  #andExpression_miss
-    |   equalityExpression ( '&' equalityExpression)*   #andExpression_
+    |   andExpression '&' equalityExpression   #andExpression_
     ;
 
 exclusiveOrExpression
     :   andExpression   #exclusiveOrExpression_miss
-    |   andExpression ('^' andExpression)*    #exclusiveOrExpression_
+    |   exclusiveOrExpression '^' andExpression    #exclusiveOrExpression_
     ;
 
 inclusiveOrExpression
     :   exclusiveOrExpression   #inclusiveOrExpression_miss
-    |   exclusiveOrExpression ('|' exclusiveOrExpression)*   #inclusiveOrExpression_
+    |   inclusiveOrExpression '|' exclusiveOrExpression   #inclusiveOrExpression_
     ;
 
 logicalAndExpression
     :   inclusiveOrExpression   #logicalAndExpression_miss
-    |   inclusiveOrExpression ('&&' inclusiveOrExpression)*    #logicalAndExpression_
+    |   logicalAndExpression '&&' inclusiveOrExpression    #logicalAndExpression_
     ;
 
 logicalOrExpression
     :   logicalAndExpression    #logicalOrExpression_miss
-    |   logicalAndExpression ( '||' logicalAndExpression)*  #logicalOrExpression_
+    |   logicalOrExpression  '||' logicalAndExpression  #logicalOrExpression_
     ;
 
 conditionalExpression
@@ -104,20 +113,11 @@ conditionalExpression
 
 assignmentExpression
     :   conditionalExpression   #assignmentExpression_miss
-    |   unaryExpression assignmentOperator assignmentExpression #assignmentExpression_
-    ;
-
-assignmentOperator
-    :   '='
+    |   unaryExpression '=' assignmentExpression #assignmentExpression_
     ;
 
 expression
-    :   assignmentExpression (',' assignmentExpression)*|
-    newExpression
-    ;
-
-constantExpression
-    :   conditionalExpression
+    :   assignmentExpression
     ;
 
 declarationStatment
@@ -141,14 +141,12 @@ initializer
     :   expression
     ;
 
-arrayInitializer:
-	'new' typeSpecifier;
 
 statement:
 	declarationStatment
 	| expressionStatement
     | compoundStatement
-	| selectionStatement
+	| ifStatement
 	| iterationStatement
 	| jumpStatement;
 
@@ -158,28 +156,38 @@ expressionStatement:
 compoundStatement:
 	'{' statement* '}';
 
-selectionStatement:
+ifStatement:
 	'if' '(' expression ')' statement ('else' statement)?;
 
-jumpStatement:
-	(
-		Break
-		| Continue
-		| Return expression?
-	) ';' ;
+jumpStatement: breakStatement | continueStatement | returnStatement;
+
+breakStatement: Break ';';
+
+continueStatement: Continue ';';
+
+returnStatement: Return expression? ';';
 
 iterationStatement:
-	'while' '(' whileCondition ')' statement
-	| 'for' '(' forCondition ')' statement;
+	whileStatement | forStatement;
+
+whileStatement:
+	'while' '(' whileCondition ')' statement;
+
+forStatement:
+	'for' '(' forCondition ')' statement;
 
 whileCondition:
-	expression| (typeSpecifier initDeclaratorList );
+	expression;
 
 forCondition:
-	((typeSpecifier initDeclaratorList) | expression)? ';' expression? ';' expression?;
+	(typeSpecifier initDeclaratorList )? ';' expression? ';' expression?;
 
 typeSpecifier:
-	uniTypeSpecifier ('[' arrayLength? ']')*;
+	uniTypeSpecifier arrayUni*;
+
+arrayUni:
+	'[' arrayLength? ']';
+
 
 arrayLength:
 	IntergerLiteral;
@@ -200,12 +208,13 @@ className:
 	Identifier;
 
 classDeclaration:
-	'class' className '{' classContent+ '}';
+	'class' className '{' classContent+ '}' ';';
 
 classContent:
 	classMemberDel
 	| classConstructorDel
-	| classMethodDel;
+	| classMethodDel
+	;
 
 classMemberDel:
     memberType memberName (',' memberName)* ';';
@@ -223,7 +232,7 @@ classMethodDel:
 	functionDeclaration;
 
 functionDeclaration:
-	returnType? functionName  '(' parameterDecList? ')' '{'functionBody '}';
+	returnType functionName  '(' parameterDecList? ')' '{'functionBody '}';
 
 parameterDecList:
 	parameter (',' parameter)*;
@@ -238,7 +247,7 @@ functionName:
 	Identifier;
 
 functionBody:
-	statement+;
+	statement*;
 
 parameterName:
 	Identifier;

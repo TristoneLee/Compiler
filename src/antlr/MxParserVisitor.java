@@ -63,12 +63,33 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPostfixExpression_miss(MxParser.PostfixExpression_missContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code functionCall}
+	 * labeled alternative in {@link MxParser#postfixExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionCall(MxParser.FunctionCallContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code postfixExpression_member}
+	 * labeled alternative in {@link MxParser#postfixExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPostfixExpression_member(MxParser.PostfixExpression_memberContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code postfixExpression_}
 	 * labeled alternative in {@link MxParser#postfixExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPostfixExpression_(MxParser.PostfixExpression_Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code postfixExpression_arrayAccess}
+	 * labeled alternative in {@link MxParser#postfixExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPostfixExpression_arrayAccess(MxParser.PostfixExpression_arrayAccessContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#argumentExpressionList}.
 	 * @param ctx the parse tree
@@ -102,13 +123,6 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnaryOperator(MxParser.UnaryOperatorContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code multiplicativeExpression_miss}
-	 * labeled alternative in {@link MxParser#multiplicativeExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMultiplicativeExpression_miss(MxParser.MultiplicativeExpression_missContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code multiplicativeExpression_}
 	 * labeled alternative in {@link MxParser#multiplicativeExpression}.
 	 * @param ctx the parse tree
@@ -116,12 +130,18 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMultiplicativeExpression_(MxParser.MultiplicativeExpression_Context ctx);
 	/**
-	 * Visit a parse tree produced by the {@code additiveExpression_miss}
-	 * labeled alternative in {@link MxParser#additiveExpression}.
+	 * Visit a parse tree produced by the {@code multiplicativeExpression_miss}
+	 * labeled alternative in {@link MxParser#multiplicativeExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAdditiveExpression_miss(MxParser.AdditiveExpression_missContext ctx);
+	T visitMultiplicativeExpression_miss(MxParser.MultiplicativeExpression_missContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#multiplicativeOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiplicativeOp(MxParser.MultiplicativeOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code additiveExpression_}
 	 * labeled alternative in {@link MxParser#additiveExpression}.
@@ -130,12 +150,18 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAdditiveExpression_(MxParser.AdditiveExpression_Context ctx);
 	/**
-	 * Visit a parse tree produced by the {@code shiftExpression_miss}
-	 * labeled alternative in {@link MxParser#shiftExpression}.
+	 * Visit a parse tree produced by the {@code additiveExpression_miss}
+	 * labeled alternative in {@link MxParser#additiveExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitShiftExpression_miss(MxParser.ShiftExpression_missContext ctx);
+	T visitAdditiveExpression_miss(MxParser.AdditiveExpression_missContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#additiveOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAdditiveOp(MxParser.AdditiveOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code shiftExpression_}
 	 * labeled alternative in {@link MxParser#shiftExpression}.
@@ -144,12 +170,18 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitShiftExpression_(MxParser.ShiftExpression_Context ctx);
 	/**
-	 * Visit a parse tree produced by the {@code relationalExpression_miss}
-	 * labeled alternative in {@link MxParser#relationalExpression}.
+	 * Visit a parse tree produced by the {@code shiftExpression_miss}
+	 * labeled alternative in {@link MxParser#shiftExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRelationalExpression_miss(MxParser.RelationalExpression_missContext ctx);
+	T visitShiftExpression_miss(MxParser.ShiftExpression_missContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#shiftOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitShiftOp(MxParser.ShiftOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code relationalExpression_}
 	 * labeled alternative in {@link MxParser#relationalExpression}.
@@ -157,6 +189,19 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitRelationalExpression_(MxParser.RelationalExpression_Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code relationalExpression_miss}
+	 * labeled alternative in {@link MxParser#relationalExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelationalExpression_miss(MxParser.RelationalExpression_missContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#relationOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelationOp(MxParser.RelationOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code equalityExpression_miss}
 	 * labeled alternative in {@link MxParser#equalityExpression}.
@@ -171,6 +216,12 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitEqualityExpression_(MxParser.EqualityExpression_Context ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#equalityOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEqualityOp(MxParser.EqualityOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code andExpression_miss}
 	 * labeled alternative in {@link MxParser#andExpression}.
@@ -214,19 +265,19 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInclusiveOrExpression_(MxParser.InclusiveOrExpression_Context ctx);
 	/**
-	 * Visit a parse tree produced by the {@code logicalAndExpression_miss}
-	 * labeled alternative in {@link MxParser#logicalAndExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLogicalAndExpression_miss(MxParser.LogicalAndExpression_missContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code logicalAndExpression_}
 	 * labeled alternative in {@link MxParser#logicalAndExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLogicalAndExpression_(MxParser.LogicalAndExpression_Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code logicalAndExpression_miss}
+	 * labeled alternative in {@link MxParser#logicalAndExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLogicalAndExpression_miss(MxParser.LogicalAndExpression_missContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code logicalOrExpression_miss}
 	 * labeled alternative in {@link MxParser#logicalOrExpression}.
@@ -270,23 +321,11 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignmentExpression_(MxParser.AssignmentExpression_Context ctx);
 	/**
-	 * Visit a parse tree produced by {@link MxParser#assignmentOperator}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssignmentOperator(MxParser.AssignmentOperatorContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MxParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExpression(MxParser.ExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MxParser#constantExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConstantExpression(MxParser.ConstantExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#declarationStatment}.
 	 * @param ctx the parse tree
@@ -318,12 +357,6 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInitializer(MxParser.InitializerContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MxParser#arrayInitializer}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArrayInitializer(MxParser.ArrayInitializerContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MxParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -342,11 +375,11 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCompoundStatement(MxParser.CompoundStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MxParser#selectionStatement}.
+	 * Visit a parse tree produced by {@link MxParser#ifStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSelectionStatement(MxParser.SelectionStatementContext ctx);
+	T visitIfStatement(MxParser.IfStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#jumpStatement}.
 	 * @param ctx the parse tree
@@ -354,11 +387,41 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitJumpStatement(MxParser.JumpStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MxParser#breakStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBreakStatement(MxParser.BreakStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#continueStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitContinueStatement(MxParser.ContinueStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#returnStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnStatement(MxParser.ReturnStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MxParser#iterationStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIterationStatement(MxParser.IterationStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#whileStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhileStatement(MxParser.WhileStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#forStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForStatement(MxParser.ForStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#whileCondition}.
 	 * @param ctx the parse tree
@@ -377,6 +440,12 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTypeSpecifier(MxParser.TypeSpecifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#arrayUni}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayUni(MxParser.ArrayUniContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#arrayLength}.
 	 * @param ctx the parse tree

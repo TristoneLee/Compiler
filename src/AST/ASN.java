@@ -1,5 +1,7 @@
 package src.AST;
 
+import src.utility.Exception.CompileException;
+
 import java.util.List;
 
 abstract public class ASN {
@@ -29,4 +31,6 @@ abstract public class ASN {
     public void attachChild (ASN child_){
         this.children.add(child_);
     }
+
+    public void build() throws CompileException {}
 }
