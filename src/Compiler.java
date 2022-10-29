@@ -21,7 +21,7 @@ public class Compiler {
         FileInputStream fis;
         {
             try {
-                fis = new FileInputStream("E:\\课程资料\\大二上\\编译器\\Compiler-Design-Implementation\\testcases\\sema\\basic-package\\basic-11.mx");
+                fis = new FileInputStream("E:\\课程资料\\大二上\\编译器\\Compiler-Design-Implementation\\testcases\\sema\\basic-package\\basic-64.mx");
                 System.setIn(fis);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
