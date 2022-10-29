@@ -62,6 +62,7 @@ public class ASNBinaryExpr extends ASNExpr {
             }
             case assign -> {
                 if(lhs instanceof ASNIntConst||lhs instanceof ASNStringConst||lhs instanceof ASNBooleanConst||lhs instanceof ASNThis) throw new InvalidExpression();
+                if(!lhs.ifLeftValue)throw new InvalidExpression();
                 else if(rhs.returnType.equals(lhs.returnType)||(lhs.returnType.dimension!=0&&rhs.returnType.equals(NullType))||!lhs.returnType.isBasicType()&&rhs.returnType.equals(NullType)) returnType=VoidType;
                 else throw new InvalidExpression();
             }

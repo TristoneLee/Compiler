@@ -12,6 +12,7 @@ import antlr.MxLexer;
 import antlr.MxParser;
 import parser.ASTbuilder;
 import utility.Exception.CompileException;
+import utility.MxErrorListener;
 
 public class Compiler {
 
@@ -30,6 +31,8 @@ public class Compiler {
             MxLexer lexer = new MxLexer(charStream);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MxParser parser = new MxParser(tokens);
+            parser.removeErrorListeners();
+            parser.addErrorListener(new MxErrorListener());
             ParseTree tree = parser.translationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
             ASTbuilder builder = new ASTbuilder();
@@ -39,6 +42,8 @@ public class Compiler {
         }catch (CompileException exception){
             exception.Call();
             throw new RuntimeException();
+        } catch (RuntimeException e){
+            System.err.println(e.getMessage());
         }
     }
 }

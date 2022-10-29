@@ -13,6 +13,7 @@ public class ASNIdentifier extends ASNExpr{
     public ASNIdentifier(String text, ScopeBuffer scopeBuffer){
         super("Identifier",scopeBuffer);
         identifier=text;
+        ifLeftValue=true;
     }
 
     @Override

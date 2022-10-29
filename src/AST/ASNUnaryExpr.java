@@ -31,6 +31,7 @@ public class ASNUnaryExpr extends ASNExpr{
        if(unaryOp==UnaryOp.not) {
            if(!expr.returnType.equals(BooleanType)) throw new InvalidExpression();
        }else if (!expr.returnType.equals(IntegerType)) throw new InvalidExpression();
+       if((unaryOp==UnaryOp.plusplus||unaryOp==UnaryOp.minusminus)&& !expr.ifLeftValue)  throw new InvalidExpression();
        returnType=expr.returnType;
     }
 }

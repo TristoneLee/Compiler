@@ -19,6 +19,7 @@ public class ASNArrayAccess extends ASNExpr {
     public ASNArrayAccess(ScopeBuffer scopeBuffer) {
         super("ArrayAccess", scopeBuffer);
         arrayIds = new ArrayList<>();
+        ifLeftValue=true;
     }
 
     @Override

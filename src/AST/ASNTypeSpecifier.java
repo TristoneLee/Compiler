@@ -32,5 +32,10 @@ public class ASNTypeSpecifier extends ASN {
     @Override
     public void check() throws CompileException {
         if (valueType.baseType.equals("void")  && valueType.dimension != 0) throw new InvalidArrayType();
+        boolean flag=false;
+        for(int i:valueType.dimensions){
+            if(i==0) flag=true;
+            else if (flag) throw new InvalidArrayType();
+        }
     }
 }

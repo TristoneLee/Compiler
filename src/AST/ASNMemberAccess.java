@@ -33,5 +33,6 @@ public class ASNMemberAccess extends ASNExpr {
         postfix.check();
         scopeBuffer.pop();
         returnType = postfix.returnType;
+        if(postfix instanceof ASNIdentifier) ifLeftValue=true;
     }
 }
