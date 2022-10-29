@@ -14,20 +14,20 @@ import static src.utility.ValueType.IntegerType;
 
 public class ASNArrayAccess extends ASNExpr {
     List<ASNExpr> arrayIds;
-    String arrayIden;
+    ASNExpr arrayIden;
 
     public ASNArrayAccess(ScopeBuffer scopeBuffer) {
         super("ArrayAccess", scopeBuffer);
-        arrayIds=new ArrayList<>();
+        arrayIds = new ArrayList<>();
     }
 
     @Override
     public void build() {
         for (ASN child : children) {
-            if (child instanceof ASNIdentifier) {
-                arrayIden = ((ASNIdentifier) child).identifier;
-            } else if(child instanceof ASNArrayId){
-                arrayIds.add( ((ASNArrayId) child).expr);
+            if (child instanceof ASNArrayId) {
+                arrayIds.add(((ASNArrayId) child).expr);
+            } else if (child instanceof ASNExpr) {
+                arrayIden = (ASNExpr) child;
             }
         }
     }
@@ -38,12 +38,13 @@ public class ASNArrayAccess extends ASNExpr {
             arrayId.check();
             if (!arrayId.returnType.equals(IntegerType)) throw new InvalidExpression();
         }
-        ValueType valueType = scopeBuffer.searchVar(arrayIden);
-        if(valueType==null) throw new UndeifinedVariety();
-        if(valueType.dimension<arrayIds.size()) throw new InvalidExpression();
-        returnType=new ValueType(valueType.baseType);
-        returnType.dimensions=valueType.dimensions.subList(arrayIds.size(), valueType.dimensions.size());
-        returnType.dimension=returnType.dimensions.size();
+        arrayIden.check();
+        ValueType valueType = arrayIden.returnType;
+        if (valueType == null) throw new UndeifinedVariety();
+        if (valueType.dimension < arrayIds.size()) throw new InvalidExpression();
+        returnType = new ValueType(valueType.baseType);
+        returnType.dimensions = valueType.dimensions.subList(arrayIds.size(), valueType.dimensions.size());
+        returnType.dimension = returnType.dimensions.size();
     }
 
 }
