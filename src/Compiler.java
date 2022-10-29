@@ -18,15 +18,6 @@ import src.utility.Exception.CompileException;
 public class Compiler {
 
     public static void main(String[] args) throws IOException {
-        FileInputStream fis;
-        {
-            try {
-                fis = new FileInputStream("E:\\课程资料\\大二上\\编译器\\Compiler-Design-Implementation\\testcases\\sema\\basic-package\\basic-55.mx");
-                System.setIn(fis);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
         try {
             CharStream charStream = CharStreams.fromStream(System.in);
             MxLexer lexer = new MxLexer(charStream);
