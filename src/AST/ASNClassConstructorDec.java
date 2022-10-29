@@ -16,7 +16,7 @@ public class ASNClassConstructorDec extends ASNStmt{
     @Override
     public void build() throws CompileException {
         for(ASN child:children){
-            if(child instanceof ASNStringConst) className=((ASNStringConst) child).value;
+            if(child instanceof ASNIdentifier) className=((ASNIdentifier) child).identifier;
             else if(child instanceof ASNFuncBody) funcBody=(ASNFuncBody) child;
         }
     }

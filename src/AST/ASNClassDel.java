@@ -32,7 +32,7 @@ public class ASNClassDel extends ASNStmt {
                 classEntity.classMethod.put(((ASNFuncDec) child).entity.functionName,((ASNFuncDec) child).entity);
             }
             else if (child instanceof ASNClassConstructorDec) {
-                if(((ASNClassConstructorDec) child).className!= classEntity.className) throw new InvalidStmt();
+                if(!Objects.equals(((ASNClassConstructorDec) child).className, classEntity.className)) throw new InvalidStmt();
                 constructorDec = (ASNClassConstructorDec) child;
             }
             else if (child instanceof ASNClassMemberDec) {
@@ -41,8 +41,8 @@ public class ASNClassDel extends ASNStmt {
                     else classEntity.classMember.put(member.name,member);
                 }
             }
-            else if (child instanceof ASNStringConst ){
-                classEntity.className=((ASNStringConst) child).value;
+            else if (child instanceof ASNIdentifier ){
+                classEntity.className=((ASNIdentifier) child).identifier;
             }
         }
     }

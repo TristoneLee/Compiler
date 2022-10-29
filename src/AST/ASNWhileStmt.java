@@ -4,6 +4,7 @@ import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidStmt;
+import utility.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class ASNWhileStmt extends ASNStmt{
         whileCondition.check();
         if(whileCondition.returnType!=BooleanType) throw new InvalidStmt();
         scopeBuffer.push(new Scope());
+        scopeBuffer.addVariable("loopppppp",new ValueType());
         for(ASNStmt stmt:statements) stmt.check();
         scopeBuffer.pop();
     }

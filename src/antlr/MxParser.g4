@@ -43,7 +43,7 @@ unaryExpression:
 	;
 
 newExpression:
-	'new' typeSpecifier;
+	'new' (typeSpecifier| (className '(' ')'));
 
 unaryOperator
     :   '&' | '*' | '+' | '-' | '~' | '!'
@@ -237,7 +237,7 @@ memberName:
 	Identifier;
 
 classConstructorDel:
-	className '(' ')' '{'functionBody'}';
+	StringLiteral '(' ')' '{'functionBody'}';
 
 classMethodDel:
 	functionDeclaration;

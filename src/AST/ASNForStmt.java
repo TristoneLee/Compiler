@@ -4,6 +4,7 @@ import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidExpression;
+import utility.ValueType;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +34,7 @@ public class ASNForStmt extends ASNStmt {
 
     public void check() throws CompileException{
         scopeBuffer.push(new Scope());
+        scopeBuffer.addVariable("loopppppp",new ValueType());
         if(forExpr1!=null)forExpr1.check();
         if(forExpr2!=null)forExpr2.check();
         if(forExpr3!=null)forExpr3.check();

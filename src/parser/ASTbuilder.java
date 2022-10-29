@@ -254,7 +254,7 @@ public class ASTbuilder extends MxParserBaseListener {
     }
 
     public void enterClassName(MxParser.ClassNameContext cxt) {
-        push(new ASNStringConst(cxt.getText(), scopeBuffer));
+        push(new ASNIdentifier(cxt.getText(), scopeBuffer));
     }
 
     public void exitClassName(MxParser.ClassNameContext cxt) throws CompileException {
