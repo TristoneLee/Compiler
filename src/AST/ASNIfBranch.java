@@ -1,8 +1,8 @@
-package src.AST;
+package AST;
 
-import src.parser.Scope;
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
+import parser.Scope;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
 
 import java.util.ArrayList;
 import java.util.List;

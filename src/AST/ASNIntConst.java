@@ -1,11 +1,11 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
+import parser.ScopeBuffer;
 
 import java.util.List;
 import java.util.Stack;
 
-import static src.utility.ValueType.IntegerType;
+import static utility.ValueType.IntegerType;
 
 public class ASNIntConst extends ASNExpr{
     Integer value;

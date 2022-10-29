@@ -1,15 +1,14 @@
-package src.parser;
+package parser;
 
-import src.AST.*;
-import src.antlr.MxParser;
-import src.antlr.MxParserBaseListener;
-import src.utility.Exception.CompileException;
+import AST.*;
+import antlr.MxParser;
+import antlr.MxParserBaseListener;
+import utility.Exception.CompileException;
 
 import java.util.Objects;
 import java.util.Stack;
 
 import static java.lang.Integer.parseInt;
-import static src.parser.ClassEntity.stringClass;
 
 public class ASTbuilder extends MxParserBaseListener {
     Stack<ASN> buffer;

@@ -1,4 +1,4 @@
-package src.utility.Exception;
+package utility.Exception;
 
 
 public class UndeifinedVariety extends CompileException {

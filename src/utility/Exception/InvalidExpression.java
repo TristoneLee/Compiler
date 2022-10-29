@@ -1,4 +1,4 @@
-package src.utility.Exception;
+package utility.Exception;
 
 public class InvalidExpression extends CompileException {
     public InvalidExpression() {

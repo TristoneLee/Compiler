@@ -1,13 +1,13 @@
-package src.AST;
+package AST;
 
-import src.parser.ClassEntity;
-import src.parser.FunctionEntity;
-import src.parser.Scope;
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Exception.InvalidStmt;
-import src.utility.Exception.Redeclarification;
-import src.utility.Parameter;
+import parser.ClassEntity;
+import parser.FunctionEntity;
+import parser.Scope;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Exception.InvalidStmt;
+import utility.Exception.Redeclarification;
+import utility.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;

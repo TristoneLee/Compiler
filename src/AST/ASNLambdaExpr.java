@@ -1,15 +1,15 @@
-package src.AST;
+package AST;
 
-import src.parser.Scope;
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Parameter;
+import parser.Scope;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Parameter;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
-import static src.utility.ValueType.VoidType;
+import static utility.ValueType.VoidType;
 
 public class ASNLambdaExpr extends ASNExpr{
     public enum LambdaType {refer,value};
@@ -43,7 +43,7 @@ public class ASNLambdaExpr extends ASNExpr{
         for(Parameter parameter:parameters)scopeBuffer.addVariable(parameter.name,parameter.valueType);
         funcBody.check();
         returnType=funcBody.returnType;
-        if(returnType==VoidType) throw new CompileException("NoReturnForLambdaExpression");
+        if(returnType.equals(VoidType)) throw new CompileException("NoReturnForLambdaExpression");
         scopeBuffer.pop();
     }
 }

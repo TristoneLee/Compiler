@@ -1,13 +1,13 @@
-package src.parser;
+package parser;
 
-import src.utility.Parameter;
-import src.utility.ValueType;
+import utility.Parameter;
+import utility.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static src.utility.ValueType.*;
+import static utility.ValueType.*;
 
 public class FunctionEntity {
     public String functionName;

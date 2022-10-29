@@ -1,5 +1,3 @@
-package src;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,10 +8,10 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import src.antlr.MxLexer;
-import src.antlr.MxParser;
-import src.parser.ASTbuilder;
-import src.utility.Exception.CompileException;
+import antlr.MxLexer;
+import antlr.MxParser;
+import parser.ASTbuilder;
+import utility.Exception.CompileException;
 
 public class Compiler {
 
@@ -21,7 +19,7 @@ public class Compiler {
 //        FileInputStream fis;
 //        {
 //            try {
-//                fis = new FileInputStream("E:\\课程资料\\大二上\\编译器\\Compiler-Design-Implementation\\Compiler-2021-testcases\\sema\\basic-package\\basic-1.mx");
+//                fis = new FileInputStream("E:\\课程资料\\大二上\\编译器\\Compiler-Design-Implementation\\Compiler-2021-testcases\\sema\\basic-package\\basic-40.mx");
 //                System.setIn(fis);
 //            } catch (FileNotFoundException e) {
 //                throw new RuntimeException(e);

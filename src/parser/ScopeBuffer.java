@@ -1,9 +1,9 @@
-package src.parser;
+package parser;
 
-import src.utility.Exception.CompileException;
-import src.utility.Exception.Redeclarification;
-import src.utility.Parameter;
-import src.utility.ValueType;
+import utility.Exception.CompileException;
+import utility.Exception.Redeclarification;
+import utility.Parameter;
+import utility.ValueType;
 
 import java.util.HashMap;
 import java.util.Map;

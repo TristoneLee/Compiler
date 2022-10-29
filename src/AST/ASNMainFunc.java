@@ -1,11 +1,11 @@
-package src.AST;
+package AST;
 
-import src.parser.Scope;
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Parameter;
+import parser.Scope;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Parameter;
 
-import static src.utility.ValueType.IntegerType;
+import static utility.ValueType.IntegerType;
 
 public class ASNMainFunc extends ASNFuncDec{
     ASNMainFunc(ScopeBuffer scopeBuffer){

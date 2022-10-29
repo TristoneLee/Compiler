@@ -1,15 +1,15 @@
-package src.AST;
+package AST;
 
-import src.parser.Scope;
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Exception.InvalidExpression;
+import parser.Scope;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Exception.InvalidExpression;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
-import static src.utility.ValueType.BooleanType;
+import static utility.ValueType.BooleanType;
 
 public class ASNForStmt extends ASNStmt {
     ASNForExpr1 forExpr1;

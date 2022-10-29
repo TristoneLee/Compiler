@@ -1,16 +1,16 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Exception.InvalidExpression;
-import src.utility.Exception.UndeifinedVariety;
-import src.utility.ValueType;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Exception.InvalidExpression;
+import utility.Exception.UndeifinedVariety;
+import utility.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static src.utility.ValueType.IntegerType;
+import static utility.ValueType.IntegerType;
 
 public class ASNArrayAccess extends ASNExpr {
     List<ASNExpr> arrayIds;

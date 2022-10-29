@@ -1,9 +1,9 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Exception.InvalidArrayType;
-import src.utility.ValueType;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Exception.InvalidArrayType;
+import utility.ValueType;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,10 +26,11 @@ public class ASNTypeSpecifier extends ASN {
                 valueType.dimensions.add(((ASNArrayUni) child).num);
             }
         }
+        check();
     }
 
     @Override
     public void check() throws CompileException {
-        if (valueType.baseType == "void" && valueType.dimension != 0) throw new InvalidArrayType();
+        if (valueType.baseType.equals("void")  && valueType.dimension != 0) throw new InvalidArrayType();
     }
 }

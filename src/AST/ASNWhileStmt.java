@@ -1,15 +1,15 @@
-package src.AST;
+package AST;
 
-import src.parser.Scope;
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Exception.InvalidStmt;
+import parser.Scope;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Exception.InvalidStmt;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-import static src.utility.ValueType.BooleanType;
+import static utility.ValueType.BooleanType;
 
 public class ASNWhileStmt extends ASNStmt{
     ASNExpr whileCondition;

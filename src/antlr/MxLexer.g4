@@ -3,7 +3,7 @@ lexer grammar MxLexer;
 
 IntergerLiteral: (NonzeroDigit (Digit)*)|'0';
 
-StringLiteral: '"' Schar* '"';
+StringLiteral: '"' ( '\\n' | '\\\\' | '\\"' | .)*? '"';
 
 BooleanLiteral: False_ | True_;
 
@@ -84,10 +84,6 @@ fragment Digit: [0-9];
 fragment NonzeroDigit: [1-9];
 
 DigitSequence: Digit+;
-
-fragment EscapeSequence: '\\' ["n\\];
-
-fragment Schar: [ -~] | EscapeSequence;
 
 Whitespace: [ \t]+ -> skip;
 

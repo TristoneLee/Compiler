@@ -1,14 +1,14 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Exception.InvalidExpression;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Exception.InvalidExpression;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
-import static src.utility.ValueType.*;
+import static utility.ValueType.*;
 
 public class ASNBinaryExpr extends ASNExpr {
     // 1:lhs 2:rhs
@@ -62,7 +62,7 @@ public class ASNBinaryExpr extends ASNExpr {
             }
             case assign -> {
                 if(lhs instanceof ASNIntConst||lhs instanceof ASNStringConst||lhs instanceof ASNBooleanConst||lhs instanceof ASNThis) throw new InvalidExpression();
-                else if(rhs.returnType.equals(lhs.returnType)||(lhs.returnType.dimension!=0&&rhs.returnType==NullType)) returnType=VoidType;
+                else if(rhs.returnType.equals(lhs.returnType)||(lhs.returnType.dimension!=0&&rhs.returnType.equals(NullType))||!lhs.returnType.isBasicType()&&rhs.returnType.equals(NullType)) returnType=VoidType;
                 else throw new InvalidExpression();
             }
         }

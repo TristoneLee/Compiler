@@ -1,14 +1,14 @@
-package src.parser;
+package parser;
 
-import src.utility.Parameter;
+import utility.Parameter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static src.utility.ValueType.IntegerType;
-import static src.utility.ValueType.StringType;
+import static utility.ValueType.IntegerType;
+import static utility.ValueType.StringType;
 
 public class ClassEntity {
     public String className;
@@ -25,9 +25,9 @@ public class ClassEntity {
         stringClass= new ClassEntity();
         stringClass.className = "String";
 
-        FunctionEntity stringPrint = new FunctionEntity();
-        stringPrint.functionName = "print";
-        stringPrint.returnType = IntegerType;
+        FunctionEntity stringLength = new FunctionEntity();
+        stringLength.functionName = "Length";
+        stringLength.returnType = IntegerType;
 
         FunctionEntity stringSubstring = new FunctionEntity();
         stringSubstring.functionName = "substring";
@@ -47,7 +47,7 @@ public class ClassEntity {
         ord.paraList = new ArrayList<>();
         ord.paraList.add(new Parameter("pos", IntegerType));
 
-        stringClass.classMethod.put("print", stringPrint);
+        stringClass.classMethod.put("length", stringLength);
         stringClass.classMethod.put("substring", stringSubstring);
         stringClass.classMethod.put("parseInt", parserInt);
         stringClass.classMethod.put("ord", ord);

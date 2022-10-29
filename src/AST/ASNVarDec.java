@@ -1,10 +1,10 @@
-package src.AST;
+package AST;
 
 import com.sun.jdi.VoidType;
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.ValueType;
-import src.utility.ValueType.*;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.ValueType;
+import utility.ValueType.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ASNVarDec extends ASNStmt{
         for(ASNInitDeclarator declarator:declarators){
             declarator.check();
             if(valueType.equals(ValueType.VoidType)) throw new CompileException("ValidValueType");
-            if(declarator.initor!=null&&!valueType.equals(declarator.returnType)) throw new CompileException("UnmatchedValueType");
+            if(declarator.initor!=null&&!valueType.equals(declarator.returnType)&&!(!valueType.isBasicType()&&declarator.returnType.equals(ValueType.NullType))) throw new CompileException("UnmatchedValueType");
             scopeBuffer.addVariable(declarator.name,valueType);
         }
     }

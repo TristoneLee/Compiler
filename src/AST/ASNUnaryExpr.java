@@ -1,14 +1,14 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Exception.InvalidExpression;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Exception.InvalidExpression;
 
 import java.util.List;
 import java.util.Stack;
 
-import static src.utility.ValueType.BooleanType;
-import static src.utility.ValueType.IntegerType;
+import static utility.ValueType.BooleanType;
+import static utility.ValueType.IntegerType;
 
 public class ASNUnaryExpr extends ASNExpr{
     public enum UnaryOp{plusplus,minusminus,and,star,plus,minus,not,tilde}

@@ -1,11 +1,11 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
+import parser.ScopeBuffer;
 
 import java.util.List;
 import java.util.Stack;
 
-import static src.utility.ValueType.BooleanType;
+import static utility.ValueType.BooleanType;
 
 public class ASNBooleanConst extends ASNExpr{
     Boolean value;

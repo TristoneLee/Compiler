@@ -1,14 +1,14 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Exception.InvalidStmt;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Exception.InvalidStmt;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import static src.utility.ValueType.BooleanType;
+import static utility.ValueType.BooleanType;
 
 public class ASNIfStmt extends ASNStmt{
     ASNExpr ifCondition;

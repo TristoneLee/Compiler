@@ -1,7 +1,7 @@
-package src.parser;
+package parser;
 
 
-import src.utility.*;
+import utility.*;
 
 import java.util.HashMap;
 import java.util.Map;

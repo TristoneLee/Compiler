@@ -1,5 +1,5 @@
 // Generated from E:/课程资料/大二上/编译器/Compiler-Design-Implementation/src/antlr\MxParser.g4 by ANTLR 4.10.1
-package src.antlr;
+package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

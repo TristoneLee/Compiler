@@ -1,15 +1,15 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.ValueType;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import static src.utility.ValueType.IntegerType;
-import static src.utility.ValueType.VoidType;
+import static utility.ValueType.IntegerType;
+import static utility.ValueType.VoidType;
 
 public class ASNFuncBody extends ASN{
     ValueType returnType;

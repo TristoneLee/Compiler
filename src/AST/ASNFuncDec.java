@@ -1,15 +1,15 @@
-package src.AST;
+package AST;
 
-import src.parser.FunctionEntity;
-import src.parser.Scope;
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Exception.InvalidExpression;
-import src.utility.Parameter;
-import src.utility.ValueType;
+import parser.FunctionEntity;
+import parser.Scope;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Exception.InvalidExpression;
+import utility.Parameter;
+import utility.ValueType;
 
-import static src.utility.ValueType.IntegerType;
-import static src.utility.ValueType.VoidType;
+import static utility.ValueType.IntegerType;
+import static utility.ValueType.VoidType;
 
 
 public class ASNFuncDec extends ASNStmt {
@@ -36,6 +36,7 @@ public class ASNFuncDec extends ASNStmt {
     public void check() throws CompileException {
         if(entity.functionName.equals("main")){
             if(!entity.returnType.equals(IntegerType)) throw new CompileException("InvalidMainFuncReturn");
+            if(entity.paraList.size()!=0) throw new CompileException("InvalidMainFuncPara");
         }
         funcBody.returnType = entity.returnType;
         funcBody.ifMain = entity.functionName.equals("main");

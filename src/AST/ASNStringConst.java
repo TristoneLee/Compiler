@@ -1,11 +1,11 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
+import parser.ScopeBuffer;
 
 import java.util.List;
 import java.util.Stack;
 
-import static src.utility.ValueType.StringType;
+import static utility.ValueType.StringType;
 
 public class ASNStringConst extends ASNExpr {
     String value;

@@ -1,4 +1,4 @@
-package src.utility;
+package utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,4 +37,8 @@ public class ValueType {
     public static ValueType BooleanType = new ValueType("bool");
     public static ValueType NullType = new ValueType("null");
     public static ValueType VoidType = new ValueType("void");
+
+    public boolean isBasicType(){
+        return equals(StringType)||equals(BooleanType)||equals(IntegerType);
+    }
 }

@@ -1,9 +1,9 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
 
-import static src.utility.ValueType.NullType;
+import static utility.ValueType.NullType;
 
 
 public class ASNNull extends ASNExpr{

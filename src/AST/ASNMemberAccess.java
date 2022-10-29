@@ -1,12 +1,12 @@
-package src.AST;
+package AST;
 
-import src.parser.ClassEntity;
-import src.parser.FunctionEntity;
-import src.parser.Scope;
-import src.parser.ScopeBuffer;
-import src.utility.Exception.CompileException;
-import src.utility.Exception.InvalidExpression;
-import src.utility.ValueType;
+import parser.ClassEntity;
+import parser.FunctionEntity;
+import parser.Scope;
+import parser.ScopeBuffer;
+import utility.Exception.CompileException;
+import utility.Exception.InvalidExpression;
+import utility.ValueType;
 
 public class ASNMemberAccess extends ASNExpr {
     ASNExpr var;

@@ -1,7 +1,7 @@
-package src.AST;
+package AST;
 
-import src.parser.ScopeBuffer;
-import src.utility.ValueType;
+import parser.ScopeBuffer;
+import utility.ValueType;
 
 import java.util.Objects;
 import java.util.Stack;
