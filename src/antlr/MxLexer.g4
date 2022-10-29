@@ -1,7 +1,7 @@
 lexer grammar MxLexer;
 
 
-IntergerLiteral: ((SIGN)? NonzeroDigit (Digit)*)|'0';
+IntergerLiteral: (NonzeroDigit (Digit)*)|'0';
 
 StringLiteral: '"' Schar* '"';
 
@@ -24,6 +24,7 @@ False_ : 'false';
 New : 'new';
 This : 'this';
 Class: 'class';
+Null: 'null';
 
 LeftParen : '(';
 RightParen : ')';
@@ -93,3 +94,5 @@ Whitespace: [ \t]+ -> skip;
 Newline: ('\r' '\n'? | '\n') -> skip;
 
 LineComment: '//' ~[\r\n]* -> skip;
+
+BlockComment:   '/*' .*? '*/' -> skip;

@@ -7,6 +7,7 @@ public class Redeclarification extends CompileException{
     }
 
     public Redeclarification(String name_){
+        super("Redeclarification");
         name=name_;
     }
 }

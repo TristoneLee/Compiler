@@ -1,30 +1,34 @@
 package src.AST;
 
+import src.parser.ScopeBuffer;
+import src.utility.Exception.CompileException;
 import src.utility.Parameter;
 
 import java.util.Objects;
 
 public class ASNParameter extends ASN {
-
     Parameter parameter;
-
-    public ASNParameter() {
-        super("Parameter");
+    ASNTypeSpecifier typeSpecifier;
+    public ASNParameter(ScopeBuffer scopeBuffer) {
+        super("Parameter", scopeBuffer);
+        parameter=new Parameter();
     }
 
-    public Parameter getParamter() {
-        return parameter;
-    }
-
-    public void build(){
-        for(ASN child :children){
-            if(Objects.equals(child.type, "StringConst")){
-                parameter.name=((ASNStringConst) child).value;
-            }else if(Objects.equals(child.type,"TypeSpecifier")){
-                parameter.dimension=((ASNTypeSpecifier) child).dimension;
-                parameter.dimensions=((ASNTypeSpecifier) child).dimensions;
-                parameter.baseType=((ASNTypeSpecifier) child).baseType;
+    @Override
+    public void build() throws CompileException {
+        for (ASN child : children) {
+            if (Objects.equals(child.type, "StringConst")) {
+                parameter.name = ((ASNStringConst) child).value;
+            } else if (Objects.equals(child.type, "TypeSpecifier")) {
+                parameter.valueType.dimension = ((ASNTypeSpecifier) child).valueType.dimension;
+                parameter.valueType.dimensions = ((ASNTypeSpecifier) child).valueType.dimensions;
+                parameter.valueType.baseType = ((ASNTypeSpecifier) child).valueType.baseType;
             }
         }
+    }
+
+    @Override
+    public void check() throws CompileException {
+        typeSpecifier.check();
     }
 }

@@ -2,10 +2,11 @@ package src.utility.Exception;
 
 
 public class UndeifinedVariety extends CompileException {
-    String name;
-    int array, line;
+    public UndeifinedVariety() {
+        super("UndefinedVariety");
+    }
 
     public void Call() {
-        System.err.println("Error: Undefined variety %v in line %v array %v.");
+        System.err.println("Error: UndefinedVariety ");
     }
 }

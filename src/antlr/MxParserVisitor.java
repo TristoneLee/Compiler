@@ -31,12 +31,19 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrimaryExpression_miss(MxParser.PrimaryExpression_missContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code primaryExpression_this}
+	 * Visit a parse tree produced by the {@code this}
 	 * labeled alternative in {@link MxParser#primaryExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrimaryExpression_this(MxParser.PrimaryExpression_thisContext ctx);
+	T visitThis(MxParser.ThisContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code null}
+	 * labeled alternative in {@link MxParser#primaryExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNull(MxParser.NullContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#lambdaExpression}.
 	 * @param ctx the parse tree
@@ -56,6 +63,13 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLambdaReferMark(MxParser.LambdaReferMarkContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code memberAccess}
+	 * labeled alternative in {@link MxParser#postfixExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMemberAccess(MxParser.MemberAccessContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code postfixExpression_miss}
 	 * labeled alternative in {@link MxParser#postfixExpression}.
 	 * @param ctx the parse tree
@@ -70,12 +84,12 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionCall(MxParser.FunctionCallContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code postfixExpression_member}
+	 * Visit a parse tree produced by the {@code arrayAccess}
 	 * labeled alternative in {@link MxParser#postfixExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPostfixExpression_member(MxParser.PostfixExpression_memberContext ctx);
+	T visitArrayAccess(MxParser.ArrayAccessContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code postfixExpression_}
 	 * labeled alternative in {@link MxParser#postfixExpression}.
@@ -84,12 +98,11 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPostfixExpression_(MxParser.PostfixExpression_Context ctx);
 	/**
-	 * Visit a parse tree produced by the {@code postfixExpression_arrayAccess}
-	 * labeled alternative in {@link MxParser#postfixExpression}.
+	 * Visit a parse tree produced by {@link MxParser#arrayId}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPostfixExpression_arrayAccess(MxParser.PostfixExpression_arrayAccessContext ctx);
+	T visitArrayId(MxParser.ArrayIdContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#argumentExpressionList}.
 	 * @param ctx the parse tree
@@ -351,12 +364,6 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInitDeclarator(MxParser.InitDeclaratorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MxParser#initializer}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInitializer(MxParser.InitializerContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MxParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -434,6 +441,24 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitForCondition(MxParser.ForConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#forExpr1}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForExpr1(MxParser.ForExpr1Context ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#forExpr2}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForExpr2(MxParser.ForExpr2Context ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#forExpr3}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForExpr3(MxParser.ForExpr3Context ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#typeSpecifier}.
 	 * @param ctx the parse tree

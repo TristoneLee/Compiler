@@ -1,10 +1,17 @@
 package src.AST;
 
-public class ASNBooleanConst extends ASN{
-    Boolean value;
+import src.parser.ScopeBuffer;
 
-    ASNBooleanConst(Boolean value_){
-        super("BooleanConst");
+import java.util.List;
+import java.util.Stack;
+
+import static src.utility.ValueType.BooleanType;
+
+public class ASNBooleanConst extends ASNExpr{
+    Boolean value;
+    public ASNBooleanConst(Boolean value_, ScopeBuffer scopeBuffer){
+        super("BooleanConst",scopeBuffer);
         value=value_;
+        returnType= BooleanType;
     }
 }

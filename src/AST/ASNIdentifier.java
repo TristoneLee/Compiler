@@ -1,17 +1,28 @@
 package src.AST;
 
-public class ASNIdentifier extends ASN{
+import src.parser.ScopeBuffer;
+import src.utility.Exception.CompileException;
+import src.utility.Exception.UndeifinedVariety;
+
+import java.util.List;
+import java.util.Stack;
+
+public class ASNIdentifier extends ASNExpr{
     String identifier;
 
-    public ASNIdentifier(){
-        super("Identifier");
+    public ASNIdentifier(String text, ScopeBuffer scopeBuffer){
+        super("Identifier",scopeBuffer);
+        identifier=text;
     }
 
-    public String getIdentifier() {
-        return identifier;
+    @Override
+    public void build() throws CompileException {
+        super.build();
     }
 
-    public void setIdentifier(String identifier_){
-        identifier=identifier_;
+    @Override
+    public void check() throws CompileException {
+        returnType=scopeBuffer.searchVar(identifier);
+        if(returnType==null) throw new UndeifinedVariety();
     }
 }

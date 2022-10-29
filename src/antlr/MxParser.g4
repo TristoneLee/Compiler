@@ -7,8 +7,9 @@ translationUnit: statement+ EOF;
 
 primaryExpression:
 	Identifier  #primaryExpression_Iden
-	| literal   #primaryExpression_miss
-	| 'this' #primaryExpression_this
+	| literal+   #primaryExpression_miss
+	| 'this' #this
+	| 'null' #null
 	| '(' expression ')'  #primaryExpression_miss
 	| lambdaExpression  #primaryExpression_miss
 	;
@@ -23,11 +24,13 @@ lambdaReferMark: '&';
 
 postfixExpression:
     primaryExpression   #postfixExpression_miss
-    | postfixExpression  '[' expression ']' #postfixExpression_arrayAccess
-                          | '.'  Identifier  #postfixExpression_member
-                          | ('++' | '--')  #postfixExpression_
-                          | '(' argumentExpressionList? ')'  #functionCall
+    | postfixExpression  ('[' arrayId ']')+ #arrayAccess
+	| postfixExpression '.'  postfixExpression  #memberAccess
+    | postfixExpression  ('++' | '--')  #postfixExpression_
+    | functionName '(' argumentExpressionList? ')'  #functionCall
     ;
+
+arrayId: expression;
 
 argumentExpressionList
     :   assignmentExpression (',' assignmentExpression)*
@@ -36,8 +39,8 @@ argumentExpressionList
 unaryExpression:
      postfixExpression     #unaryExpression_miss
     |   ('++' |  '--' | unaryOperator) unaryExpression  #unaryExpression_
-    |    newExpression   #unaryExpression_miss;
-
+    |    newExpression   #unaryExpression_miss
+	;
 
 newExpression:
 	'new' typeSpecifier;
@@ -134,13 +137,8 @@ initDeclaratorList
 	;
 
 initDeclarator
-	:   Identifier ('=' initializer)?
+	:   Identifier ('=' expression)?
 	;
-
-initializer
-    :   expression
-    ;
-
 
 statement:
 	declarationStatment
@@ -180,7 +178,16 @@ whileCondition:
 	expression;
 
 forCondition:
-	(typeSpecifier initDeclaratorList )? ';' expression? ';' expression?;
+	forExpr1  forExpr2? ';' forExpr3?;
+
+forExpr1:
+    expression ';'| varDeclaration;
+
+forExpr2:
+	expression;
+
+forExpr3:
+	expression;
 
 typeSpecifier:
 	uniTypeSpecifier arrayUni*;
@@ -208,7 +215,7 @@ className:
 	Identifier;
 
 classDeclaration:
-	'class' className '{' classContent+ '}' ';';
+	'class' className '{' classContent* '}' ';';
 
 classContent:
 	classMemberDel
