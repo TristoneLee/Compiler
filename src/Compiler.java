@@ -38,6 +38,7 @@ public class Compiler {
 //            System.out.println("Success!");
         }catch (CompileException exception){
             exception.Call();
+            throw new RuntimeException();
         }
     }
 }
