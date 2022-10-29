@@ -4,6 +4,7 @@ import src.parser.ScopeBuffer;
 import src.utility.Exception.CompileException;
 import src.utility.Exception.InvalidStmt;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -11,7 +12,8 @@ import static src.utility.ValueType.BooleanType;
 
 public class ASNIfStmt extends ASNStmt{
     ASNExpr ifCondition;
-    List<ASNStmt> statements;
+    ASNIfBranch trueStmt;
+    ASNIfBranch falseStmt;
 
     public ASNIfStmt(ScopeBuffer scopeBuffer){
         super("IfStmt",scopeBuffer);
@@ -20,8 +22,9 @@ public class ASNIfStmt extends ASNStmt{
     @Override
     public void build(){
         for(ASN child :children){
-            if(child instanceof ASNStmt){
-                statements.add((ASNStmt) child);
+            if(child instanceof ASNIfBranch){
+                if(((ASNIfBranch) child).dir) trueStmt= (ASNIfBranch) child;
+                else falseStmt= (ASNIfBranch) child;
             }else if(child instanceof ASNExpr){
                 ifCondition=(ASNExpr) child;
             }
@@ -31,9 +34,8 @@ public class ASNIfStmt extends ASNStmt{
     @Override
     public void check() throws CompileException {
         ifCondition.check();
-        for(ASNStmt stmt : statements){
-            stmt.check();
-        }
-        if(ifCondition.returnType!=BooleanType) throw new InvalidStmt();
+        if(trueStmt!=null) trueStmt.check();
+        if(falseStmt!=null) falseStmt.check();
+        if(!ifCondition.returnType.equals(BooleanType)) throw new InvalidStmt();
     }
 }

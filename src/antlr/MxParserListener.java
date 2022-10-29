@@ -648,6 +648,26 @@ public interface MxParserListener extends ParseTreeListener {
 	 */
 	void exitIfStatement(MxParser.IfStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MxParser#trueStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterTrueStatement(MxParser.TrueStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#trueStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitTrueStatement(MxParser.TrueStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxParser#falseStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFalseStatement(MxParser.FalseStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#falseStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFalseStatement(MxParser.FalseStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MxParser#jumpStatement}.
 	 * @param ctx the parse tree
 	 */

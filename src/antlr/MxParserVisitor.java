@@ -388,6 +388,18 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfStatement(MxParser.IfStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MxParser#trueStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTrueStatement(MxParser.TrueStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#falseStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFalseStatement(MxParser.FalseStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MxParser#jumpStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -155,7 +155,11 @@ compoundStatement:
 	'{' statement* '}';
 
 ifStatement:
-	'if' '(' expression ')' statement ('else' statement)?;
+	'if' '(' expression ')' trueStatement ('else' falseStatement)?;
+
+trueStatement: statement;
+
+falseStatement: statement;
 
 jumpStatement: breakStatement | continueStatement | returnStatement;
 
@@ -181,7 +185,7 @@ forCondition:
 	forExpr1  forExpr2? ';' forExpr3?;
 
 forExpr1:
-    expression ';'| varDeclaration;
+    expression? ';'| varDeclaration;
 
 forExpr2:
 	expression;

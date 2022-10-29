@@ -12,11 +12,11 @@ public class ASNForExpr1 extends ASN{
 
     @Override
     public void build() throws CompileException {
-        expr=children.get(0);
+        if(children.size()!=0)expr=children.get(0);
     }
 
     @Override
     public void check() throws CompileException {
-        expr.check();
+        if(expr!=null)expr.check();
     }
 }

@@ -24,7 +24,7 @@ public class ASNFuncCall extends ASNExpr {
     @Override
     public void build() throws CompileException {
         for (ASN child : children) {
-            if (child instanceof ASNStringConst) funcName = ((ASNStringConst) child).value;
+            if (child instanceof ASNStringConst&&funcName==null) funcName = ((ASNStringConst) child).value;
             else if (child instanceof ASNExpr) parameters.add((ASNExpr) child);
             else throw new InvalidExpression();
         }

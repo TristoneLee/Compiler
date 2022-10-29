@@ -53,7 +53,7 @@ public class ASTbuilder extends MxParserBaseListener {
 
     public void buildInInit() {
         scopeBuffer.addClass("string", ClassEntity.stringClass);
-        scopeBuffer.addFunction("print", FunctionEntity.funcPrintlnInt);
+        scopeBuffer.addFunction("print", FunctionEntity.funcPrint);
         scopeBuffer.addFunction("println", FunctionEntity.funcPrintln);
         scopeBuffer.addFunction("printInt", FunctionEntity.funcPrintInt);
         scopeBuffer.addFunction("printlnInt", FunctionEntity.funcPrintlnInt);
@@ -150,7 +150,7 @@ public class ASTbuilder extends MxParserBaseListener {
     }
 
     public void enterIfStatement(MxParser.IfStatementContext cxt) {
-        push(new ASNWhileStmt(scopeBuffer));
+        push(new ASNIfStmt(scopeBuffer));
     }
 
     public void exitIfStatement(MxParser.IfStatementContext cxt) throws CompileException {
@@ -564,6 +564,28 @@ public class ASTbuilder extends MxParserBaseListener {
     }
 
     public void exitThis(MxParser.ThisContext cxt){
+        buffer.peek().build();;
+        buffer.pop();
+    }
+
+    public void enterTrueStatement(MxParser.TrueStatementContext cxt){
+        ASNIfBranch branch=new ASNIfBranch(scopeBuffer);
+        branch.dir=true;
+        push(branch);
+    }
+    
+    public void exitTrueStatement(MxParser.TrueStatementContext cxt){
+        buffer.peek().build();;
+        buffer.pop();
+    }
+
+    public void enterFalseStatement(MxParser.FalseStatementContext cxt){
+        ASNIfBranch branch=new ASNIfBranch(scopeBuffer);
+        branch.dir=false;
+        push(branch);
+    }
+
+    public void exitFalseStatement(MxParser.FalseStatementContext cxt){
         buffer.peek().build();;
         buffer.pop();
     }
