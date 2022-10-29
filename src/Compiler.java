@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import src.antlr.*;
 import src.parser.ASTbuilder;
-import src.utility.Exception.CompileException;
 
 
 public class Compiler {
