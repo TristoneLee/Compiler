@@ -37,7 +37,7 @@ public class Compiler {
             ASTbuilder builder = new ASTbuilder();
             walker.walk(builder, tree);
             builder.check();
-            System.out.println("Success!");
+//            System.out.println("Success!");
         }catch (CompileException exception){
             exception.Call();
         }
