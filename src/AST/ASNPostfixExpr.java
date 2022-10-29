@@ -25,7 +25,7 @@ public class ASNPostfixExpr extends ASNExpr {
     @Override
     public void check() throws CompileException {
         expr.check();
-        if(expr.returnType!= IntegerType) throw new InvalidExpression();
+        if(!expr.returnType.equals(IntegerType) ) throw new InvalidExpression();
         returnType=IntegerType;
     }
 

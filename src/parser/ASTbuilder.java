@@ -3,10 +3,8 @@ package src.parser;
 import src.AST.*;
 import src.antlr.MxParser;
 import src.antlr.MxParserBaseListener;
-import src.antlr.MxParserBaseVisitor;
 import src.utility.Exception.CompileException;
 
-import javax.swing.*;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -551,7 +549,7 @@ public class ASTbuilder extends MxParserBaseListener {
     }
 
     public void enterCompoundStatement(MxParser.CompoundStatementContext cxt){
-        buffer.push(new ASNCompoundStmt(scopeBuffer));
+        push(new ASNCompoundStmt(scopeBuffer));
     }
 
     public void exitCompoundStatement(MxParser.CompoundStatementContext cxt){
