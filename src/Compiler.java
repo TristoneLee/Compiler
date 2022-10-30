@@ -41,8 +41,10 @@ public class Compiler {
 //            System.out.println("Success!");
         }catch (CompileException exception){
             exception.Call();
+            throw new Exception();
         } catch (RuntimeException e){
             System.err.println(e.getMessage());
+            throw new Exception();
         }
     }
 }
