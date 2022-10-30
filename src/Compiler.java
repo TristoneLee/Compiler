@@ -29,6 +29,8 @@ public class Compiler {
         try {
             CharStream charStream = CharStreams.fromStream(System.in);
             MxLexer lexer = new MxLexer(charStream);
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(new MxErrorListener());
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MxParser parser = new MxParser(tokens);
             parser.removeErrorListeners();
