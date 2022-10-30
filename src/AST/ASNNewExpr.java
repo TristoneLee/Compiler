@@ -3,6 +3,7 @@ package AST;
 import parser.ClassEntity;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
+import utility.ValueType;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,8 +33,9 @@ public class ASNNewExpr extends ASNExpr{
         }
         }
         else {
-            expr_.check();
-            returnType=expr_.returnType;
+            ClassEntity classEntity=scopeBuffer.searchClass(expr_.identifier);
+            if(classEntity==null) throw new CompileException("UndefinedClass");
+            returnType=new ValueType(expr_.identifier);
         }
     }
 }

@@ -25,14 +25,14 @@ public class ASNMemberAccess extends ASNExpr {
     @Override
     public void check() throws CompileException {
         var.check();
-        if (var.returnType.dimension == 0){
-        ClassEntity entity = scopeBuffer.searchClass(var.returnType.baseType);
-        if (entity == null) throw new InvalidExpression();
-        scopeBuffer.push(new Scope(entity));}
-        else scopeBuffer.push(new Scope(ClassEntity.arrayClass));
+        if (var.returnType.dimension == 0) {
+            ClassEntity entity = scopeBuffer.searchClass(var.returnType.baseType);
+            if (entity == null) throw new InvalidExpression();
+            scopeBuffer.push(new Scope(entity));
+        } else scopeBuffer.push(new Scope(ClassEntity.arrayClass));
         postfix.check();
         scopeBuffer.pop();
         returnType = postfix.returnType;
-        if(postfix instanceof ASNIdentifier) ifLeftValue=true;
+        if (postfix instanceof ASNIdentifier) ifLeftValue = true;
     }
 }
