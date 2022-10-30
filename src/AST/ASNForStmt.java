@@ -34,12 +34,13 @@ public class ASNForStmt extends ASNStmt {
 
     public void check() throws CompileException{
         scopeBuffer.push(new Scope());
-        scopeBuffer.addVariable("loopppppp",new ValueType());
+        scopeBuffer.controlFlow.push(this);
         if(forExpr1!=null)forExpr1.check();
         if(forExpr2!=null)forExpr2.check();
         if(forExpr3!=null)forExpr3.check();
-        if(forExpr2!=null&&forExpr2.returnType!=BooleanType) throw new InvalidExpression();
+        if(forExpr2!=null&&!forExpr2.returnType.equals(BooleanType)) throw new InvalidExpression();
         forStmt.check();
+        scopeBuffer.controlFlow.pop();
         scopeBuffer.pop();
     }
 }

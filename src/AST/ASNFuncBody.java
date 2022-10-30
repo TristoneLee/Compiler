@@ -11,32 +11,22 @@ import java.util.Stack;
 import static utility.ValueType.IntegerType;
 import static utility.ValueType.VoidType;
 
-public class ASNFuncBody extends ASN{
-    ValueType returnType;
+public class ASNFuncBody extends ASN {
+    List<ASNStmt> statements = new ArrayList<>();
 
-    boolean ifMain;
-    List<ASNStmt> statements=new ArrayList<>();
-    public ASNFuncBody(ScopeBuffer scopeBuffer){
-        super("FuncBody",scopeBuffer);
+    public ASNFuncBody(ScopeBuffer scopeBuffer) {
+        super("FuncBody", scopeBuffer);
     }
 
     @Override
-    public void build(){
-        for(ASN child:children)statements.add((ASNStmt) child);
+    public void build() {
+        for (ASN child : children) statements.add((ASNStmt) child);
     }
 
     @Override
     public void check() throws CompileException {
-        boolean ifHaveReturn=false;
-        for(ASNStmt stmt:statements){
+        for (ASNStmt stmt : statements) {
             stmt.check();
-            if(stmt instanceof ASNReturnStmt) {
-                if(!((ASNReturnStmt) stmt).returnType.equals(returnType)) throw new CompileException("UnmatchedReturnType");
-                ifHaveReturn=true;
-            }
-        }
-        if(!ifHaveReturn){
-            if(!ifMain&&!returnType.equals(VoidType)) throw new CompileException("NoReturn");
         }
     }
 }

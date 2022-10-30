@@ -19,7 +19,7 @@ public class ASNMainFunc extends ASNFuncDec{
 
     @Override
     public void check() throws CompileException {
-        if(entity.returnType!=IntegerType) throw new CompileException("InvalidMainFunction");
+        if(!entity.returnType.equals(IntegerType)) throw new CompileException("InvalidMainFunction");
         super.check();
     }
 }

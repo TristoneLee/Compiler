@@ -51,8 +51,10 @@ public class ASNClassDel extends ASNStmt {
     public void check() throws CompileException {
         if(constructorDec!=null&&!Objects.equals(constructorDec.className, classEntity.className)) throw new CompileException("UnmatchedConstructor");
         scopeBuffer.push(new Scope(classEntity));
+        scopeBuffer.controlFlow.push(this);
         for(ASNFuncDec method:classMethods) method.check();
         if(constructorDec!=null)constructorDec.check();
+        scopeBuffer.controlFlow.pop();
         scopeBuffer.pop();
     }
 }

@@ -166,15 +166,15 @@ public interface MxParserListener extends ParseTreeListener {
 	 */
 	void exitArrayId(MxParser.ArrayIdContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#argumentExpressionList}.
+	 * Enter a parse tree produced by {@link MxParser#arguementExpressionList}.
 	 * @param ctx the parse tree
 	 */
-	void enterArgumentExpressionList(MxParser.ArgumentExpressionListContext ctx);
+	void enterArguementExpressionList(MxParser.ArguementExpressionListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#argumentExpressionList}.
+	 * Exit a parse tree produced by {@link MxParser#arguementExpressionList}.
 	 * @param ctx the parse tree
 	 */
-	void exitArgumentExpressionList(MxParser.ArgumentExpressionListContext ctx);
+	void exitArguementExpressionList(MxParser.ArguementExpressionListContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code unaryExpression_miss}
 	 * labeled alternative in {@link MxParser#unaryExpression}.
@@ -200,15 +200,29 @@ public interface MxParserListener extends ParseTreeListener {
 	 */
 	void exitUnaryExpression_(MxParser.UnaryExpression_Context ctx);
 	/**
-	 * Enter a parse tree produced by {@link MxParser#newExpression}.
+	 * Enter a parse tree produced by the {@code newExpression_array}
+	 * labeled alternative in {@link MxParser#newExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNewExpression(MxParser.NewExpressionContext ctx);
+	void enterNewExpression_array(MxParser.NewExpression_arrayContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MxParser#newExpression}.
+	 * Exit a parse tree produced by the {@code newExpression_array}
+	 * labeled alternative in {@link MxParser#newExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNewExpression(MxParser.NewExpressionContext ctx);
+	void exitNewExpression_array(MxParser.NewExpression_arrayContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code newExpression_class}
+	 * labeled alternative in {@link MxParser#newExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNewExpression_class(MxParser.NewExpression_classContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code newExpression_class}
+	 * labeled alternative in {@link MxParser#newExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNewExpression_class(MxParser.NewExpression_classContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MxParser#unaryOperator}.
 	 * @param ctx the parse tree
@@ -817,6 +831,26 @@ public interface MxParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArrayLength(MxParser.ArrayLengthContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxParser#newTypeSpecifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterNewTypeSpecifier(MxParser.NewTypeSpecifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#newTypeSpecifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitNewTypeSpecifier(MxParser.NewTypeSpecifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MxParser#newArrayUni}.
+	 * @param ctx the parse tree
+	 */
+	void enterNewArrayUni(MxParser.NewArrayUniContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MxParser#newArrayUni}.
+	 * @param ctx the parse tree
+	 */
+	void exitNewArrayUni(MxParser.NewArrayUniContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MxParser#uniTypeSpecifier}.
 	 * @param ctx the parse tree

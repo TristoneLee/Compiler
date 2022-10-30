@@ -22,7 +22,5 @@ public class Scope {
         funcTable=new HashMap<>();
         variableTable.putAll(entity.classMember);
         funcTable.putAll(entity.classMethod);
-        Parameter para =new Parameter("this",new ValueType(entity.className));
-        variableTable.put("this",para);
     }
 }

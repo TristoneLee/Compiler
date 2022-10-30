@@ -17,11 +17,10 @@ public class ASTbuilder extends MxParserBaseListener {
 
     public ASTbuilder() {
         buffer = new Stack<>();
-        scopeBuffer=new ScopeBuffer();
+        scopeBuffer = new ScopeBuffer();
     }
 
     private void push(ASN node) {
-        System.out.println(node.type);
         node.setParent(buffer.peek());
         if (!buffer.empty()) buffer.peek().attachChild(node);
         buffer.push(node);
@@ -129,8 +128,27 @@ public class ASTbuilder extends MxParserBaseListener {
         buffer.pop();
     }
 
+    public void enterNewArrayUni(MxParser.NewArrayUniContext cxt) {
+        push(new ASNNewArrayUni(scopeBuffer));
+    }
+
+    public void exitNewArrayUni(MxParser.NewArrayUniContext cxt) throws CompileException {
+        buffer.peek().build();
+        buffer.pop();
+    }
+
+    public void enterNewTypeSpecifier(MxParser.NewTypeSpecifierContext cxt){
+        push(new ASNNewTypeSpecifier(scopeBuffer));
+    }
+
+    public void exitNewTypeSpecifier(MxParser.NewTypeSpecifierContext cxt) throws CompileException{
+        buffer.peek().build();
+        buffer.pop();
+    }
+
+
     public void enterArrayLength(MxParser.ArrayLengthContext cxt) {
-        push(new ASNIntConst(parseInt(cxt.IntergerLiteral().getText()), scopeBuffer));
+        push(new ASNIntConst(parseInt(cxt.IntegerLiteral().getText()), scopeBuffer));
     }
 
     public void exitArrayLength(MxParser.ArrayLengthContext cxt) {
@@ -289,11 +307,20 @@ public class ASTbuilder extends MxParserBaseListener {
         buffer.pop();
     }
 
-    public void enterNewExpression(MxParser.NewExpressionContext cxt) {
+    public void enterNewExpression_array(MxParser.NewExpression_arrayContext cxt) {
         push(new ASNNewExpr(scopeBuffer));
     }
 
-    public void exitNewExpression(MxParser.NewExpressionContext cxt) throws CompileException {
+    public void exitNewExpression_array(MxParser.NewExpression_arrayContext cxt) throws CompileException {
+        buffer.peek().build();
+        buffer.pop();
+    }
+
+    public void enterNewExpression_class(MxParser.NewExpression_classContext cxt) {
+        push(new ASNNewExpr(scopeBuffer));
+    }
+
+    public void exitNewExpression_class(MxParser.NewExpression_classContext cxt) throws CompileException {
         buffer.peek().build();
         buffer.pop();
     }
@@ -483,7 +510,7 @@ public class ASTbuilder extends MxParserBaseListener {
     public void enterLiteral(MxParser.LiteralContext cxt) {
         switch (cxt.getStart().getType()) {
             case MxParser.StringLiteral -> push(new ASNStringConst(cxt.getText(), scopeBuffer));
-            case MxParser.IntergerLiteral -> push(new ASNIntConst(Integer.parseInt(cxt.getText()), scopeBuffer));
+            case MxParser.IntegerLiteral -> push(new ASNIntConst(Integer.parseInt(cxt.getText()), scopeBuffer));
             case MxParser.BooleanLiteral -> push(new ASNBooleanConst(Boolean.parseBoolean(cxt.getText()), scopeBuffer));
         }
     }
@@ -493,11 +520,11 @@ public class ASTbuilder extends MxParserBaseListener {
         buffer.pop();
     }
 
-    public void enterForExpr1(MxParser.ForExpr1Context cxt){
+    public void enterForExpr1(MxParser.ForExpr1Context cxt) {
         push(new ASNForExpr1(scopeBuffer));
     }
 
-    public void exitForExpr1(MxParser.ForExpr1Context cxt){
+    public void exitForExpr1(MxParser.ForExpr1Context cxt) {
         buffer.peek().build();
         buffer.pop();
     }
@@ -533,57 +560,61 @@ public class ASTbuilder extends MxParserBaseListener {
         push(new ASNIdentifier(cxt.getText(), scopeBuffer));
     }
 
-    public void exitPrimaryExpression_Iden(MxParser.PrimaryExpression_IdenContext cxt){
+    public void exitPrimaryExpression_Iden(MxParser.PrimaryExpression_IdenContext cxt) {
         buffer.peek().build();
         buffer.pop();
     }
 
-    public void enterArrayId(MxParser.ArrayIdContext cxt){
+    public void enterArrayId(MxParser.ArrayIdContext cxt) {
         push(new ASNArrayId(scopeBuffer));
     }
 
-    public void exitArrayId(MxParser.ArrayIdContext cxt){
+    public void exitArrayId(MxParser.ArrayIdContext cxt) {
         buffer.peek().build();
         buffer.pop();
     }
 
-    public void enterCompoundStatement(MxParser.CompoundStatementContext cxt){
+    public void enterCompoundStatement(MxParser.CompoundStatementContext cxt) {
         push(new ASNCompoundStmt(scopeBuffer));
     }
 
-    public void exitCompoundStatement(MxParser.CompoundStatementContext cxt){
-        buffer.peek().build();;
+    public void exitCompoundStatement(MxParser.CompoundStatementContext cxt) {
+        buffer.peek().build();
+        ;
         buffer.pop();
     }
 
-    public void enterThis(MxParser.ThisContext cxt){
+    public void enterThis(MxParser.ThisContext cxt) {
         push(new ASNThis(scopeBuffer));
     }
 
-    public void exitThis(MxParser.ThisContext cxt){
-        buffer.peek().build();;
+    public void exitThis(MxParser.ThisContext cxt) {
+        buffer.peek().build();
+        ;
         buffer.pop();
     }
 
-    public void enterTrueStatement(MxParser.TrueStatementContext cxt){
-        ASNIfBranch branch=new ASNIfBranch(scopeBuffer);
-        branch.dir=true;
+    public void enterTrueStatement(MxParser.TrueStatementContext cxt) {
+        ASNIfBranch branch = new ASNIfBranch(scopeBuffer);
+        branch.dir = true;
         push(branch);
     }
-    
-    public void exitTrueStatement(MxParser.TrueStatementContext cxt){
-        buffer.peek().build();;
+
+    public void exitTrueStatement(MxParser.TrueStatementContext cxt) {
+        buffer.peek().build();
+        ;
         buffer.pop();
     }
 
-    public void enterFalseStatement(MxParser.FalseStatementContext cxt){
-        ASNIfBranch branch=new ASNIfBranch(scopeBuffer);
-        branch.dir=false;
+    public void enterFalseStatement(MxParser.FalseStatementContext cxt) {
+        ASNIfBranch branch = new ASNIfBranch(scopeBuffer);
+        branch.dir = false;
         push(branch);
     }
 
-    public void exitFalseStatement(MxParser.FalseStatementContext cxt){
-        buffer.peek().build();;
+    public void exitFalseStatement(MxParser.FalseStatementContext cxt) {
+        buffer.peek().build();
+        ;
         buffer.pop();
     }
 }

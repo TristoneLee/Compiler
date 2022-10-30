@@ -18,13 +18,13 @@ public class ASNFuncCall extends ASNExpr {
 
     public ASNFuncCall(ScopeBuffer scopeBuffer) {
         super("FuncCall", scopeBuffer);
-        parameters=new ArrayList<>();
+        parameters = new ArrayList<>();
     }
 
     @Override
     public void build() throws CompileException {
         for (ASN child : children) {
-            if (child instanceof ASNStringConst&&funcName==null) funcName = ((ASNStringConst) child).value;
+            if (child instanceof ASNStringConst && funcName == null) funcName = ((ASNStringConst) child).value;
             else if (child instanceof ASNExpr) parameters.add((ASNExpr) child);
             else throw new InvalidExpression();
         }
@@ -32,13 +32,14 @@ public class ASNFuncCall extends ASNExpr {
 
     @Override
     public void check() throws CompileException {
-        for(ASNExpr expr:parameters) expr.check();
+        for (ASNExpr expr : parameters) expr.check();
         FunctionEntity entity = scopeBuffer.searchFunc(funcName);
-        if (entity==null)throw new CompileException("UndefinedFunction");
-        if (entity.paraList.size()!=parameters.size()) throw new CompileException("UndefinedFunction");
-        for(int i=0;i<parameters.size();++i){
-            if(!entity.paraList.get(i).valueType.equals(parameters.get(i).returnType)) throw new CompileException("UnmatchedParameter");
+        if (entity == null) throw new CompileException("UndefinedFunction");
+        if (entity.paraList.size() != parameters.size()) throw new CompileException("UndefinedFunction");
+        for (int i = 0; i < parameters.size(); ++i) {
+            if (!entity.paraList.get(i).valueType.equals(parameters.get(i).returnType) &&!( (entity.paraList.get(i).valueType.dimension != 0||!entity.paraList.get(i).valueType.isBasicType()) && parameters.get(i).returnType.equals(ValueType.NullType)))
+                throw new CompileException("UnmatchedParameter");
         }
-        returnType=entity.returnType;
+        returnType = entity.returnType;
     }
 }

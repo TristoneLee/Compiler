@@ -1,5 +1,6 @@
 package parser;
 
+import AST.*;
 import utility.Exception.CompileException;
 import utility.Exception.Redeclarification;
 import utility.Parameter;
@@ -11,6 +12,8 @@ import java.util.Stack;
 
 public class ScopeBuffer {
     Stack<Scope> scopeBuffer;
+
+    public Stack<ASN> controlFlow;
     Map<String, ClassEntity> classTable;
     Map<String, FunctionEntity> functionTable;
 
@@ -22,6 +25,7 @@ public class ScopeBuffer {
         scopeBuffer=new Stack<>();
         classTable=new HashMap<>();
         functionTable=new HashMap<>();
+        controlFlow=new Stack<>();
     }
 
 
@@ -71,4 +75,33 @@ public class ScopeBuffer {
         return scopeBuffer.pop();
     }
 
+    public ASN searchFuncDec(){
+        for(int i=controlFlow.size()-1;i>=0;--i){
+            if(controlFlow.get(i) instanceof ASNFuncDec) {
+                ((ASNFuncDec) controlFlow.get(i)).ifReturn=true;
+                return (ASNFuncDec) controlFlow.get(i);
+            }else if(controlFlow.get(i) instanceof ASNLambdaExpr){
+                return (ASNLambdaExpr) controlFlow.get(i);
+            }
+        }
+        return null;
+    }
+
+    public ASN searchLoop(){
+        for(int i=controlFlow.size()-1;i>=0;--i){
+            if(controlFlow.get(i) instanceof ASNWhileStmt||controlFlow.get(i) instanceof ASNForStmt) {
+                return controlFlow.get(i);
+            }
+        }
+        return null;
+    }
+
+    public ASNClassDel searchClassControl(){
+        for(int i=controlFlow.size()-1;i>=0;--i){
+            if(controlFlow.get(i) instanceof ASNClassDel) {
+                return (ASNClassDel) controlFlow.get(i);
+            }
+        }
+        return null;
+    }
 }

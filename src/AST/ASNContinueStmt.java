@@ -13,6 +13,6 @@ public class ASNContinueStmt extends ASNStmt {
 
     @Override
     public void check() throws CompileException {
-        if(scopeBuffer.searchVar("loopppppp")==null) throw new CompileException("ContinueOutsideLoop");
+        if(scopeBuffer.searchLoop()==null) throw new CompileException("ContinueOutsideLoop");
     }
 }

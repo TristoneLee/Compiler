@@ -12,20 +12,27 @@ import static utility.ValueType.VoidType;
 public class ASNReturnStmt extends ASNStmt {
     ValueType returnType;
     ASNExpr expr;
+
     public ASNReturnStmt(ScopeBuffer scopeBuffer) {
-        super("RetuenStmt",scopeBuffer);
+        super("RetuenStmt", scopeBuffer);
     }
 
     @Override
     public void build() throws CompileException {
-        if(!children.isEmpty()) expr= (ASNExpr) children.get(0);
+        if (!children.isEmpty()) expr = (ASNExpr) children.get(0);
     }
 
     @Override
     public void check() throws CompileException {
-        if(expr!=null) {
+        if (expr != null) {
             expr.check();
-            returnType=expr.returnType;
-        }else returnType=VoidType;
+            returnType = expr.returnType;
+        } else returnType = VoidType;
+        if ((scopeBuffer.searchFuncDec() instanceof ASNFuncDec upperFuncDecNode)) {
+            if (!upperFuncDecNode.entity.returnType.equals(returnType) && !((upperFuncDecNode.entity.returnType.dimension != 0 || !upperFuncDecNode.entity.returnType.isBasicType()) && returnType.equals(ValueType.NullType)))
+                throw new CompileException("UnmatchedReturnType");
+        } else if (scopeBuffer.searchFuncDec() instanceof ASNLambdaExpr) {
+            ((ASNLambdaExpr) scopeBuffer.searchFuncDec()).returnType = returnType;
+        } else throw new CompileException("ReturnOutsideOfFunc");
     }
 }

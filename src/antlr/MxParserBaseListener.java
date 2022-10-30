@@ -184,13 +184,13 @@ public class MxParserBaseListener implements MxParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArgumentExpressionList(MxParser.ArgumentExpressionListContext ctx) { }
+	@Override public void enterArguementExpressionList(MxParser.ArguementExpressionListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArgumentExpressionList(MxParser.ArgumentExpressionListContext ctx) { }
+	@Override public void exitArguementExpressionList(MxParser.ArguementExpressionListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -220,13 +220,25 @@ public class MxParserBaseListener implements MxParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNewExpression(MxParser.NewExpressionContext ctx) { }
+	@Override public void enterNewExpression_array(MxParser.NewExpression_arrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNewExpression(MxParser.NewExpressionContext ctx) { }
+	@Override public void exitNewExpression_array(MxParser.NewExpression_arrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNewExpression_class(MxParser.NewExpression_classContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNewExpression_class(MxParser.NewExpression_classContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -899,6 +911,30 @@ public class MxParserBaseListener implements MxParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArrayLength(MxParser.ArrayLengthContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNewTypeSpecifier(MxParser.NewTypeSpecifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNewTypeSpecifier(MxParser.NewTypeSpecifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNewArrayUni(MxParser.NewArrayUniContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNewArrayUni(MxParser.NewArrayUniContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -104,11 +104,11 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArrayId(MxParser.ArrayIdContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MxParser#argumentExpressionList}.
+	 * Visit a parse tree produced by {@link MxParser#arguementExpressionList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitArgumentExpressionList(MxParser.ArgumentExpressionListContext ctx);
+	T visitArguementExpressionList(MxParser.ArguementExpressionListContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code unaryExpression_miss}
 	 * labeled alternative in {@link MxParser#unaryExpression}.
@@ -124,11 +124,19 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnaryExpression_(MxParser.UnaryExpression_Context ctx);
 	/**
-	 * Visit a parse tree produced by {@link MxParser#newExpression}.
+	 * Visit a parse tree produced by the {@code newExpression_array}
+	 * labeled alternative in {@link MxParser#newExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNewExpression(MxParser.NewExpressionContext ctx);
+	T visitNewExpression_array(MxParser.NewExpression_arrayContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code newExpression_class}
+	 * labeled alternative in {@link MxParser#newExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewExpression_class(MxParser.NewExpression_classContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#unaryOperator}.
 	 * @param ctx the parse tree
@@ -489,6 +497,18 @@ public interface MxParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitArrayLength(MxParser.ArrayLengthContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#newTypeSpecifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewTypeSpecifier(MxParser.NewTypeSpecifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MxParser#newArrayUni}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewArrayUni(MxParser.NewArrayUniContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MxParser#uniTypeSpecifier}.
 	 * @param ctx the parse tree

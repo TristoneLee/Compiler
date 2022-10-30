@@ -15,10 +15,10 @@ primaryExpression:
 	;
 
 lambdaExpression:
-	lambdaHead '{' functionBody '}';
+	lambdaHead '{' functionBody '}''(' arguementExpressionList? ')';
 
 lambdaHead:
-	'[' lambdaReferMark? ']' '(' parameterDecList? ')' '->';
+	'[' lambdaReferMark? ']' ('(' parameterDecList? ')')? '->';
 
 lambdaReferMark: '&';
 
@@ -27,12 +27,12 @@ postfixExpression:
     | postfixExpression  ('[' arrayId ']')+ #arrayAccess
 	| postfixExpression '.'  postfixExpression  #memberAccess
     | postfixExpression  ('++' | '--')  #postfixExpression_
-    | functionName '(' argumentExpressionList? ')'  #functionCall
+    | functionName '(' arguementExpressionList? ')'  #functionCall
     ;
 
 arrayId: expression;
 
-argumentExpressionList
+arguementExpressionList
     :   assignmentExpression (',' assignmentExpression)*
     ;
 
@@ -43,7 +43,8 @@ unaryExpression:
 	;
 
 newExpression:
-	'new' (typeSpecifier| (className '(' ')'));
+	'new' newTypeSpecifier    #newExpression_array
+	|'new'  className ('(' ')')? #newExpression_class;
 
 unaryOperator
     :   '&' | '*' | '+' | '-' | '~' | '!'
@@ -199,9 +200,13 @@ typeSpecifier:
 arrayUni:
 	'[' arrayLength? ']';
 
+arrayLength: IntegerLiteral;
 
-arrayLength:
-	IntergerLiteral;
+newTypeSpecifier:
+	uniTypeSpecifier newArrayUni+;
+
+newArrayUni:
+	'[' expression? ']';
 
 uniTypeSpecifier
 	: ('void'
@@ -237,7 +242,7 @@ memberName:
 	Identifier;
 
 classConstructorDel:
-	StringLiteral '(' ')' '{'functionBody'}';
+	className '(' ')' '{'functionBody'}';
 
 classMethodDel:
 	functionDeclaration;
@@ -294,4 +299,4 @@ theOperator:
 	| LeftBracket RightBracket;
 
 
-literal: IntergerLiteral | StringLiteral | BooleanLiteral;
+literal: IntegerLiteral | StringLiteral | BooleanLiteral;

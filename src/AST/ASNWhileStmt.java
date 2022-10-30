@@ -34,10 +34,11 @@ public class ASNWhileStmt extends ASNStmt{
     @Override
     public void check() throws CompileException {
         whileCondition.check();
-        if(whileCondition.returnType!=BooleanType) throw new InvalidStmt();
+        if(!whileCondition.returnType.equals(BooleanType)) throw new InvalidStmt();
         scopeBuffer.push(new Scope());
-        scopeBuffer.addVariable("loopppppp",new ValueType());
+        scopeBuffer.controlFlow.push(this);
         for(ASNStmt stmt:statements) stmt.check();
         scopeBuffer.pop();
+        scopeBuffer.controlFlow.pop();
     }
 }

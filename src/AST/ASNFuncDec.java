@@ -8,6 +8,8 @@ import utility.Exception.InvalidExpression;
 import utility.Parameter;
 import utility.ValueType;
 
+import java.util.Objects;
+
 import static utility.ValueType.IntegerType;
 import static utility.ValueType.VoidType;
 
@@ -16,8 +18,14 @@ public class ASNFuncDec extends ASNStmt {
     public FunctionEntity entity = new FunctionEntity();
     public ASNFuncBody funcBody;
 
+    public boolean ifReturn;
+
     public ASNFuncDec(ScopeBuffer scopeBuffer) {
         super("FuncDec", scopeBuffer);
+    }
+
+    public ASNFuncDec(String classConstructorDec, ScopeBuffer scopeBuffer) {
+        super(classConstructorDec,scopeBuffer);
     }
 
     @Override
@@ -34,15 +42,17 @@ public class ASNFuncDec extends ASNStmt {
 
     @Override
     public void check() throws CompileException {
+        System.out.println(entity.functionName);
         if(entity.functionName.equals("main")){
             if(!entity.returnType.equals(IntegerType)) throw new CompileException("InvalidMainFuncReturn");
             if(entity.paraList.size()!=0) throw new CompileException("InvalidMainFuncPara");
         }
-        funcBody.returnType = entity.returnType;
-        funcBody.ifMain = entity.functionName.equals("main");
         scopeBuffer.push(new Scope());
+        scopeBuffer.controlFlow.push(this);
         for(Parameter para:entity.paraList)scopeBuffer.addVariable(para.name, para.valueType);
         funcBody.check();
+        if(!((ASNFuncDec)scopeBuffer.controlFlow.peek()).ifReturn && !Objects.equals(entity.functionName, "main")&&!Objects.equals(entity.returnType, VoidType)) throw new CompileException("NoReturn");
+        scopeBuffer.controlFlow.pop();
         scopeBuffer.pop();
     }
 }

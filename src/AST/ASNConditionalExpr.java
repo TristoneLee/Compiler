@@ -26,7 +26,7 @@ public class ASNConditionalExpr extends ASNExpr{
         condition.check();
         case1.check();
         case2.check();
-        if(condition.returnType!=BooleanType) throw new InvalidExpression();
+        if(!condition.returnType.equals(BooleanType)) throw new InvalidExpression();
         else if(case1.returnType!=case2.returnType) throw new InvalidExpression();
         else returnType=case1.returnType;
     }

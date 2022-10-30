@@ -16,7 +16,7 @@ import utility.MxErrorListener;
 
 public class Compiler {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 //        FileInputStream fis;
 //        {
 //            try {
@@ -41,10 +41,8 @@ public class Compiler {
 //            System.out.println("Success!");
         }catch (CompileException exception){
             exception.Call();
-            throw new RuntimeException();
         } catch (RuntimeException e){
             System.err.println(e.getMessage());
-            throw new RuntimeException();
         }
     }
 }

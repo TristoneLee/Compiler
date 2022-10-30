@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Stack;
 
 public class ASNTypeSpecifier extends ASN {
-
     ValueType valueType;
 
     public ASNTypeSpecifier(ScopeBuffer scopeBuffer) {

@@ -1,7 +1,7 @@
 lexer grammar MxLexer;
 
 
-IntergerLiteral: (NonzeroDigit (Digit)*)|'0';
+IntegerLiteral: (NonzeroDigit (Digit)*)|'0';
 
 StringLiteral: '"' ( '\\n' | '\\\\' | '\\"' | .)*? '"';
 
@@ -70,10 +70,10 @@ Arrow : '->';
 Dot : '.';
 
 
-Identifier: IdentifierNondigit (IdentifierNondigit | Digit )*;
+Identifier: IdentifierNondigit (Nondigit | Digit )*;
 
 fragment
-IdentifierNondigit : Nondigit;
+IdentifierNondigit : [a-zA-Z];
 
 fragment Nondigit: [a-zA-Z_];
 

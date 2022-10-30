@@ -56,7 +56,7 @@ public class ASNBinaryExpr extends ASNExpr {
                 else throw new InvalidExpression();
             }
             case equal, notEqual -> {
-                if (rhs.returnType.equals(lhs.returnType)  || rhs.returnType.dimension != 0 && lhs.returnType.equals(NullType)  || lhs.returnType.dimension != 0 && rhs.returnType.equals(NullType) )
+                if (rhs.returnType.equals(lhs.returnType)  || rhs.returnType.dimension != 0 && lhs.returnType.equals(NullType)  || ! rhs.returnType.isBasicType() && rhs.returnType.equals(NullType) )
                     returnType = BooleanType;
                 else throw new InvalidExpression();
             }
