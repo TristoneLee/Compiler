@@ -1,5 +1,6 @@
 package AST;
 
+import IR.IRBlock;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 
@@ -10,11 +11,9 @@ import java.util.Stack;
 abstract public class ASN {
     ASN parent;
     public List<ASN> children = new ArrayList<>();
-    public String type;
     ScopeBuffer scopeBuffer;
 
-    ASN(String type_, ScopeBuffer scopeBuffer_) {
-        type = type_;
+    ASN( ScopeBuffer scopeBuffer_) {
         scopeBuffer = scopeBuffer_;
     }
 
@@ -26,10 +25,6 @@ abstract public class ASN {
         if (i < children.size()) {
             return children.get(i);
         } else return null;
-    }
-
-    public int getChildCount() {
-        return children.size();
     }
 
     public void setParent(ASN parent_) {
@@ -45,4 +40,8 @@ abstract public class ASN {
 
     public void check() throws CompileException {
     }
+
+    public void irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock){};
+
+    public void controlFlowAnalysis(List<IRBlock> blocks){};
 }

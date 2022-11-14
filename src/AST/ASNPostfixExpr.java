@@ -12,7 +12,7 @@ public class ASNPostfixExpr extends ASNExpr {
     ASNExpr expr;
 
     public ASNPostfixExpr(ScopeBuffer scopeBuffer, PostfixType _type) {
-        super("PostfixExpr", scopeBuffer);
+        super( scopeBuffer);
         type = _type;
     }
 

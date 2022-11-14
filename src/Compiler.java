@@ -20,7 +20,7 @@ public class Compiler {
 //        FileInputStream fis;
 //        {
 //            try {
-//                fis = new FileInputStream("E:\\课程资料\\大二上\\编译器\\Compiler-Design-Implementation\\Compiler-2021-testcases\\sema\\basic-package\\basic-40.mx");
+//                fis = new FileInputStream("E:\\课程资料\\大二上\\编译器\\Compiler-Design-Implementation\\Compiler-2021-testcases\\sema\\basic-package\\basic-2.mx");
 //                System.setIn(fis);
 //            } catch (FileNotFoundException e) {
 //                throw new RuntimeException(e);
@@ -40,6 +40,7 @@ public class Compiler {
             ASTbuilder builder = new ASTbuilder();
             walker.walk(builder, tree);
             builder.check();
+            int x=1;
 //            System.out.println("Success!");
         }catch (CompileException exception){
             exception.Call();

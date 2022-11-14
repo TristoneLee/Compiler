@@ -1,5 +1,6 @@
 package AST;
 
+import IR.IRBlock;
 import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
@@ -14,17 +15,16 @@ import static utility.ValueType.BooleanType;
 
 public class ASNWhileStmt extends ASNStmt{
     ASNExpr whileCondition;
-    List<ASNStmt> statements;
+    ASNStmt whileStmt;
     public ASNWhileStmt(ScopeBuffer scopeBuffer){
-        super("WhileStmt",scopeBuffer);
-        statements=new ArrayList<>();
+        super(scopeBuffer);
     }
 
     @Override
     public void build(){
         for(ASN child :children){
             if(child instanceof ASNStmt){
-                statements.add((ASNStmt) child);
+                whileStmt= (ASNStmt) child;
             }else if(child instanceof ASNExpr){
                 whileCondition=(ASNExpr) child;
             }
@@ -37,8 +37,31 @@ public class ASNWhileStmt extends ASNStmt{
         if(!whileCondition.returnType.equals(BooleanType)) throw new InvalidStmt();
         scopeBuffer.push(new Scope());
         scopeBuffer.controlFlow.push(this);
-        for(ASNStmt stmt:statements) stmt.check();
+        whileStmt.check();
         scopeBuffer.pop();
         scopeBuffer.controlFlow.pop();
+    }
+
+    int formerIndex;
+    int conditionIndex;
+    int bodyIndex;
+    int forwardIndex;
+
+    @Override
+    public void controlFlowAnalysis(List<IRBlock> blocks) {
+        formerIndex=blocks.size()-1;
+        blocks.add(new IRBlock());
+        conditionIndex=blocks.size()-1;
+        blocks.add(new IRBlock());
+        bodyIndex=blocks.size()-1;
+        blocks.add(new IRBlock());
+        forwardIndex= blocks.size()-1;
+    }
+
+    @Override
+    public void irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock) {
+        whileCondition.irGeneration(blocks,localVarIndex,conditionIndex);
+        whileStmt.irGeneration(blocks,localVarIndex,bodyIndex);
+        curBlock=forwardIndex;
     }
 }

@@ -10,7 +10,7 @@ public class ASNExprStmt extends ASNStmt{
     ASNExpr expr;
 
     public ASNExprStmt(ScopeBuffer scopeBuffer){
-        super("ExprStmt",scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override

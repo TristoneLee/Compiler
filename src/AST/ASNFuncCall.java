@@ -17,7 +17,7 @@ public class ASNFuncCall extends ASNExpr {
     List<ASNExpr> parameters;
 
     public ASNFuncCall(ScopeBuffer scopeBuffer) {
-        super("FuncCall", scopeBuffer);
+        super( scopeBuffer);
         parameters = new ArrayList<>();
     }
 

@@ -10,7 +10,7 @@ public class ASNForExpr3 extends ASNExpr{
     ASNExpr expr;
 
     public ASNForExpr3 (ScopeBuffer scopeBuffer){
-        super("ForExpr3",scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package AST;
 
+import IR.IRBlock;
+import org.xml.sax.SAXNotSupportedException;
 import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
@@ -11,7 +13,7 @@ public class ASNCompoundStmt extends ASNStmt {
     List<ASNStmt> stmts;
 
     public ASNCompoundStmt(ScopeBuffer scopeBuffer){
-        super("CompoundStmt",scopeBuffer);
+        super(scopeBuffer);
         stmts=new ArrayList<>();
     }
 
@@ -29,5 +31,12 @@ public class ASNCompoundStmt extends ASNStmt {
             stmt.check();
         }
         scopeBuffer.pop();
+    }
+
+    @Override
+    public void controlFlowAnalysis(List<IRBlock> blocks) {
+        for(ASNStmt stmt:stmts){
+            stmt.controlFlowAnalysis(blocks);
+        }
     }
 }

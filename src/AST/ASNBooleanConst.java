@@ -10,7 +10,7 @@ import static utility.ValueType.BooleanType;
 public class ASNBooleanConst extends ASNExpr{
     Boolean value;
     public ASNBooleanConst(Boolean value_, ScopeBuffer scopeBuffer){
-        super("BooleanConst",scopeBuffer);
+        super(scopeBuffer);
         value=value_;
         returnType= BooleanType;
     }

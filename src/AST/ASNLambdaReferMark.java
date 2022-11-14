@@ -6,6 +6,6 @@ import java.util.Stack;
 
 public class ASNLambdaReferMark extends ASN{
     public ASNLambdaReferMark(ScopeBuffer scopeBuffer){
-        super("LambdaReferMark",scopeBuffer);
+        super(scopeBuffer);
     }
 }

@@ -19,7 +19,7 @@ public class ASNClassDel extends ASNStmt {
     public ClassEntity classEntity;
 
     public ASNClassDel(ScopeBuffer scopeBuffer) {
-        super("ClassDec", scopeBuffer);
+        super( scopeBuffer);
         classEntity=new ClassEntity();
         classMethods=new ArrayList<>();
     }

@@ -20,7 +20,7 @@ public class ASNLambdaExpr extends ASNExpr{
     List<ASNExpr> values;
     ASNFuncBody funcBody;
     public ASNLambdaExpr(ScopeBuffer scopeBuffer) {
-        super("LambdaExpr",scopeBuffer);
+        super(scopeBuffer);
         values=new ArrayList<>();
         parameters=new ArrayList<>();
     }

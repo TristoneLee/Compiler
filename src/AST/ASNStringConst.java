@@ -11,7 +11,7 @@ public class ASNStringConst extends ASNExpr {
     String value;
 
     public ASNStringConst(String value_, ScopeBuffer scopeBuffer) {
-        super("StringConst",scopeBuffer);
+        super(scopeBuffer);
         value = value_;
         returnType=StringType;
     }

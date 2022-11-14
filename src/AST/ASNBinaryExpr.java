@@ -22,7 +22,7 @@ public class ASNBinaryExpr extends ASNExpr {
     Operate op;
 
     public ASNBinaryExpr(Operate op_, ScopeBuffer scopeBuffer) {
-        super("BinaryExpression", scopeBuffer);
+        super(scopeBuffer);
         op=op_;
     }
 

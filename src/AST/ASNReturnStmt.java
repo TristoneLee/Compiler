@@ -14,7 +14,7 @@ public class ASNReturnStmt extends ASNStmt {
     ASNExpr expr;
 
     public ASNReturnStmt(ScopeBuffer scopeBuffer) {
-        super("RetuenStmt", scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override

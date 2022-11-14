@@ -14,7 +14,7 @@ public class ASNNewTypeSpecifier extends ASNExpr{
     List<ASNExpr> dimensions;
 
     public ASNNewTypeSpecifier(ScopeBuffer scopeBuffer) {
-        super("TypeSpecifier", scopeBuffer);
+        super( scopeBuffer);
         dimensions=new ArrayList<>();
     }
 

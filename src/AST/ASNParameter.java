@@ -9,17 +9,18 @@ import java.util.Objects;
 public class ASNParameter extends ASN {
     Parameter parameter;
     ASNTypeSpecifier typeSpecifier;
+
     public ASNParameter(ScopeBuffer scopeBuffer) {
-        super("Parameter", scopeBuffer);
-        parameter=new Parameter();
+        super( scopeBuffer);
+        parameter = new Parameter();
     }
 
     @Override
     public void build() throws CompileException {
         for (ASN child : children) {
-            if (Objects.equals(child.type, "StringConst")) {
+            if (child instanceof ASNStringConst) {
                 parameter.name = ((ASNStringConst) child).value;
-            } else if (Objects.equals(child.type, "TypeSpecifier")) {
+            } else if (child instanceof ASNTypeSpecifier) {
                 parameter.valueType.dimension = ((ASNTypeSpecifier) child).valueType.dimension;
                 parameter.valueType.dimensions = ((ASNTypeSpecifier) child).valueType.dimensions;
                 parameter.valueType.baseType = ((ASNTypeSpecifier) child).valueType.baseType;

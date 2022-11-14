@@ -8,7 +8,7 @@ import static utility.ValueType.NullType;
 
 public class ASNNull extends ASNExpr{
     public ASNNull(ScopeBuffer scopeBuffer){
-        super("ASNNull",scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override

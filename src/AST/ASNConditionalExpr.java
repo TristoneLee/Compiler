@@ -11,7 +11,7 @@ public class ASNConditionalExpr extends ASNExpr{
     ASNExpr case1,case2,condition;
 
     public ASNConditionalExpr(ScopeBuffer scopeBuffer){
-        super("ConditionalExpr",scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override

@@ -12,7 +12,7 @@ public class ASNIfBranch extends ASN {
     public boolean dir;
 
     public ASNIfBranch(ScopeBuffer scopeBuffer){
-        super("TrueStmt",scopeBuffer);
+        super(scopeBuffer);
         stmts=new ArrayList<>();
     }
 

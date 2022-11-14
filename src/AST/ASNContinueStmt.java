@@ -8,7 +8,7 @@ import java.util.Stack;
 
 public class ASNContinueStmt extends ASNStmt {
     public ASNContinueStmt(ScopeBuffer scopeBuffer){
-        super("ContinueStmt",scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override

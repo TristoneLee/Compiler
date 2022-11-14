@@ -13,7 +13,7 @@ public class ASNInitDeclarator extends ASN{
     ASNExpr initor;
 
     public ASNInitDeclarator(String name_, ScopeBuffer scopeBuffer) {
-        super("InitDeclarator", scopeBuffer);
+        super( scopeBuffer);
         name=name_;
     }
 

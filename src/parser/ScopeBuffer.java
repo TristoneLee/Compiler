@@ -7,6 +7,7 @@ import utility.Parameter;
 import utility.ValueType;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Stack;
 
@@ -14,8 +15,9 @@ public class ScopeBuffer {
     Stack<Scope> scopeBuffer;
 
     public Stack<ASN> controlFlow;
-    Map<String, ClassEntity> classTable;
-    Map<String, FunctionEntity> functionTable;
+
+    public LinkedHashMap<String, ClassEntity> classTable;
+    public LinkedHashMap<String, FunctionEntity> functionTable;
 
     public void push(Scope scope) {
         scopeBuffer.push(scope);
@@ -23,8 +25,8 @@ public class ScopeBuffer {
 
     public ScopeBuffer(){
         scopeBuffer=new Stack<>();
-        classTable=new HashMap<>();
-        functionTable=new HashMap<>();
+        classTable=new LinkedHashMap<>();
+        functionTable=new LinkedHashMap<>();
         controlFlow=new Stack<>();
     }
 

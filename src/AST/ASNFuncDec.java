@@ -1,5 +1,6 @@
 package AST;
 
+import IR.IRBlock;
 import parser.FunctionEntity;
 import parser.Scope;
 import parser.ScopeBuffer;
@@ -8,6 +9,7 @@ import utility.Exception.InvalidExpression;
 import utility.Parameter;
 import utility.ValueType;
 
+import java.util.List;
 import java.util.Objects;
 
 import static utility.ValueType.IntegerType;
@@ -21,11 +23,7 @@ public class ASNFuncDec extends ASNStmt {
     public boolean ifReturn;
 
     public ASNFuncDec(ScopeBuffer scopeBuffer) {
-        super("FuncDec", scopeBuffer);
-    }
-
-    public ASNFuncDec(String classConstructorDec, ScopeBuffer scopeBuffer) {
-        super(classConstructorDec,scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override
@@ -43,16 +41,21 @@ public class ASNFuncDec extends ASNStmt {
     @Override
     public void check() throws CompileException {
         System.out.println(entity.functionName);
-        if(entity.functionName.equals("main")){
-            if(!entity.returnType.equals(IntegerType)) throw new CompileException("InvalidMainFuncReturn");
-            if(entity.paraList.size()!=0) throw new CompileException("InvalidMainFuncPara");
+        if (entity.functionName.equals("main")) {
+            if (!entity.returnType.equals(IntegerType)) throw new CompileException("InvalidMainFuncReturn");
+            if (entity.paraList.size() != 0) throw new CompileException("InvalidMainFuncPara");
         }
         scopeBuffer.push(new Scope());
         scopeBuffer.controlFlow.push(this);
-        for(Parameter para:entity.paraList)scopeBuffer.addVariable(para.name, para.valueType);
+        for (Parameter para : entity.paraList) scopeBuffer.addVariable(para.name, para.valueType);
         funcBody.check();
-        if(!((ASNFuncDec)scopeBuffer.controlFlow.peek()).ifReturn && !Objects.equals(entity.functionName, "main")&&!Objects.equals(entity.returnType, VoidType)) throw new CompileException("NoReturn");
+        if (!((ASNFuncDec) scopeBuffer.controlFlow.peek()).ifReturn && !Objects.equals(entity.functionName, "main") && !Objects.equals(entity.returnType, VoidType))
+            throw new CompileException("NoReturn");
         scopeBuffer.controlFlow.pop();
         scopeBuffer.pop();
+    }
+
+    @Override
+    public void to_IR(List<IRBlock> blocks, Integer localVarIndex, Integer blockIndex) {
     }
 }

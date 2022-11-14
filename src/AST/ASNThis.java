@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ASNThis extends ASNExpr{
     public ASNThis(ScopeBuffer scopeBuffer){
-        super("This", scopeBuffer);
+        super( scopeBuffer);
     }
 
     @Override

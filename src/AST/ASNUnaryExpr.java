@@ -16,7 +16,7 @@ public class ASNUnaryExpr extends ASNExpr{
     ASNExpr expr;
 
     public ASNUnaryExpr(ScopeBuffer scopeBuffer, UnaryOp op){
-        super("ASNUnaryExpr",scopeBuffer);
+        super(scopeBuffer);
         unaryOp=op;
     }
 

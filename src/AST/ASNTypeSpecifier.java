@@ -13,7 +13,7 @@ public class ASNTypeSpecifier extends ASN {
     ValueType valueType;
 
     public ASNTypeSpecifier(ScopeBuffer scopeBuffer) {
-        super("TypeSpecifier", scopeBuffer);
+        super( scopeBuffer);
     }
 
     @Override

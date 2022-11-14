@@ -14,7 +14,7 @@ public class ASNClassMemberDec extends ASNStmt{
     List<Parameter> members;
 
     public ASNClassMemberDec(ScopeBuffer scopeBuffer){
-        super("ClassMemberDec",scopeBuffer);
+        super(scopeBuffer);
         members=new ArrayList<>();
     }
 

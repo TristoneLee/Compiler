@@ -5,6 +5,7 @@ import antlr.MxParser;
 import antlr.MxParserBaseListener;
 import utility.Exception.CompileException;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -12,8 +13,12 @@ import static java.lang.Integer.parseInt;
 
 public class ASTbuilder extends MxParserBaseListener {
     Stack<ASN> buffer;
-    ScopeBuffer scopeBuffer;
-    ASN root;
+    public ScopeBuffer scopeBuffer;
+    public ASN root;
+
+    List<ASNFuncDec> funcDecList;
+    List<ASNClassDel> classDelList;
+    List<ASNVarDec> varDecList;
 
     public ASTbuilder() {
         buffer = new Stack<>();
@@ -41,6 +46,9 @@ public class ASTbuilder extends MxParserBaseListener {
                 scopeBuffer.addFunction(((ASNFuncDec) child).entity.functionName, ((ASNFuncDec) child).entity);
             } else if (child instanceof ASNClassDel) {
                 scopeBuffer.addClass(((ASNClassDel) child).classEntity.className, ((ASNClassDel) child).classEntity);
+                classDelList.add((ASNClassDel) child);
+            } else if (child instanceof ASNVarDec){
+                varDecList.add((ASNVarDec) child);
             }
         }
         scopeBuffer.push(new Scope());

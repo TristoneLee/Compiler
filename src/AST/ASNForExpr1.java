@@ -7,7 +7,7 @@ public class ASNForExpr1 extends ASN{
     ASN expr;
 
     public ASNForExpr1 (ScopeBuffer scopeBuffer){
-        super("ForExpr1",scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override

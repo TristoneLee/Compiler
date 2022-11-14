@@ -13,7 +13,7 @@ public class ASNVarDec extends ASNStmt{
     ValueType valueType;
     List<ASNInitDeclarator> declarators=new ArrayList<>();
     public ASNVarDec(ScopeBuffer scopeBuffer){
-        super("VarDec",scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override

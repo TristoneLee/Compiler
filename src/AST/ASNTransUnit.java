@@ -8,7 +8,7 @@ import java.util.Stack;
 
 public class ASNTransUnit extends ASN{
     public ASNTransUnit(ScopeBuffer scopeBuffer) {
-        super("TransUnit",scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override

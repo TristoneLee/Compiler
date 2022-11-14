@@ -1,5 +1,6 @@
 package AST;
 
+import IR.IRBlock;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidStmt;
@@ -16,7 +17,7 @@ public class ASNIfStmt extends ASNStmt{
     ASNIfBranch falseStmt;
 
     public ASNIfStmt(ScopeBuffer scopeBuffer){
-        super("IfStmt",scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override
@@ -37,5 +38,28 @@ public class ASNIfStmt extends ASNStmt{
         if(trueStmt!=null) trueStmt.check();
         if(falseStmt!=null) falseStmt.check();
         if(!ifCondition.returnType.equals(BooleanType)) throw new InvalidStmt();
+    }
+
+    int formerIndex;
+    int conditionIndex;
+    int trueStmtIndex;
+    int falseStmtIndex;
+    int forwardIndex;
+
+    @Override
+    public void controlFlowAnalysis(List<IRBlock> blocks) {
+        formerIndex=blocks.size()-1;
+        conditionIndex=formerIndex+1;
+        blocks.add(new IRBlock());
+        if(trueStmt!=null){
+            blocks.add(new IRBlock());
+            trueStmtIndex= blocks.size()-1;
+        }
+        if(falseStmt!=null){
+            blocks.add(new IRBlock());
+            falseStmtIndex= blocks.size()-1;
+        }
+        blocks.add(new IRBlock());
+        formerIndex=blocks.size()-1;
     }
 }

@@ -11,7 +11,7 @@ public class ASNArrayUni extends ASN{
      int num;
 
     public ASNArrayUni(ScopeBuffer scopeBuffer){
-        super("ArrayUni",scopeBuffer);
+        super(scopeBuffer);
     }
 
     public void build() throws CompileException {

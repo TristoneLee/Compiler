@@ -9,7 +9,7 @@ import java.util.Stack;
 public class ASNForExpr2 extends ASNExpr{
     ASNExpr expr;
     public ASNForExpr2 (ScopeBuffer scopeBuffer){
-        super("ForExpr2",scopeBuffer);
+        super(scopeBuffer);
     }
 
     @Override

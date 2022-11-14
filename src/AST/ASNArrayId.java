@@ -9,7 +9,7 @@ public class ASNArrayId extends  ASNExpr{
     ASNExpr expr;
 
     public ASNArrayId(ScopeBuffer scopeBuffer) {
-        super("ArrayId", scopeBuffer);
+        super( scopeBuffer);
     }
 
     @Override

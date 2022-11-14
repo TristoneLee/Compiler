@@ -8,7 +8,7 @@ public class ASNNewArrayUni extends ASN{
     ASNExpr expr;
 
     public ASNNewArrayUni(ScopeBuffer scopeBuffer){
-        super("NewArrayUni",scopeBuffer);
+        super(scopeBuffer);
     }
 
     public void build() throws CompileException {

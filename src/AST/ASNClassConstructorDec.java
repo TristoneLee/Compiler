@@ -11,7 +11,7 @@ public class ASNClassConstructorDec extends ASNFuncDec{
     String className;
 
     public ASNClassConstructorDec(ScopeBuffer scopeBuffer) {
-        super("ClassConstructorDec", scopeBuffer);
+        super( scopeBuffer);
         entity.returnType= ValueType.VoidType;
     }
 

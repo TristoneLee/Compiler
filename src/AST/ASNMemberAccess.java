@@ -13,7 +13,7 @@ public class ASNMemberAccess extends ASNExpr {
     ASNExpr postfix;
 
     public ASNMemberAccess(ScopeBuffer scopeBuffer) {
-        super("MemberAccess", scopeBuffer);
+        super( scopeBuffer);
     }
 
     @Override

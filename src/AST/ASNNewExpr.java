@@ -13,7 +13,7 @@ public class ASNNewExpr extends ASNExpr{
     ASNNewTypeSpecifier expr;
     ASNIdentifier expr_;
     public ASNNewExpr(ScopeBuffer scopeBuffer){
-        super("NewExpr",scopeBuffer);
+        super(scopeBuffer);
     }
     @Override
     public void build(){
