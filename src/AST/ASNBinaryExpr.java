@@ -1,12 +1,12 @@
 package AST;
 
+import IR.IRBlock;
+import IR.IRUtility.IRScopeBuffer;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidExpression;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Stack;
 
 import static utility.ValueType.*;
 
@@ -65,6 +65,19 @@ public class ASNBinaryExpr extends ASNExpr {
                 if(!lhs.ifLeftValue)throw new InvalidExpression();
                 else if(rhs.returnType.equals(lhs.returnType)||(lhs.returnType.dimension!=0&&rhs.returnType.equals(NullType))||!lhs.returnType.isBasicType()&&rhs.returnType.equals(NullType)) returnType=VoidType;
                 else throw new InvalidExpression();
+            }
+        }
+    }
+
+    @Override
+    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
+        if(op==Operate.assign){
+            if(rhs instanceof ASNIntConst){
+                int lhsIndex=lhs.irGeneration(blocks,localVarIndex,curBlock,irScopeBuffer);
+
+            }
+            if(lhs instanceof ASNIdentifier){
+                irScopeBuffer.scopeBuffer.peek().indexTable.put(((ASNIdentifier) lhs).identifier,++localVarIndex);
             }
         }
     }

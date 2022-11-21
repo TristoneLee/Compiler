@@ -5,6 +5,7 @@ import antlr.MxParser;
 import antlr.MxParserBaseListener;
 import utility.Exception.CompileException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
@@ -23,6 +24,7 @@ public class ASTbuilder extends MxParserBaseListener {
     public ASTbuilder() {
         buffer = new Stack<>();
         scopeBuffer = new ScopeBuffer();
+        varDecList=new ArrayList<>();
     }
 
     private void push(ASN node) {
@@ -51,7 +53,6 @@ public class ASTbuilder extends MxParserBaseListener {
                 varDecList.add((ASNVarDec) child);
             }
         }
-        scopeBuffer.push(new Scope());
         if (!flag) throw new CompileException("NoMainFunction");
     }
 

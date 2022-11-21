@@ -1,16 +1,12 @@
 package AST;
 
 import IR.IRBlock;
+import IR.IRUtility.IRScopeBuffer;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
-import utility.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
-
-import static utility.ValueType.IntegerType;
-import static utility.ValueType.VoidType;
 
 public class ASNFuncBody extends ASN {
     public List<ASNStmt> statements = new ArrayList<>();
@@ -32,11 +28,12 @@ public class ASNFuncBody extends ASN {
     }
 
     @Override
-    public void irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock) {
+    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
         controlFlowAnalysis(blocks,0);
         for(ASNStmt stmt:statements){
-            stmt.irGeneration(blocks,localVarIndex,curBlock);
+            stmt.irGeneration(blocks,localVarIndex,curBlock,irScopeBuffer);
         }
+        return 0;
     }
 
     public void controlFlowAnalysis(List<IRBlock> blocks, Integer blockIndex){

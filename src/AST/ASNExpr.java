@@ -10,9 +10,10 @@ abstract public class ASNExpr extends ASN {
     ValueType returnType;
     boolean ifLeftValue = false;
 
+    int returnIndex;
+
     ASNExpr(ScopeBuffer scopeBuffer) {
         super(scopeBuffer);
     }
-
 
 }

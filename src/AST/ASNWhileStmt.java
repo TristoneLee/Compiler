@@ -1,13 +1,12 @@
 package AST;
 
 import IR.IRBlock;
+import IR.IRUtility.IRScopeBuffer;
 import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidStmt;
-import utility.ValueType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -59,9 +58,10 @@ public class ASNWhileStmt extends ASNStmt{
     }
 
     @Override
-    public void irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock) {
-        whileCondition.irGeneration(blocks,localVarIndex,conditionIndex);
-        whileStmt.irGeneration(blocks,localVarIndex,bodyIndex);
+    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
+        whileCondition.irGeneration(blocks,localVarIndex,conditionIndex,irScopeBuffer);
+        whileStmt.irGeneration(blocks,localVarIndex,bodyIndex,irScopeBuffer);
         curBlock=forwardIndex;
+        return 0;
     }
 }

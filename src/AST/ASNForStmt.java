@@ -1,15 +1,13 @@
 package AST;
 
 import IR.IRBlock;
+import IR.IRUtility.IRScopeBuffer;
 import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidExpression;
-import utility.ValueType;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Stack;
 
 import static utility.ValueType.BooleanType;
 
@@ -72,19 +70,20 @@ public class ASNForStmt extends ASNStmt {
     }
 
     @Override
-    public void irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock) {
+    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
         if(forExpr1!=null){
-            forExpr1.irGeneration(blocks,localVarIndex,formerIndex);
+            forExpr1.irGeneration(blocks,localVarIndex,formerIndex,irScopeBuffer);
         }
         if(forExpr2!=null){
-            forExpr2.irGeneration(blocks,localVarIndex,expr2Index);
+            forExpr2.irGeneration(blocks,localVarIndex,expr2Index,irScopeBuffer);
         }
         if(forExpr3!=null){
-            forExpr3.irGeneration(blocks,localVarIndex,expr3Index);
+            forExpr3.irGeneration(blocks,localVarIndex,expr3Index,irScopeBuffer);
         }
         if(forStmt!=null){
-            forStmt.irGeneration(blocks,localVarIndex,bodyIndex);
+            forStmt.irGeneration(blocks,localVarIndex,bodyIndex,irScopeBuffer);
         }
         curBlock=forwardIndex;
+        return 0;
     }
 }

@@ -1,10 +1,11 @@
 package AST;
 
+import IR.IRBlock;
+import IR.IRUtility.IRScopeBuffer;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 
 import java.util.List;
-import java.util.Stack;
 
 public class ASNExprStmt extends ASNStmt{
     ASNExpr expr;
@@ -21,5 +22,11 @@ public class ASNExprStmt extends ASNStmt{
     @Override
     public void check() throws CompileException {
         if(expr!=null)expr.check();
+    }
+
+    @Override
+    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
+        expr.irGeneration(blocks,localVarIndex,curBlock,irScopeBuffer);
+        return 0;
     }
 }

@@ -1,5 +1,7 @@
 package AST;
 
+import IR.IRBlock;
+import IR.IRUtility.IRScopeBuffer;
 import com.sun.jdi.VoidType;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
@@ -35,5 +37,14 @@ public class ASNVarDec extends ASNStmt{
             if(declarator.initor!=null&&!valueType.equals(declarator.returnType)&&!(!valueType.isBasicType()&&declarator.returnType.equals(ValueType.NullType))) throw new CompileException("UnmatchedValueType");
             scopeBuffer.addVariable(declarator.name,valueType);
         }
+    }
+
+    @Override
+    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
+        if (valueType.equals(ValueType.IntegerType)) {
+            localVarIndex++;
+            blocks.get(curBlock).ins.add(new IR)
+        }
+        return 0;
     }
 }

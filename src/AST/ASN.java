@@ -1,19 +1,19 @@
 package AST;
 
 import IR.IRBlock;
+import IR.IRUtility.IRScopeBuffer;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 abstract public class ASN {
     ASN parent;
     public List<ASN> children = new ArrayList<>();
     ScopeBuffer scopeBuffer;
 
-    ASN( ScopeBuffer scopeBuffer_) {
+    ASN(ScopeBuffer scopeBuffer_) {
         scopeBuffer = scopeBuffer_;
     }
 
@@ -41,7 +41,11 @@ abstract public class ASN {
     public void check() throws CompileException {
     }
 
-    public void irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock){};
+    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
+        return 0;
+    }
+    
 
-    public void controlFlowAnalysis(List<IRBlock> blocks){};
+    public void controlFlowAnalysis(List<IRBlock> blocks) {
+    }
 }

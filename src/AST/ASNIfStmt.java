@@ -1,13 +1,12 @@
 package AST;
 
 import IR.IRBlock;
+import IR.IRUtility.IRScopeBuffer;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidStmt;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 import static utility.ValueType.BooleanType;
 
@@ -60,6 +59,19 @@ public class ASNIfStmt extends ASNStmt{
             falseStmtIndex= blocks.size()-1;
         }
         blocks.add(new IRBlock());
-        formerIndex=blocks.size()-1;
+        forwardIndex=blocks.size()-1;
+    }
+
+    @Override
+    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
+        if(ifCondition!=null){
+            ifCondition.irGeneration(blocks,localVarIndex,conditionIndex,irScopeBuffer);
+        }
+        if(trueStmt!=null){
+            trueStmt.irGeneration(blocks,localVarIndex,conditionIndex,irScopeBuffer);
+        }
+        if(falseStmt!=null){
+            falseStmt.irGeneration(blocks,localVarIndex,conditionIndex,irScopeBuffer);
+        }
     }
 }
