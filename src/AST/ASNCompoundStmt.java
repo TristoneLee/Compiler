@@ -1,7 +1,5 @@
 package AST;
 
-import IR.IRBlock;
-import org.xml.sax.SAXNotSupportedException;
 import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
@@ -34,9 +32,9 @@ public class ASNCompoundStmt extends ASNStmt {
     }
 
     @Override
-    public void controlFlowAnalysis(List<IRBlock> blocks) {
+    public void controlFlowAnalysis(IRBuilder irBuilder) {
         for(ASNStmt stmt:stmts){
-            stmt.controlFlowAnalysis(blocks);
+            stmt.controlFlowAnalysis(irBuilder);
         }
     }
 }

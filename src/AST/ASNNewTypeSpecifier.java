@@ -8,14 +8,14 @@ import utility.ValueType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ASNNewTypeSpecifier extends ASNExpr{
+public class ASNNewTypeSpecifier extends ASNExpr {
     String baseType;
     int dimension;
-    List<ASNExpr> dimensions;
+    List<Integer> dimensions;
 
     public ASNNewTypeSpecifier(ScopeBuffer scopeBuffer) {
-        super( scopeBuffer);
-        dimensions=new ArrayList<>();
+        super(scopeBuffer);
+        dimensions = new ArrayList<>();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class ASNNewTypeSpecifier extends ASNExpr{
             if (child instanceof ASNStringConst) baseType = ((ASNStringConst) child).value;
             else if (child instanceof ASNNewArrayUni) {
                 ++dimension;
-                dimensions.add(((ASNNewArrayUni) child).expr);
+                dimensions.add(((ASNNewArrayUni) child).expr == null ? 0 : ((ASNNewArrayUni) child).expr.value);
             }
         }
     }
@@ -33,17 +33,13 @@ public class ASNNewTypeSpecifier extends ASNExpr{
     public void check() throws CompileException {
         if (baseType.equals("void") && dimension != 0) throw new InvalidArrayType();
         boolean flag = false;
-        for (ASNExpr expr : dimensions) {
-            if(expr!=null){
-                expr.check();
-                if(!expr.returnType.equals(ValueType.IntegerType)) throw new CompileException("InvalidArrayNew");
-            }
-            if (expr == null) flag = true;
+        for (int dim : dimensions) {
+            if (dim==0) flag = true;
             else if (flag) throw new InvalidArrayType();
         }
-        returnType=new ValueType(baseType);
-        returnType.dimension=dimension;
-        for(int i=0;i<dimension;++i)returnType.dimensions.add(0);
+        returnType = new ValueType(baseType);
+        returnType.dimension = dimension;
+        for (int i = 0; i < dimension; ++i) returnType.dimensions.add(0);
     }
 }
 

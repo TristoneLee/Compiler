@@ -1,5 +1,9 @@
 package AST;
 
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRIns.IRCalc;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidExpression;
@@ -30,4 +34,15 @@ public class ASNPostfixExpr extends ASNExpr {
         returnType=IntegerType;
     }
 
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+        var lVar= expr.irGeneration(irBuilder,irFunction,curBlock);
+        ++irFunction.localVarIndex;
+        var returnVar = new IRVar(returnType, irFunction.localVarIndex);
+        var copyIns=new IRCalc(new IRVar(0),lVar,returnVar, IRCalc.IROp.plus);
+        var opIns=new IRCalc(new IRVar(1),lVar,lVar, IRCalc.IROp.plus);
+        irFunction.addIns(curBlock,opIns);
+        irFunction.addIns(curBlock,copyIns);
+        return returnVar;
+    }
 }

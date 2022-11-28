@@ -2,12 +2,21 @@ package IR.IRIns;
 
 import IR.IRUtility.IRVar;
 
-public class IRCalc {
+public class IRCalc extends IRIns{
     public enum IROp {
-        plus, minus, star, div, mod, leftShift, rightShift, and, or, logicalAnd, logicalOr, equal, notEqual, exclusiveOr
+        plus, minus, star, div, mod, less, lessEqual, greaterEqual, greater, leftShift,
+        rightShift, and, or, logicalAnd, logicalOr, equal, notEqual, assign, exclusiveOr
     }
 
-    IRVar rhs;
-    IRVar lhs;
-    IROp op;
+    public IRVar rhs;
+    public IRVar lhs;
+    public IROp op;
+    public IRVar des;
+
+    public IRCalc(IRVar lhsVar_, IRVar rhsVar_, IRVar desVar_,IROp op_) {
+        rhs=new IRVar(rhsVar_);
+        lhs=new IRVar(lhsVar_);
+        des=new IRVar(desVar_);
+        op=op_;
+    }
 }

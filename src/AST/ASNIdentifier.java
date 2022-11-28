@@ -1,11 +1,11 @@
 package AST;
 
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.UndeifinedVariety;
-
-import java.util.List;
-import java.util.Stack;
 
 public class ASNIdentifier extends ASNExpr{
     String identifier;
@@ -25,5 +25,10 @@ public class ASNIdentifier extends ASNExpr{
     public void check() throws CompileException {
         returnType=scopeBuffer.searchVar(identifier);
         if(returnType==null) throw new UndeifinedVariety();
+    }
+
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+        return irBuilder.irScopeStack.searchVar(identifier);
     }
 }

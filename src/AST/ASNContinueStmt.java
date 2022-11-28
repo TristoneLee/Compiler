@@ -1,5 +1,9 @@
 package AST;
 
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRIns.IRBr;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 
@@ -14,5 +18,11 @@ public class ASNContinueStmt extends ASNStmt {
     @Override
     public void check() throws CompileException {
         if(scopeBuffer.searchLoop()==null) throw new CompileException("ContinueOutsideLoop");
+    }
+
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+        irFunction.addIns(curBlock,new IRBr(irFunction.blocks.get(curBlock).continueBlock));
+        return null;
     }
 }

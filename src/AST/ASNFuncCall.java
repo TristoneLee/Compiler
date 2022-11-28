@@ -1,5 +1,9 @@
 package AST;
 
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRIns.IRCall;
+import IR.IRUtility.IRVar;
 import parser.ClassEntity;
 import parser.FunctionEntity;
 import parser.ScopeBuffer;
@@ -41,5 +45,17 @@ public class ASNFuncCall extends ASNExpr {
                 throw new CompileException("UnmatchedParameter");
         }
         returnType = entity.returnType;
+    }
+
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+        var curIns=new IRCall();
+        ++irFunction.localVarIndex;
+        curIns.returnVar= new IRVar(returnType, irFunction.localVarIndex);
+        curIns.function=irBuilder.searchFunction(funcName);
+        for(var para:parameters){
+            curIns.paras.add(para.irGeneration(irBuilder,irFunction,curBlock));
+        }
+        return curIns.returnVar;
     }
 }

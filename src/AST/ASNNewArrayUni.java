@@ -5,7 +5,7 @@ import utility.Exception.CompileException;
 import utility.Exception.InvalidArrayType;
 
 public class ASNNewArrayUni extends ASN{
-    ASNExpr expr;
+    ASNIntConst expr;
 
     public ASNNewArrayUni(ScopeBuffer scopeBuffer){
         super(scopeBuffer);
@@ -14,7 +14,7 @@ public class ASNNewArrayUni extends ASN{
     public void build() throws CompileException {
         if(children.isEmpty()) expr=null;
         else{
-            expr= (ASNExpr) children.get(0);
+            expr= (ASNIntConst) children.get(0);
         }
     }
 }

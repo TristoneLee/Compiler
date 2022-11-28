@@ -1,12 +1,12 @@
 package AST;
 
 import IR.IRBlock;
-import IR.IRUtility.IRScopeBuffer;
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidStmt;
-
-import java.util.List;
 
 import static utility.ValueType.BooleanType;
 
@@ -46,7 +46,8 @@ public class ASNIfStmt extends ASNStmt{
     int forwardIndex;
 
     @Override
-    public void controlFlowAnalysis(List<IRBlock> blocks) {
+    public void controlFlowAnalysis(IRFunction irFunction) {
+        var blocks=irFunction.blocks;
         formerIndex=blocks.size()-1;
         conditionIndex=formerIndex+1;
         blocks.add(new IRBlock());
@@ -63,15 +64,17 @@ public class ASNIfStmt extends ASNStmt{
     }
 
     @Override
-    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction,Integer curBlock) {
         if(ifCondition!=null){
-            ifCondition.irGeneration(blocks,localVarIndex,conditionIndex,irScopeBuffer);
+            ifCondition.irGeneration(irBuilder,irFunction,conditionIndex);
         }
         if(trueStmt!=null){
-            trueStmt.irGeneration(blocks,localVarIndex,conditionIndex,irScopeBuffer);
+            trueStmt.irGeneration(irBuilder,irFunction,trueStmtIndex);
         }
         if(falseStmt!=null){
-            falseStmt.irGeneration(blocks,localVarIndex,conditionIndex,irScopeBuffer);
+            falseStmt.irGeneration(irBuilder,irFunction,falseStmtIndex);
         }
+        curBlock=forwardIndex;
+        return null;
     }
 }

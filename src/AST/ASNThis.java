@@ -1,10 +1,11 @@
 package AST;
 
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.ValueType;
-
-import java.util.List;
 
 public class ASNThis extends ASNExpr{
     public ASNThis(ScopeBuffer scopeBuffer){
@@ -16,5 +17,10 @@ public class ASNThis extends ASNExpr{
         ASNClassDel classDelNode=scopeBuffer.searchClassControl();
         if(classDelNode==null)  throw new CompileException("InvalidUseOfThis");
         else returnType=new ValueType(classDelNode.classEntity.className);
+    }
+
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+            return irBuilder.irScopeStack.searchVar("this");
     }
 }

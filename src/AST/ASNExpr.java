@@ -1,5 +1,8 @@
 package AST;
 
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.ValueType;
 
@@ -16,4 +19,8 @@ abstract public class ASNExpr extends ASN {
         super(scopeBuffer);
     }
 
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+        return super.irGeneration(irBuilder, irFunction, curBlock);
+    }
 }

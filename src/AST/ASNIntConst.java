@@ -1,5 +1,8 @@
 package AST;
 
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 
 import java.util.List;
@@ -13,5 +16,10 @@ public class ASNIntConst extends ASNExpr{
         super(scopeBuffer);
         value=value_;
         returnType= IntegerType;
+    }
+
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+        return new IRVar(value);
     }
 }

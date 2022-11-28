@@ -1,6 +1,10 @@
 package AST;
 
 import IR.IRBlock;
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRIns.IRBr;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.ValueType;
@@ -18,5 +22,9 @@ public class ASNBreakStmt extends ASNStmt{
         if(scopeBuffer.searchLoop()==null) throw new CompileException("BreakOutsideLoop");
     }
 
-
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+        irFunction.addIns(curBlock,new IRBr(irFunction.blocks.get(curBlock).breakBlock));
+        return null;
+    }
 }

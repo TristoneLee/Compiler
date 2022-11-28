@@ -1,13 +1,13 @@
 package AST;
 
 import IR.IRBlock;
-import IR.IRUtility.IRScopeBuffer;
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidExpression;
-
-import java.util.List;
 
 import static utility.ValueType.BooleanType;
 
@@ -50,8 +50,9 @@ public class ASNForStmt extends ASNStmt {
     int forwardIndex;
 
     @Override
-    public void controlFlowAnalysis(List<IRBlock> blocks) {
-        formerIndex = blocks.size() - 1;
+    public void controlFlowAnalysis(IRFunction irFunction) {
+        var blocks=irFunction.blocks;
+        formerIndex = irFunction.blocks.size() - 1;
         if (forExpr2 != null) {
             blocks.add(new IRBlock());
             expr2Index = blocks.size()-1;
@@ -63,27 +64,27 @@ public class ASNForStmt extends ASNStmt {
         if (forStmt != null) {
             blocks.add(new IRBlock());
             bodyIndex= blocks.size()-1;
-            forStmt.controlFlowAnalysis(blocks);
+            forStmt.controlFlowAnalysis(irFunction);
         }
         blocks.add(new IRBlock());
         forwardIndex = blocks.size() -1;
     }
 
     @Override
-    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
+    public IRVar irGeneration(IRBuilder irBuilder,IRFunction irFunction,Integer curBlock) {
         if(forExpr1!=null){
-            forExpr1.irGeneration(blocks,localVarIndex,formerIndex,irScopeBuffer);
+            forExpr1.irGeneration(irBuilder,irFunction,formerIndex);
         }
         if(forExpr2!=null){
-            forExpr2.irGeneration(blocks,localVarIndex,expr2Index,irScopeBuffer);
+            forExpr2.irGeneration(irBuilder,irFunction,expr2Index);
         }
         if(forExpr3!=null){
-            forExpr3.irGeneration(blocks,localVarIndex,expr3Index,irScopeBuffer);
+            forExpr3.irGeneration(irBuilder,irFunction,expr3Index);
         }
         if(forStmt!=null){
-            forStmt.irGeneration(blocks,localVarIndex,bodyIndex,irScopeBuffer);
+            forStmt.irGeneration(irBuilder,irFunction,bodyIndex);
         }
         curBlock=forwardIndex;
-        return 0;
+        return null;
     }
 }

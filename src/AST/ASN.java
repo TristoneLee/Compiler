@@ -1,7 +1,8 @@
 package AST;
 
-import IR.IRBlock;
-import IR.IRUtility.IRScopeBuffer;
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 
@@ -41,11 +42,10 @@ abstract public class ASN {
     public void check() throws CompileException {
     }
 
-    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
-        return 0;
+    public IRVar irGeneration(IRBuilder irBuilder,IRFunction irFunction,Integer curBlock) {
+        return null;
     }
-    
 
-    public void controlFlowAnalysis(List<IRBlock> blocks) {
+    public void controlFlowAnalysis(IRFunction irFunction) {
     }
 }

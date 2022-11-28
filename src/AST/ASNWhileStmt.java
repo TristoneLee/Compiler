@@ -1,13 +1,13 @@
 package AST;
 
 import IR.IRBlock;
-import IR.IRUtility.IRScopeBuffer;
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidStmt;
-
-import java.util.List;
 
 
 import static utility.ValueType.BooleanType;
@@ -47,7 +47,8 @@ public class ASNWhileStmt extends ASNStmt{
     int forwardIndex;
 
     @Override
-    public void controlFlowAnalysis(List<IRBlock> blocks) {
+    public void controlFlowAnalysis(IRFunction irFunction) {
+        var blocks=irFunction.blocks;
         formerIndex=blocks.size()-1;
         blocks.add(new IRBlock());
         conditionIndex=blocks.size()-1;
@@ -58,10 +59,10 @@ public class ASNWhileStmt extends ASNStmt{
     }
 
     @Override
-    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
-        whileCondition.irGeneration(blocks,localVarIndex,conditionIndex,irScopeBuffer);
-        whileStmt.irGeneration(blocks,localVarIndex,bodyIndex,irScopeBuffer);
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction,Integer curBlock) {
+        whileCondition.irGeneration(irBuilder,irFunction,conditionIndex);
+        whileStmt.irGeneration(irBuilder,irFunction,bodyIndex);
         curBlock=forwardIndex;
-        return 0;
+        return null;
     }
 }

@@ -1,7 +1,8 @@
 package AST;
 
-import IR.IRBlock;
-import IR.IRUtility.IRScopeBuffer;
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 
@@ -28,17 +29,17 @@ public class ASNFuncBody extends ASN {
     }
 
     @Override
-    public int irGeneration(List<IRBlock> blocks, Integer localVarIndex, Integer curBlock, IRScopeBuffer irScopeBuffer) {
-        controlFlowAnalysis(blocks,0);
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+        controlFlowAnalysis(irFunction);
         for(ASNStmt stmt:statements){
-            stmt.irGeneration(blocks,localVarIndex,curBlock,irScopeBuffer);
+            stmt.irGeneration(irBuilder,irFunction, curBlock);
         }
-        return 0;
+        return null;
     }
 
-    public void controlFlowAnalysis(List<IRBlock> blocks, Integer blockIndex){
+    public void controlFlowAnalysis(IRFunction irFunction){
         for(ASNStmt stmt:statements){
-            stmt.controlFlowAnalysis(blocks);
+            stmt.controlFlowAnalysis(irFunction);
         }
     }
 }
