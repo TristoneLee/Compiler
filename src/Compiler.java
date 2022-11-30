@@ -48,6 +48,7 @@ public class Compiler {
         } catch (RuntimeException e){
             System.err.println(e.getMessage());
             throw new Exception();
+
         }
     }
 }
