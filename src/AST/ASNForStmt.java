@@ -3,6 +3,8 @@ package AST;
 import IR.IRBlock;
 import IR.IRBuilder;
 import IR.IRFunction;
+import IR.IRIns.IRBr;
+import IR.IRIns.IRCondBr;
 import IR.IRUtility.IRVar;
 import parser.Scope;
 import parser.ScopeBuffer;
@@ -51,40 +53,51 @@ public class ASNForStmt extends ASNStmt {
 
     @Override
     public void controlFlowAnalysis(IRFunction irFunction) {
-        var blocks=irFunction.blocks;
+        var blocks = irFunction.blocks;
         formerIndex = irFunction.blocks.size() - 1;
         if (forExpr2 != null) {
             blocks.add(new IRBlock());
-            expr2Index = blocks.size()-1;
+            expr2Index = blocks.size() - 1;
         }
         if (forExpr3 != null) {
             blocks.add(new IRBlock());
-            expr3Index=blocks.size()-1;
+            expr3Index = blocks.size() - 1;
         }
         if (forStmt != null) {
-            blocks.add(new IRBlock());
-            bodyIndex= blocks.size()-1;
+            var bodyBlock = new IRBlock();
+            blocks.add(bodyBlock);
+            bodyIndex = blocks.size() - 1;
             forStmt.controlFlowAnalysis(irFunction);
         }
         blocks.add(new IRBlock());
-        forwardIndex = blocks.size() -1;
+        forwardIndex = blocks.size() - 1;
+        irFunction.setBreakBlock(bodyIndex,forwardIndex);
+        if (forExpr3 != null) irFunction.setContinueBlock(bodyIndex,expr3Index);
+        else irFunction.setContinueBlock(bodyIndex,bodyIndex);
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder,IRFunction irFunction,Integer curBlock) {
-        if(forExpr1!=null){
-            forExpr1.irGeneration(irBuilder,irFunction,formerIndex);
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+        if (forExpr1 != null) {
+            forExpr1.irGeneration(irBuilder, irFunction, formerIndex);
+            if(forExpr2!=null)irFunction.addIns(formerIndex, new IRBr(expr2Index));
+            else irFunction.addIns(formerIndex,new IRBr(bodyIndex));
         }
-        if(forExpr2!=null){
-            forExpr2.irGeneration(irBuilder,irFunction,expr2Index);
+        if (forExpr2 != null) {
+            var condVar = forExpr2.irGeneration(irBuilder, irFunction, expr2Index);
+            irFunction.addIns(expr2Index, new IRCondBr(condVar, bodyIndex, forwardIndex));
         }
-        if(forExpr3!=null){
-            forExpr3.irGeneration(irBuilder,irFunction,expr3Index);
+        if (forExpr3 != null) {
+            forExpr3.irGeneration(irBuilder, irFunction, expr3Index);
+            if(forExpr2!=null)irFunction.addIns(expr3Index, new IRBr(expr2Index));
+            else irFunction.addIns(expr3Index,new IRBr(bodyIndex));
         }
-        if(forStmt!=null){
-            forStmt.irGeneration(irBuilder,irFunction,bodyIndex);
+        if (forStmt != null) {
+            forStmt.irGeneration(irBuilder, irFunction, bodyIndex);
+            if(forExpr2!=null)irFunction.addIns(bodyIndex, new IRBr(expr2Index));
+            else irFunction.addIns(bodyIndex,new IRBr(bodyIndex));
         }
-        curBlock=forwardIndex;
+        curBlock = forwardIndex;
         return null;
     }
 }

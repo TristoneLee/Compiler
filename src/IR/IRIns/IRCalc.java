@@ -19,4 +19,8 @@ public class IRCalc extends IRIns{
         des=new IRVar(desVar_);
         op=op_;
     }
+
+    public String toString(){
+        return des.toString()+" = "+lhs
+    }
 }

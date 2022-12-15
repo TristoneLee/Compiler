@@ -57,7 +57,14 @@ public class IRVar {
         literal = rhs.literal;
     }
 
-    public IRVar(){
+    public String toString(){
+        if(genre==IRVarGenre.local){
+            return "%"+ index;
+        }else if(genre==IRVarGenre.global){
+            return "@"+name;
+        }else {
+            return literal.toString();
+        }
     }
 
 }

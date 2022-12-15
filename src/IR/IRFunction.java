@@ -35,4 +35,12 @@ public class IRFunction {
     public void addIns(int blockId, IRIns ins){
         blocks.get(blockId).add(ins);
     }
+
+    public void setContinueBlock(int blockIndex,int continueBlock_){
+        blocks.get(blockIndex).continueBlock=continueBlock_;
+    }
+
+    public void setBreakBlock (int blockIndex,int breakBlock_){
+        blocks.get(blockIndex).breakBlock=breakBlock_;
+    }
 }

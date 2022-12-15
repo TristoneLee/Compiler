@@ -12,4 +12,8 @@ public class IRBlock {
     public void add(IRIns irIns){
         ins.add(irIns);
     }
+
+    public String toString(){
+
+    }
 }

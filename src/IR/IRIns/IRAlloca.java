@@ -12,6 +12,6 @@ public class IRAlloca extends IRIns{
     }
 
     public String toString(){
-        return "";
+        return irVar.toString() + " = alloca i32\n";
     }
 }

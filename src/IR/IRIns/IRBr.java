@@ -6,4 +6,9 @@ public class IRBr extends IRIns{
     public IRBr(int des_) {
         des=des_;
     }
+
+    @Override
+    public String toString() {
+        return "br "+des+"\n";
+    }
 }

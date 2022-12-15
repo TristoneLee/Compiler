@@ -3,6 +3,8 @@ package AST;
 import IR.IRBlock;
 import IR.IRBuilder;
 import IR.IRFunction;
+import IR.IRIns.IRBr;
+import IR.IRIns.IRCondBr;
 import IR.IRUtility.IRVar;
 import parser.Scope;
 import parser.ScopeBuffer;
@@ -54,14 +56,19 @@ public class ASNWhileStmt extends ASNStmt{
         conditionIndex=blocks.size()-1;
         blocks.add(new IRBlock());
         bodyIndex=blocks.size()-1;
+        whileStmt.controlFlowAnalysis(irFunction);
         blocks.add(new IRBlock());
         forwardIndex= blocks.size()-1;
+        irFunction.setBreakBlock(bodyIndex,forwardIndex);
+        irFunction.setContinueBlock(bodyIndex,conditionIndex);
     }
 
     @Override
     public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction,Integer curBlock) {
-        whileCondition.irGeneration(irBuilder,irFunction,conditionIndex);
+        var condVar=whileCondition.irGeneration(irBuilder,irFunction,conditionIndex);
+        irFunction.addIns(conditionIndex,new IRCondBr(condVar,bodyIndex,forwardIndex));
         whileStmt.irGeneration(irBuilder,irFunction,bodyIndex);
+        irFunction.addIns(bodyIndex,new IRBr(conditionIndex));
         curBlock=forwardIndex;
         return null;
     }
