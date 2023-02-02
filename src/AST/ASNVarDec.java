@@ -3,6 +3,7 @@ package AST;
 import IR.IRBuilder;
 import IR.IRFunction;
 import IR.IRIns.IRAlloca;
+import IR.IRIns.IRLoad;
 import IR.IRIns.IRStore;
 import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
@@ -44,18 +45,47 @@ public class ASNVarDec extends ASNStmt {
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
-        IRType irType = new IRType(valueType);
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        IRType irType = new IRType(valueType,irBuilder);
         for (ASNInitDeclarator declarator : declarators) {
             irFunction.localVarIndex++;
-            IRVar curVar = new IRVar(valueType, irFunction.localVarIndex, valueType.isBasicType() ? 0 : 1);
+            IRVar curVar = new IRVar(new IRType(valueType,irBuilder).set_ptr(), irFunction.localVarIndex);
             irBuilder.irScopeStack.scopeStack.peek().indexTable.put(declarator.name, curVar);
-            irFunction.blocks.get(curBlock).ins.add(new IRAlloca(curVar));
+            irFunction.addIns(irFunction.curBlock,new IRAlloca(curVar));
             if (declarator.initor != null) {
-                var rhsVar = declarator.initor.irGeneration(irBuilder, irFunction, curBlock);
-                irFunction.blocks.get(curBlock).ins.add(new IRStore(curVar, new IRVar(valueType, rhsVar.index)));
+                var rhsVar = declarator.initor.irGeneration(irBuilder, irFunction);
+                if((declarator.initor instanceof ASNMemberAccess&& !( ((ASNMemberAccess) declarator.initor).postfix instanceof ASNFuncCall))||declarator.initor instanceof ASNArrayAccess){
+                    var loadIns=new IRLoad();
+                    loadIns.src=rhsVar;
+                    ++irFunction.localVarIndex;
+                    loadIns.des=new IRVar(curVar.type.deref(), irFunction.localVarIndex);
+                    rhsVar=loadIns.des;
+                    irFunction.addIns(irFunction.curBlock,loadIns);
+                }
+                irFunction.addIns(0,new IRStore(curVar, rhsVar));
             }
         }
         return null;
+    }
+
+    public void globalInitGeneration(IRBuilder irBuilder,IRFunction irFunction){
+            IRType irType = new IRType(valueType,irBuilder);
+            for (ASNInitDeclarator declarator : declarators) {
+                IRVar curVar = new IRVar(new IRType(valueType,irBuilder), declarator.name);
+                irBuilder.irScopeStack.globScope().indexTable.put(declarator.name, curVar);
+                irFunction.addIns(0,new IRAlloca(curVar));
+                if (declarator.initor != null) {
+                    var rhsVar = declarator.initor.irGeneration(irBuilder, irFunction);
+                    if((declarator.initor instanceof ASNMemberAccess&& !( ((ASNMemberAccess) declarator.initor).postfix instanceof ASNFuncCall))||declarator.initor instanceof ASNArrayAccess){
+                        var loadIns=new IRLoad();
+                        loadIns.src=rhsVar;
+                        ++irFunction.localVarIndex;
+                        loadIns.des=new IRVar(curVar.type.deref(), irFunction.localVarIndex);
+                        rhsVar=loadIns.des;
+                        irFunction.addIns(irFunction.curBlock,loadIns);
+                    }
+                    irFunction.addIns(0,new IRStore(curVar, rhsVar));
+                }
+            }
     }
 }

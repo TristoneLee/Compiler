@@ -4,7 +4,9 @@ import IR.IRBuilder;
 import IR.IRFunction;
 import IR.IRIns.IRCall;
 import IR.IRIns.IRGetPtr;
+import IR.IRIns.IRLoad;
 import IR.IRStruct;
+import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
 import parser.ClassEntity;
 import parser.Scope;
@@ -61,46 +63,70 @@ public class ASNMemberAccess extends ASNExpr {
         } else throw new CompileException("Unexpected member access type");
     }
 
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
-        var srcVar=var.irGeneration(irBuilder,irFunction,curBlock);
-        var curStruct=irBuilder.structs.get(srcVar.type.baseType);
-        if(postfix instanceof ASNIdentifier) {
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        var srcVar = var.irGeneration(irBuilder, irFunction);
+        if (postfix instanceof ASNIdentifier) {
+            var curStruct = irBuilder.structs.get(srcVar.type.tarStruct.structName);
             ++irFunction.localVarIndex;
-            var returnVar= new IRVar(returnType, irFunction.localVarIndex);
+            var returnVar = new IRVar(new IRType(returnType, irBuilder), irFunction.localVarIndex);
             var curIns = new IRGetPtr();
-            curIns.des=returnVar;
-            curIns.src=srcVar;
-            curIns.num=new IRVar(curStruct.getMemberIndex(varName));
-            irFunction.addIns(curBlock,curIns);
-            return returnVar;
-        }else if(postfix instanceof ASNArrayAccess){
-            ++irFunction.localVarIndex;
-            var returnVar= new IRVar(returnType, irFunction.localVarIndex);
-            var curIns = new IRGetPtr();
-            curIns.des=returnVar;
-            curIns.src=srcVar;
-            curIns.num=new IRVar(curStruct.getMemberIndex(varName));
-            irFunction.addIns(curBlock,curIns);
-            for (var arrayId:arrayIds){
-                var getPtrIns = new IRGetPtr();
-                getPtrIns.src=new IRVar(returnVar);
-                returnVar=new IRVar(IntegerType,irFunction.localVarIndex);
-                getPtrIns.num=arrayId.irGeneration(irBuilder,irFunction,curBlock);
-                getPtrIns.des=returnVar;
+            curIns.des = returnVar;
+            curIns.src = srcVar;
+            curIns.indexes.add(new IRVar(0, IRType.Genre.I32));
+            curIns.indexes.add(new IRVar(curStruct.getMemberIndex(varName), IRType.Genre.I32));
+            irFunction.addIns(irFunction.curBlock, curIns);
+            if(ifLoad){
+                var loadIns=new IRLoad();
                 ++irFunction.localVarIndex;
-                returnVar=new IRVar(IntegerType,irFunction.localVarIndex);
-                irFunction.addIns(curBlock,getPtrIns);
+                loadIns.des= new IRVar(returnVar.type.deref(), irFunction.localVarIndex);
+                loadIns.src=srcVar;
+                irFunction.addIns(irFunction.curBlock, loadIns);
+                return loadIns.des;
             }
             return returnVar;
-        }else if (postfix instanceof ASNFuncCall){
-            var curIns=new IRCall();
+        } else if (postfix instanceof ASNArrayAccess) {
+            var curStruct = irBuilder.structs.get(srcVar.type.tarStruct.structName);
             ++irFunction.localVarIndex;
-            curIns.returnVar= new IRVar(returnType, irFunction.localVarIndex);
-            curIns.funcName=funcName;
-            curIns.paras.add(srcVar);
-            for(var para:parameters){
-                curIns.paras.add(para.irGeneration(irBuilder,irFunction,curBlock));
+            var returnVar = new IRVar(new IRType(returnType, irBuilder), irFunction.localVarIndex);
+            var curIns = new IRGetPtr();
+            curIns.des = returnVar;
+            curIns.src = srcVar;
+            curIns.indexes.add(new IRVar(curStruct.getMemberIndex(varName), IRType.Genre.I32));
+            irFunction.addIns(irFunction.curBlock, curIns);
+            for (var arrayId : arrayIds) {
+                var getPtrIns = new IRGetPtr();
+                getPtrIns.src = new IRVar(returnVar);
+                returnVar = new IRVar(IRType.new_i32(), irFunction.localVarIndex);
+                getPtrIns.indexes.add(arrayId.irGeneration(irBuilder, irFunction));
+                getPtrIns.des = returnVar;
+                ++irFunction.localVarIndex;
+                returnVar = new IRVar(IRType.new_i32(), irFunction.localVarIndex);
+                irFunction.addIns(irFunction.curBlock, getPtrIns);
             }
+            if(ifLoad){
+                var loadIns=new IRLoad();
+                ++irFunction.localVarIndex;
+                loadIns.des= new IRVar(returnVar.type.deref(), irFunction.localVarIndex);
+                loadIns.src=srcVar;
+                irFunction.addIns(irFunction.curBlock, loadIns);
+                return loadIns.des;
+            }
+            return returnVar;
+        } else if (postfix instanceof ASNFuncCall) {
+            var curIns = new IRCall();
+            ++irFunction.localVarIndex;
+            curIns.returnVar = new IRVar(new IRType(returnType, irBuilder), irFunction.localVarIndex);
+            if (funcName.equals("size") ) curIns.funcName = "__GET__SIZE";
+            else if(funcName.equals("length")) curIns.funcName="__STRING_LENGTH";
+            else if (funcName.equals("parseInt")) curIns.funcName = "__STRING_PARSE_INT";
+            else if (funcName.equals("ord")) curIns.funcName = "__STRING_ORD";
+            else if (funcName.equals("substring")) curIns.funcName = "__SUBSTRING";
+            else curIns.funcName = funcName;
+            curIns.paras.add(srcVar);
+            for (var para : parameters) {
+                curIns.paras.add(para.irGeneration(irBuilder, irFunction));
+            }
+            irFunction.addIns(irFunction.curBlock, curIns);
             return curIns.returnVar;
         }
         return null;

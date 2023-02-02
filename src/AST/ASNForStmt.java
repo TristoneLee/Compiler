@@ -14,7 +14,7 @@ import utility.Exception.InvalidExpression;
 import static utility.ValueType.BooleanType;
 
 public class ASNForStmt extends ASNStmt {
-    ASNForExpr1 forExpr1;
+    ASNStmt forExpr1;
     ASNExpr forExpr2;
     ASNExpr forExpr3;
     ASNStmt forStmt;
@@ -25,10 +25,10 @@ public class ASNForStmt extends ASNStmt {
 
     public void build() throws CompileException {
         for (ASN child : children) {
-            if (child instanceof ASNStmt) forStmt = (ASNStmt) child;
-            else if (child instanceof ASNForExpr2) forExpr2 = ((ASNForExpr2) child).expr;
+            if (child instanceof ASNForExpr2) forExpr2 = ((ASNForExpr2) child).expr;
             else if (child instanceof ASNForExpr3) forExpr3 = ((ASNForExpr3) child).expr;
-            else if (child instanceof ASNForExpr1) forExpr1 = (ASNForExpr1) child;
+            else if (child instanceof ASNForExpr1) forExpr1 = (ASNStmt) child;
+            else if (child instanceof ASNStmt) forStmt = (ASNStmt) child;
             else throw new InvalidExpression();
         }
     }
@@ -52,7 +52,7 @@ public class ASNForStmt extends ASNStmt {
     int forwardIndex;
 
     @Override
-    public void controlFlowAnalysis(IRFunction irFunction) {
+    public void controlFlowAnalysis(IRBuilder irBuilder, IRFunction irFunction) {
         var blocks = irFunction.blocks;
         formerIndex = irFunction.blocks.size() - 1;
         if (forExpr2 != null) {
@@ -67,37 +67,42 @@ public class ASNForStmt extends ASNStmt {
             var bodyBlock = new IRBlock();
             blocks.add(bodyBlock);
             bodyIndex = blocks.size() - 1;
-            forStmt.controlFlowAnalysis(irFunction);
+            forStmt.controlFlowAnalysis(irBuilder, irFunction);
         }
         blocks.add(new IRBlock());
         forwardIndex = blocks.size() - 1;
-        irFunction.setBreakBlock(bodyIndex,forwardIndex);
-        if (forExpr3 != null) irFunction.setContinueBlock(bodyIndex,expr3Index);
-        else irFunction.setContinueBlock(bodyIndex,bodyIndex);
+        irFunction.setBreakBlock(bodyIndex, forwardIndex);
+        if (forExpr3 != null) irFunction.setContinueBlock(bodyIndex, expr3Index);
+        else irFunction.setContinueBlock(bodyIndex, bodyIndex);
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
         if (forExpr1 != null) {
-            forExpr1.irGeneration(irBuilder, irFunction, formerIndex);
-            if(forExpr2!=null)irFunction.addIns(formerIndex, new IRBr(expr2Index));
-            else irFunction.addIns(formerIndex,new IRBr(bodyIndex));
+            irFunction.curBlock=formerIndex;
+            forExpr1.irGeneration(irBuilder, irFunction);
+            if (forExpr2 != null) irFunction.addIns(formerIndex, new IRBr(expr2Index));
+            else irFunction.addIns(formerIndex, new IRBr(bodyIndex));
         }
         if (forExpr2 != null) {
-            var condVar = forExpr2.irGeneration(irBuilder, irFunction, expr2Index);
+            irFunction.curBlock=expr2Index;
+            var condVar = forExpr2.irGeneration(irBuilder, irFunction);
             irFunction.addIns(expr2Index, new IRCondBr(condVar, bodyIndex, forwardIndex));
         }
         if (forExpr3 != null) {
-            forExpr3.irGeneration(irBuilder, irFunction, expr3Index);
-            if(forExpr2!=null)irFunction.addIns(expr3Index, new IRBr(expr2Index));
-            else irFunction.addIns(expr3Index,new IRBr(bodyIndex));
+            irFunction.curBlock=expr3Index;
+            forExpr3.irGeneration(irBuilder, irFunction);
+            if (forExpr2 != null) irFunction.addIns(expr3Index, new IRBr(expr2Index));
+            else irFunction.addIns(expr3Index, new IRBr(bodyIndex));
         }
         if (forStmt != null) {
-            forStmt.irGeneration(irBuilder, irFunction, bodyIndex);
-            if(forExpr2!=null)irFunction.addIns(bodyIndex, new IRBr(expr2Index));
-            else irFunction.addIns(bodyIndex,new IRBr(bodyIndex));
+            irFunction.curBlock=bodyIndex;
+            forStmt.irGeneration(irBuilder, irFunction);
+            if (forExpr3 != null) irFunction.addIns(bodyIndex, new IRBr(expr3Index));
+            else if(forExpr2!=null) irFunction.addIns(bodyIndex, new IRBr(expr2Index));
+            else irFunction.addIns(bodyIndex, new IRBr(bodyIndex));
         }
-        curBlock = forwardIndex;
+        irFunction.curBlock = forwardIndex;
         return null;
     }
 }

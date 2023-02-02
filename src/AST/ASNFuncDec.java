@@ -26,6 +26,7 @@ public class ASNFuncDec extends ASNStmt {
 
     @Override
     public void build() throws CompileException {
+        entity.asnFuncDec=this;
         for (ASN child : children) {
             if (child instanceof ASNTypeSpecifier) entity.returnType = ((ASNTypeSpecifier) child).valueType;
             else if (child instanceof ASNParameter) {
@@ -38,7 +39,7 @@ public class ASNFuncDec extends ASNStmt {
 
     @Override
     public void check() throws CompileException {
-        System.out.println(entity.functionName);
+//        System.out.println(entity.functionName);
         if(entity.functionName.equals("main")){
             if(!entity.returnType.equals(IntegerType)) throw new CompileException("InvalidMainFuncReturn");
             if(entity.paraList.size()!=0) throw new CompileException("InvalidMainFuncPara");
@@ -47,7 +48,7 @@ public class ASNFuncDec extends ASNStmt {
         scopeBuffer.controlFlow.push(this);
         for(Parameter para:entity.paraList)scopeBuffer.addVariable(para.name, para.valueType);
         funcBody.check();
-        if(!((ASNFuncDec)scopeBuffer.controlFlow.peek()).ifReturn && !Objects.equals(entity.functionName, "main")&&!Objects.equals(entity.returnType, VoidType)) throw new CompileException("NoReturn");
+        if(!((ASNFuncDec)scopeBuffer.controlFlow.peek()).ifReturn && !Objects.equals(entity.functionName, "main")&&!Objects.equals(entity.returnType, VoidType)&&!(this instanceof ASNClassConstructorDec)) throw new CompileException("NoReturn");
         scopeBuffer.controlFlow.pop();
         scopeBuffer.pop();
     }

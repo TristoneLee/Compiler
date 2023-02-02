@@ -17,8 +17,13 @@ public class ASNClassConstructorDec extends ASNFuncDec{
 
     @Override
     public void build() throws CompileException {
+        entity.asnFuncDec=this;
         for(ASN child:children){
-            if(child instanceof ASNIdentifier) className= entity.functionName=((ASNIdentifier) child).identifier;
+            if(child instanceof ASNIdentifier) {
+                className =  ((ASNIdentifier) child).identifier;
+                entity.functionName ="Constructor";
+                entity.returnType=new ValueType(className);
+            }
             else if(child instanceof ASNFuncBody) funcBody=(ASNFuncBody) child;
         }
     }
@@ -28,4 +33,5 @@ public class ASNClassConstructorDec extends ASNFuncDec{
         if(!scopeBuffer.searchClassControl().classEntity.className.equals(className))throw new CompileException("UnmatchedClassConstructor");
         super.check();
     }
+
 }

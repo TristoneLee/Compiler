@@ -3,6 +3,9 @@ package AST;
 import IR.IRBuilder;
 import IR.IRFunction;
 import IR.IRIns.IRCalc;
+import IR.IRIns.IRLoad;
+import IR.IRIns.IRStore;
+import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
@@ -43,26 +46,39 @@ public class ASNUnaryExpr extends ASNExpr {
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
-        var rVar = expr.irGeneration(irBuilder, irFunction, curBlock);
-        if(unaryOp==UnaryOp.plusplus) return rVar;
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        if (unaryOp == UnaryOp.plusplus || unaryOp == UnaryOp.minusminus) {
+            expr.ifLoad = false;
+            var srcVar = expr.irGeneration(irBuilder, irFunction);
+            ++irFunction.localVarIndex;
+            var valueVar = new IRVar(IRType.new_i32(), irFunction.localVarIndex);
+            var loadIns = new IRLoad();
+            loadIns.src = srcVar;
+            loadIns.des = valueVar;
+            var calcIns = new IRCalc(valueVar, new IRVar(1, IRType.Genre.I32), valueVar, unaryOp == UnaryOp.plusplus ? IRCalc.IROp.plus : IRCalc.IROp.minus);
+            var storeIns = new IRStore();
+            storeIns.src = valueVar;
+            storeIns.des = srcVar;
+            irFunction.addIns(irFunction.curBlock, loadIns);
+            irFunction.addIns(irFunction.curBlock, calcIns);
+            irFunction.addIns(irFunction.curBlock, storeIns);
+            if (ifLoad)
+                return valueVar;
+            else return srcVar;
+        }
+        var rVar = expr.irGeneration(irBuilder, irFunction);
+        if (unaryOp == UnaryOp.plusplus) return rVar;
         ++irFunction.localVarIndex;
-        var returnVar = new IRVar(returnType, irFunction.localVarIndex);
+        var returnVar = new IRVar(new IRType(returnType, irBuilder), irFunction.localVarIndex);
         if (unaryOp == UnaryOp.not) {
-            var curIns = new IRCalc(new IRVar(1), rVar, returnVar, IRCalc.IROp.exclusiveOr);
-            irFunction.addIns(curBlock, curIns);
+            var curIns = new IRCalc(new IRVar(1, IRType.Genre.I32), rVar, returnVar, IRCalc.IROp.exclusiveOr);
+            irFunction.addIns(irFunction.curBlock, curIns);
         } else if (unaryOp == UnaryOp.minus) {
-            var curIns = new IRCalc(new IRVar(0), rVar, returnVar, IRCalc.IROp.minus);
-            irFunction.addIns(curBlock, curIns);
+            var curIns = new IRCalc(new IRVar(0, IRType.Genre.I32), rVar, returnVar, IRCalc.IROp.minus);
+            irFunction.addIns(irFunction.curBlock, curIns);
         } else if (unaryOp == UnaryOp.tilde) {
-            var curIns = new IRCalc(new IRVar(-1), rVar, returnVar, IRCalc.IROp.exclusiveOr);
-            irFunction.addIns(curBlock, curIns);
-        } else if (unaryOp == UnaryOp.plusplus) {
-            var curIns = new IRCalc(new IRVar(1), rVar, returnVar, IRCalc.IROp.plus);
-            irFunction.addIns(curBlock, curIns);
-        } else if (unaryOp == UnaryOp.minusminus) {
-            var curIns = new IRCalc(new IRVar(-1), rVar, returnVar, IRCalc.IROp.plus);
-            irFunction.addIns(curBlock, curIns);
+            var curIns = new IRCalc(new IRVar(-1, IRType.Genre.I32), rVar, returnVar, IRCalc.IROp.exclusiveOr);
+            irFunction.addIns(irFunction.curBlock, curIns);
         }
         return returnVar;
     }

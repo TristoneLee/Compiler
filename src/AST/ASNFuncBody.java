@@ -29,17 +29,17 @@ public class ASNFuncBody extends ASN {
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
-        controlFlowAnalysis(irFunction);
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        controlFlowAnalysis(irBuilder,irFunction);
         for(ASNStmt stmt:statements){
-            stmt.irGeneration(irBuilder,irFunction, curBlock);
+            stmt.irGeneration(irBuilder,irFunction);
         }
         return null;
     }
 
-    public void controlFlowAnalysis(IRFunction irFunction){
+    public void controlFlowAnalysis(IRBuilder irBuilder,IRFunction irFunction){
         for(ASNStmt stmt:statements){
-            stmt.controlFlowAnalysis(irFunction);
+            stmt.controlFlowAnalysis(irBuilder,irFunction);
         }
     }
 }

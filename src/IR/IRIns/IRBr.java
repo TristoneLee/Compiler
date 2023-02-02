@@ -9,6 +9,6 @@ public class IRBr extends IRIns{
 
     @Override
     public String toString() {
-        return "br "+des+"\n";
+        return "br "+des+"";
     }
 }

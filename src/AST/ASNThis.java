@@ -20,7 +20,7 @@ public class ASNThis extends ASNExpr{
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
-            return irBuilder.irScopeStack.searchVar("this");
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+            return irFunction.paras.get(0);
     }
 }

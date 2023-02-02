@@ -1,5 +1,9 @@
 package AST;
 
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRIns.IRRet;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.ValueType;
@@ -34,5 +38,16 @@ public class ASNReturnStmt extends ASNStmt {
         } else if (scopeBuffer.searchFuncDec() instanceof ASNLambdaExpr) {
             ((ASNLambdaExpr) scopeBuffer.searchFuncDec()).returnType = returnType;
         } else throw new CompileException("ReturnOutsideOfFunc");
+    }
+
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        if (expr != null) {
+            var returnVar = expr.irGeneration(irBuilder, irFunction);
+            irFunction.addIns(irFunction.curBlock, new IRRet(returnVar));
+        }
+        else{
+            irFunction.addIns(irFunction.curBlock,new IRRet());
+        }
+        return null;
     }
 }

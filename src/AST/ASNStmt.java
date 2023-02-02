@@ -1,6 +1,9 @@
 package AST;
 
 import IR.IRBlock;
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 
 import java.util.List;
@@ -11,4 +14,8 @@ abstract public class ASNStmt extends ASN {
         super(scopeBuffer);
     }
 
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        return super.irGeneration(irBuilder, irFunction);
+    }
 }

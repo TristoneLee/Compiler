@@ -1,5 +1,8 @@
 package AST;
 
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
@@ -26,5 +29,13 @@ public class ASNIfBranch extends ASN {
         scopeBuffer.push(new Scope());
         for(ASNStmt stmt:stmts) stmt.check();
         scopeBuffer.pop();
+    }
+
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        for(var stmt:stmts){
+            stmt.irGeneration(irBuilder,irFunction);
+        }
+        return null;
     }
 }

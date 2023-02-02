@@ -1,2 +1,10 @@
-package ASM.ASMIns;public class ASMRet {
+package ASM.ASMIns;
+
+import IR.IRIns.IRIns;
+
+public class ASMRet extends IRIns {
+    @Override
+    public String toString() {
+        return "ret";
+    }
 }

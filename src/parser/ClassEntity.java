@@ -14,6 +14,7 @@ public class ClassEntity {
     public String className;
     public Map<String, Parameter> classMember;
     public Map<String, FunctionEntity> classMethod;
+    public FunctionEntity classConstructor;
 
     public ClassEntity() {
         classMethod = new HashMap<>();
@@ -30,7 +31,7 @@ public class ClassEntity {
         stringLength.returnType = IntegerType;
 
         FunctionEntity stringSubstring = new FunctionEntity();
-        stringSubstring.functionName = "substring";
+        stringSubstring.functionName = "__STRING_SUBSTRING";
         stringSubstring.returnType = StringType;
         List<Parameter> subStringParas = new ArrayList<>();
         subStringParas.add(new Parameter("left", IntegerType));
@@ -38,12 +39,12 @@ public class ClassEntity {
         stringSubstring.paraList = subStringParas;
 
         FunctionEntity parserInt = new FunctionEntity();
-        parserInt.functionName = "parserInt";
+        parserInt.functionName = "__STRING_PARSE_INT";
         parserInt.returnType = IntegerType;
 
         FunctionEntity ord = new FunctionEntity();
         ord.returnType = IntegerType;
-        ord.functionName = "ord";
+        ord.functionName = "__STRING_ORD";
         ord.paraList = new ArrayList<>();
         ord.paraList.add(new Parameter("pos", IntegerType));
 

@@ -1,5 +1,8 @@
 package AST;
 
+import IR.IRBuilder;
+import IR.IRFunction;
+import IR.IRUtility.IRVar;
 import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
@@ -32,9 +35,15 @@ public class ASNCompoundStmt extends ASNStmt {
     }
 
     @Override
-    public void controlFlowAnalysis(IRBuilder irBuilder) {
+    public void controlFlowAnalysis(IRBuilder irBuilder,IRFunction irFunction) {
         for(ASNStmt stmt:stmts){
-            stmt.controlFlowAnalysis(irBuilder);
+            stmt.controlFlowAnalysis(irBuilder,irFunction);
         }
+    }
+
+    @Override
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        for(var stmt:stmts) stmt.irGeneration(irBuilder,irFunction);
+        return null;
     }
 }

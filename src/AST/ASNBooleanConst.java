@@ -2,6 +2,7 @@ package AST;
 
 import IR.IRBuilder;
 import IR.IRFunction;
+import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 
@@ -20,7 +21,7 @@ public class ASNBooleanConst extends ASNExpr {
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
-        return new IRVar(value ? 1 : 0);
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        return new IRVar(value ? 1 : 0, IRType.Genre.I1);
     }
 }

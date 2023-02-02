@@ -3,7 +3,10 @@ package AST;
 import IR.IRBuilder;
 import IR.IRFunction;
 import IR.IRIns.IRCalc;
+import IR.IRIns.IRCall;
+import IR.IRIns.IRLoad;
 import IR.IRIns.IRStore;
+import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
@@ -75,27 +78,54 @@ public class ASNBinaryExpr extends ASNExpr {
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction,Integer curBlock) {
-        if (op == Operate.assign) {
-            var rhsVar=rhs.irGeneration(irBuilder,irFunction,curBlock);
-            if(lhs instanceof  ASNIdentifier){
-                var oldVar = irBuilder.irScopeStack.searchVar(((ASNIdentifier) lhs).identifier);
-                var newVar=new IRVar(oldVar);
-                newVar.index= ++irFunction.localVarIndex;
-                var curIns=new IRStore(newVar,rhsVar);
-                irFunction.addIns(curBlock,curIns);
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        if (returnType != StringType) {
+            if (op == Operate.assign) {
+                lhs.ifLoad = false;
+                var rhsVar = rhs.irGeneration(irBuilder, irFunction);
+                var lhsVar = lhs.irGeneration(irBuilder, irFunction);
+//                if (lhs instanceof ASNIdentifier) {
+//                    var oldVar = irBuilder.irScopeStack.searchVar(((ASNIdentifier) lhs).identifier);
+//                var newVar=new IRVar(oldVar);
+//                newVar.index= ++irFunction.localVarIndex;
+//                var curIns=new IRStore(newVar,rhsVar);
+//                    var curIns = new IRStore(oldVar, rhsVar);
+//                    irFunction.addIns(curBlock, curIns);
+//                    return null;
+//                }
+                var curIns = new IRStore(lhsVar, rhsVar);
+                irFunction.addIns(irFunction.curBlock, curIns);
                 return null;
             }
-            var lhsVar=lhs.irGeneration(irBuilder,irFunction,curBlock);
-            var curIns=new IRStore(lhsVar,rhsVar);
-            irFunction.addIns(curBlock,curIns);
-            return null;
+            var rhsVar = rhs.irGeneration(irBuilder, irFunction);
+            var lhsVar = lhs.irGeneration(irBuilder, irFunction);
+            irFunction.localVarIndex++;
+            IRVar returnVar;
+            if (returnType.equals(IntegerType)) returnVar = new IRVar(IRType.new_i32(), irFunction.localVarIndex);
+            else returnVar = new IRVar(IRType.new_i1(), irFunction.localVarIndex);
+            irFunction.addIns(irFunction.curBlock, new IRCalc(lhsVar, rhsVar, returnVar, IRCalc.IROp.valueOf(op.name())));
+            return returnVar;
+        } else {
+            var callIns = new IRCall();
+            ++irFunction.localVarIndex;
+            var returnvar = new IRVar(op == Operate.plus ? IRType.new_i8_ptr() : IRType.new_i1(), irFunction.localVarIndex);
+            callIns.ifInBuild = true;
+            switch (op) {
+                case plus -> callIns.funcName = "__STRING_ADD";
+                case equal -> callIns.funcName = "__STRING_EQUAL";
+                case notEqual -> callIns.funcName = "STRING_NOT_EQUAL";
+                case less -> callIns.funcName = "__STRING_LESS";
+                case greater -> callIns.funcName = "__STRING_GREATER";
+                case lessEqual -> callIns.funcName = "__STRING_LESS_EQUAL";
+                case greaterEqual -> callIns.funcName = "__STRING_GREATER_EQUAL";
+            }
+            var rhsVar = rhs.irGeneration(irBuilder, irFunction);
+            var lhsVar = rhs.irGeneration(irBuilder, irFunction);
+            callIns.returnVar = returnvar;
+            callIns.paras.add(lhsVar);
+            callIns.paras.add(rhsVar);
+            irFunction.addIns(irFunction.curBlock, callIns);
+            return returnvar;
         }
-        var rhsVar = rhs.irGeneration(irBuilder,irFunction, curBlock);
-        var lhsVar = lhs.irGeneration(irBuilder,irFunction, curBlock);
-        irFunction.localVarIndex++;
-        var returnVar = new IRVar(IntegerType, irFunction.localVarIndex);
-        irFunction.blocks.get(curBlock).add(new IRCalc(lhsVar, rhsVar, returnVar,IRCalc.IROp.valueOf(op.name())));
-        return returnVar;
     }
 }

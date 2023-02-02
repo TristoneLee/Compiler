@@ -2,6 +2,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import IR.IRBuilder;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -37,18 +38,20 @@ public class Compiler {
             parser.addErrorListener(new MxErrorListener());
             ParseTree tree = parser.translationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
-            ASTbuilder builder = new ASTbuilder();
-            walker.walk(builder, tree);
-            builder.check();
-            int x=1;
+            ASTbuilder astBuilder = new ASTbuilder();
+            walker.walk(astBuilder, tree);
+            astBuilder.check();
+            var irBuilder= new IRBuilder(astBuilder);
+            irBuilder.print();
 //            System.out.println("Success!");
         }catch (CompileException exception){
             exception.Call();
             throw new Exception();
-        } catch (RuntimeException e){
-            System.err.println(e.getMessage());
-            throw new Exception();
-
         }
+//        catch (RuntimeException e){
+//            System.err.println(e.getMessage());
+//            throw new Exception();
+//
+//        }
     }
 }

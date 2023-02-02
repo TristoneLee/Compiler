@@ -3,6 +3,8 @@ package AST;
 import IR.IRBuilder;
 import IR.IRFunction;
 import IR.IRIns.IRGetPtr;
+import IR.IRIns.IRLoad;
+import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
@@ -22,8 +24,8 @@ public class ASNArrayAccess extends ASNExpr {
     String arrayIden;
 
     public ASNArrayAccess(ScopeBuffer scopeBuffer) {
-        super( scopeBuffer);
-        ifLeftValue=true;
+        super(scopeBuffer);
+        ifLeftValue = true;
     }
 
     @Override
@@ -50,21 +52,29 @@ public class ASNArrayAccess extends ASNExpr {
         returnType = new ValueType(valueType.baseType);
         returnType.dimensions = valueType.dimensions.subList(arrayIds.size(), valueType.dimensions.size());
         returnType.dimension = returnType.dimensions.size();
-        arrayIden=idNode.identifier;
+        arrayIden = idNode.identifier;
     }
 
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock){
-        var srcVar=irBuilder.irScopeStack.searchVar(arrayIden);
-        for (var arrayId:arrayIds){
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        var srcVar = irBuilder.irScopeStack.searchVar(arrayIden);
+        for (var arrayId : arrayIds) {
             var getPtrIns = new IRGetPtr();
-            getPtrIns.src=new IRVar(srcVar);
-            srcVar=new IRVar(IntegerType,irFunction.localVarIndex);
-            getPtrIns.num=arrayId.irGeneration(irBuilder,irFunction,curBlock);
-            getPtrIns.des=srcVar;
+            getPtrIns.src = new IRVar(srcVar);
+            getPtrIns.indexes.add(arrayId.irGeneration(irBuilder, irFunction));
             ++irFunction.localVarIndex;
-            srcVar=new IRVar(IntegerType,irFunction.localVarIndex);
-            irFunction.blocks.get(curBlock).add(getPtrIns);
+            srcVar = new IRVar(new IRType(srcVar.type).deref(), irFunction.localVarIndex);
+            getPtrIns.des = srcVar;
+            irFunction.addIns(irFunction.curBlock, getPtrIns);
         }
-        return srcVar;
+        if(ifLoad){
+            ++irFunction.localVarIndex;
+            var valueVar=new IRVar(srcVar.type.deref(), irFunction.localVarIndex);
+            var loadIns =new IRLoad();
+            loadIns.src=srcVar;
+            loadIns.des=valueVar;
+            irFunction.addIns(irFunction.curBlock, loadIns);
+            return valueVar;
+        }
+        else return srcVar;
     }
 }

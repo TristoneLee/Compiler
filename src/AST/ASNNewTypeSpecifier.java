@@ -1,5 +1,6 @@
 package AST;
 
+import IR.IRUtility.IRType;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidArrayType;
@@ -11,11 +12,12 @@ import java.util.List;
 public class ASNNewTypeSpecifier extends ASNExpr {
     String baseType;
     int dimension;
-    List<Integer> dimensions;
+    List<ASNExpr> indexes;
+    int newDim=0;
 
     public ASNNewTypeSpecifier(ScopeBuffer scopeBuffer) {
         super(scopeBuffer);
-        dimensions = new ArrayList<>();
+        indexes = new ArrayList<>();
     }
 
     @Override
@@ -24,7 +26,8 @@ public class ASNNewTypeSpecifier extends ASNExpr {
             if (child instanceof ASNStringConst) baseType = ((ASNStringConst) child).value;
             else if (child instanceof ASNNewArrayUni) {
                 ++dimension;
-                dimensions.add(((ASNNewArrayUni) child).expr == null ? 0 : ((ASNNewArrayUni) child).expr.value);
+                if(((ASNNewArrayUni) child).expr!=null)indexes.add(((ASNNewArrayUni) child).expr);
+                else ++newDim;
             }
         }
     }
@@ -33,8 +36,8 @@ public class ASNNewTypeSpecifier extends ASNExpr {
     public void check() throws CompileException {
         if (baseType.equals("void") && dimension != 0) throw new InvalidArrayType();
         boolean flag = false;
-        for (int dim : dimensions) {
-            if (dim==0) flag = true;
+        for (ASNExpr dim : indexes) {
+            if (dim == null) flag = true;
             else if (flag) throw new InvalidArrayType();
         }
         returnType = new ValueType(baseType);

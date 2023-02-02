@@ -21,8 +21,8 @@ public class ASNContinueStmt extends ASNStmt {
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
-        irFunction.addIns(curBlock,new IRBr(irFunction.blocks.get(curBlock).continueBlock));
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        irFunction.addIns(irFunction.curBlock,new IRBr(irFunction.blocks.get(irFunction.curBlock).continueBlock));
         return null;
     }
 }

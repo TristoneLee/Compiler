@@ -21,6 +21,6 @@ public class IRCalc extends IRIns{
     }
 
     public String toString(){
-        return des.toString()+" = "+lhs
+        return des.toString()+" = "+op.toString()+" "+lhs.toString()+" ,"+rhs.toString();
     }
 }

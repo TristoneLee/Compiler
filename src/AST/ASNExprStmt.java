@@ -24,8 +24,8 @@ public class ASNExprStmt extends ASNStmt{
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction, Integer curBlock) {
-        expr.irGeneration(irBuilder, irFunction,curBlock);
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        expr.irGeneration(irBuilder, irFunction);
         return null;
     }
 }

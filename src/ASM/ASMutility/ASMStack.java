@@ -1,7 +1,11 @@
 package ASM.ASMutility;
 
-public class ASMReg extends ASMVar{
+public class ASMStack extends ASMVar{
     public int offset;
     public int index;
+
+    public ASMStack(){
+        genre=ASMGenre.STACK;
+    }
 
 }

@@ -1,43 +1,54 @@
 package IR;
 
-import AST.ASN;
-import AST.ASNClassDel;
-import AST.ASNFuncDec;
-import AST.ASNVarDec;
+import AST.*;
+import IR.IRIns.IRAlloca;
+import IR.IRIns.IRIns;
+import IR.IRIns.IRRet;
+import IR.IRIns.IRStore;
 import IR.IRUtility.IRScopeStack;
+import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
 import parser.ASTbuilder;
 import parser.ScopeBuffer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class IRBuilder {
-    public Map<String,IRFunction> funcs;
-    public Map<String,IRStruct> structs;
-    public IRScopeStack irScopeStack;
-    public Map<String,IRVar> globVars;
-    public List<ASNVarDec> varDecStmts;
+    public Map<String,IRFunction> funcs=new LinkedHashMap<>();
+    public Map<String,IRStruct> structs=new LinkedHashMap<>();
+    public IRScopeStack irScopeStack=new IRScopeStack();
+    public Map<String,IRVar> globVars=new LinkedHashMap<>();
+    public Integer constStringCount=0;
+    public Map<String,IRVar> constStringMap=new LinkedHashMap<>();
+    public IRFunction globalInit;
+
 
     public IRBuilder(ASTbuilder AST) {
-        funcs=new HashMap<>();
-        structs=new HashMap<>();
-        irScopeStack=new IRScopeStack();
-        globVars=new HashMap<>();
-        varDecStmts = new ArrayList<>();
-        ScopeBuffer scopeBuffer = AST.scopeBuffer;
+        globalInit=new IRFunction();
+        globalInit.funcName="__INIT";
+        globalInit.blocks.add(new IRBlock());
+        for(ASNVarDec asnVarDec:AST.varDecList){
+            asnVarDec.globalInitGeneration(this,globalInit);
+        }
+        for (ASNClassDel asnClassDel:AST.classDelList){
+            structs.put(asnClassDel.classEntity.className,new IRStruct(this,asnClassDel.classEntity));
+        }
+        for(ASNFuncDec asnFunc:AST.funcDecList){
+            funcs.put(asnFunc.entity.functionName,new IRFunction(this,asnFunc));
+        }
+        for (var struct:structs.values()) struct.structBuild(this);
+        for(var func:funcs.values()) func.functionBuild(this);
+        globalInit.addIns(0,new IRRet());
+        funcs.put("__INIT",globalInit);
+    }
 
-        for (ASN child : AST.root.children) {
-            if (child instanceof ASNFuncDec)
-                scopeBuffer.functionTable.forEach((s, entity) -> funcs.put(((ASNFuncDec) child).entity.functionName,new IRFunction((ASNFuncDec) child)));
-            else if (child instanceof ASNClassDel) scopeBuffer.classTable.forEach((s, entity) -> {
-                structs.put(((ASNClassDel) child).classEntity.className,new IRStruct(((ASNClassDel) child).classEntity));
-            });
-            else if (child instanceof ASNVarDec) {
-                varDecStmts.add((ASNVarDec) child);
-            }
+    public IRVar getConstString(String srcString){
+        if(constStringMap.containsKey(srcString)){
+            return constStringMap.get(srcString);
+        }else {
+            IRVar newVar=new IRVar(IRType.new_i8_ptr(),srcString);
+            constStringMap.put(srcString,newVar);
+            return newVar;
         }
     }
 
@@ -47,5 +58,18 @@ public class IRBuilder {
 
     public IRStruct searchStruct(String structName){
         return structs.get(structName);
+    }
+
+    public void print(){
+        structs.forEach((s,struct)->{
+            struct.print();
+        });
+        funcs.forEach((s,func)->{
+            func.print();
+        });
+    }
+
+    public void stringInit(IRFunction initFunction){
+
     }
 }

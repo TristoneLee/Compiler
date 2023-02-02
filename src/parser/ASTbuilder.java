@@ -13,18 +13,20 @@ import java.util.Stack;
 import static java.lang.Integer.parseInt;
 
 public class ASTbuilder extends MxParserBaseListener {
-    Stack<ASN> buffer;
+    public Stack<ASN> buffer;
     public ScopeBuffer scopeBuffer;
     public ASN root;
 
-    List<ASNFuncDec> funcDecList;
-    List<ASNClassDel> classDelList;
-    List<ASNVarDec> varDecList;
+    public List<ASNFuncDec> funcDecList;
+    public List<ASNClassDel> classDelList;
+    public List<ASNVarDec> varDecList;
 
     public ASTbuilder() {
         buffer = new Stack<>();
         scopeBuffer = new ScopeBuffer();
         varDecList=new ArrayList<>();
+        classDelList=new ArrayList<>();
+        funcDecList=new ArrayList<>();
     }
 
     private void push(ASN node) {
@@ -46,6 +48,7 @@ public class ASTbuilder extends MxParserBaseListener {
             if (child instanceof ASNFuncDec) {
                 if (Objects.equals(((ASNFuncDec) child).entity.functionName, "main")) flag = true;
                 scopeBuffer.addFunction(((ASNFuncDec) child).entity.functionName, ((ASNFuncDec) child).entity);
+                funcDecList.add((ASNFuncDec) child);
             } else if (child instanceof ASNClassDel) {
                 scopeBuffer.addClass(((ASNClassDel) child).classEntity.className, ((ASNClassDel) child).classEntity);
                 classDelList.add((ASNClassDel) child);
@@ -504,8 +507,8 @@ public class ASTbuilder extends MxParserBaseListener {
             case MxParser.Plus -> push(new ASNUnaryExpr(scopeBuffer, ASNUnaryExpr.UnaryOp.plus));
             case MxParser.MinusMinus -> push(new ASNUnaryExpr(scopeBuffer, ASNUnaryExpr.UnaryOp.minusminus));
             case MxParser.Minus -> push(new ASNUnaryExpr(scopeBuffer, ASNUnaryExpr.UnaryOp.minus));
-            case MxParser.Star -> push(new ASNUnaryExpr(scopeBuffer, ASNUnaryExpr.UnaryOp.star));
-            case MxParser.And -> push(new ASNUnaryExpr(scopeBuffer, ASNUnaryExpr.UnaryOp.and));
+//            case MxParser.Star -> push(new ASNUnaryExpr(scopeBuffer, ASNUnaryExpr.UnaryOp.star));
+//            case MxParser.And -> push(new ASNUnaryExpr(scopeBuffer, ASNUnaryExpr.UnaryOp.and));
             case MxParser.Tilde -> push(new ASNUnaryExpr(scopeBuffer, ASNUnaryExpr.UnaryOp.tilde));
             case MxParser.Not -> push(new ASNUnaryExpr(scopeBuffer, ASNUnaryExpr.UnaryOp.not));
         }
@@ -589,7 +592,6 @@ public class ASTbuilder extends MxParserBaseListener {
 
     public void exitCompoundStatement(MxParser.CompoundStatementContext cxt) {
         buffer.peek().build();
-        ;
         buffer.pop();
     }
 
@@ -599,7 +601,6 @@ public class ASTbuilder extends MxParserBaseListener {
 
     public void exitThis(MxParser.ThisContext cxt) {
         buffer.peek().build();
-        ;
         buffer.pop();
     }
 
@@ -611,7 +612,6 @@ public class ASTbuilder extends MxParserBaseListener {
 
     public void exitTrueStatement(MxParser.TrueStatementContext cxt) {
         buffer.peek().build();
-        ;
         buffer.pop();
     }
 
@@ -623,7 +623,6 @@ public class ASTbuilder extends MxParserBaseListener {
 
     public void exitFalseStatement(MxParser.FalseStatementContext cxt) {
         buffer.peek().build();
-        ;
         buffer.pop();
     }
 }

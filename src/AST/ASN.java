@@ -42,10 +42,10 @@ abstract public class ASN {
     public void check() throws CompileException {
     }
 
-    public IRVar irGeneration(IRBuilder irBuilder,IRFunction irFunction,Integer curBlock) {
+    public IRVar irGeneration(IRBuilder irBuilder,IRFunction irFunction) {
         return null;
     }
 
-    public void controlFlowAnalysis(IRFunction irFunction) {
+    public void controlFlowAnalysis(IRBuilder irBuilder,IRFunction irFunction) {
     }
 }

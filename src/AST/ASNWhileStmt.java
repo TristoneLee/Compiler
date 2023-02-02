@@ -49,14 +49,14 @@ public class ASNWhileStmt extends ASNStmt{
     int forwardIndex;
 
     @Override
-    public void controlFlowAnalysis(IRFunction irFunction) {
+    public void controlFlowAnalysis(IRBuilder irBuilder,IRFunction irFunction) {
         var blocks=irFunction.blocks;
         formerIndex=blocks.size()-1;
         blocks.add(new IRBlock());
         conditionIndex=blocks.size()-1;
         blocks.add(new IRBlock());
         bodyIndex=blocks.size()-1;
-        whileStmt.controlFlowAnalysis(irFunction);
+        whileStmt.controlFlowAnalysis(irBuilder,irFunction);
         blocks.add(new IRBlock());
         forwardIndex= blocks.size()-1;
         irFunction.setBreakBlock(bodyIndex,forwardIndex);
@@ -64,12 +64,14 @@ public class ASNWhileStmt extends ASNStmt{
     }
 
     @Override
-    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction,Integer curBlock) {
-        var condVar=whileCondition.irGeneration(irBuilder,irFunction,conditionIndex);
+    public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        irFunction.curBlock=conditionIndex;
+        var condVar=whileCondition.irGeneration(irBuilder,irFunction);
         irFunction.addIns(conditionIndex,new IRCondBr(condVar,bodyIndex,forwardIndex));
-        whileStmt.irGeneration(irBuilder,irFunction,bodyIndex);
+        irFunction.curBlock=bodyIndex;
+        whileStmt.irGeneration(irBuilder,irFunction);
         irFunction.addIns(bodyIndex,new IRBr(conditionIndex));
-        curBlock=forwardIndex;
+        irFunction.curBlock=forwardIndex;
         return null;
     }
 }

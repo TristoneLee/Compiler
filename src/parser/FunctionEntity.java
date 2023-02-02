@@ -1,5 +1,6 @@
 package parser;
 
+import AST.ASNFuncDec;
 import utility.Parameter;
 import utility.ValueType;
 
@@ -13,6 +14,7 @@ public class FunctionEntity {
     public String functionName;
     public ValueType returnType;
     public List<Parameter> paraList;
+    public ASNFuncDec asnFuncDec;
 
     public FunctionEntity(){
         paraList=new ArrayList<>();
@@ -29,41 +31,41 @@ public class FunctionEntity {
 
     static {
         funcPrint=new FunctionEntity();
-        funcPrint.functionName="print";
+        funcPrint.functionName="__PRINT";
         funcPrint.returnType=VoidType;
         funcPrint.paraList=new ArrayList<>();
         funcPrint.paraList.add(new Parameter("str",StringType));
 
         funcPrintln=new FunctionEntity();
-        funcPrintln.functionName="println";
+        funcPrintln.functionName="__PRINTLN";
         funcPrintln.returnType=VoidType;
         funcPrintln.paraList=new ArrayList<>();
         funcPrintln.paraList.add(new Parameter("str",StringType));
 
         funcPrintInt=new FunctionEntity();
-        funcPrintInt.functionName="printInt";
+        funcPrintInt.functionName="__PRINT_INT";
         funcPrintInt.returnType=VoidType;
         funcPrintInt.paraList=new ArrayList<>();
         funcPrintInt.paraList.add(new Parameter("n",IntegerType));
 
         funcPrintlnInt=new FunctionEntity();
-        funcPrintlnInt.functionName="printlnInt";
+        funcPrintlnInt.functionName="__PRINTLN_INT";
         funcPrintlnInt.returnType=VoidType;
         funcPrintlnInt.paraList=new ArrayList<>();
         funcPrintlnInt.paraList.add(new Parameter("n",IntegerType));
 
         funcGetString=new FunctionEntity();
-        funcGetString.functionName="getString";
+        funcGetString.functionName="__GET_STRING";
         funcGetString.returnType=StringType;
         funcGetString.paraList=new ArrayList<>();
 
         funcGetInt=new FunctionEntity();
-        funcGetInt.functionName="getInt";
+        funcGetInt.functionName="__GET_INT";
         funcGetInt.returnType=IntegerType;
         funcGetInt.paraList=new ArrayList<>();
 
         funcToString=new FunctionEntity();
-        funcToString.functionName="toString";
+        funcToString.functionName="__TO_STRING";
         funcToString.returnType=StringType;
         funcToString.paraList=new ArrayList<>();
         funcToString.paraList.add(new Parameter("i",IntegerType));

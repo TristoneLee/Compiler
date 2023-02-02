@@ -4,14 +4,17 @@ import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
 
 public class IRAlloca extends IRIns{
-    IRVar irVar;
-    int length;
+    public IRVar irVar;
+    public int size;
+    public IRType allocaType;
 
     public IRAlloca(IRVar irVar_) {
         irVar = new IRVar(irVar_);
+        allocaType=irVar.type.deref();
     }
 
+
     public String toString(){
-        return irVar.toString() + " = alloca i32\n";
+        return irVar.toString() + " = alloca "+irVar.type.deref().toString();
     }
 }
