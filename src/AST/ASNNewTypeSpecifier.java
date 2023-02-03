@@ -13,7 +13,7 @@ public class ASNNewTypeSpecifier extends ASNExpr {
     String baseType;
     int dimension;
     List<ASNExpr> indexes;
-    int newDim=0;
+    int newDim = 0;
 
     public ASNNewTypeSpecifier(ScopeBuffer scopeBuffer) {
         super(scopeBuffer);
@@ -26,8 +26,8 @@ public class ASNNewTypeSpecifier extends ASNExpr {
             if (child instanceof ASNStringConst) baseType = ((ASNStringConst) child).value;
             else if (child instanceof ASNNewArrayUni) {
                 ++dimension;
-                if(((ASNNewArrayUni) child).expr!=null)indexes.add(((ASNNewArrayUni) child).expr);
-                else ++newDim;
+                indexes.add(((ASNNewArrayUni) child).expr);
+                if (((ASNNewArrayUni) child).expr == null)++newDim;
             }
         }
     }

@@ -1,5 +1,6 @@
 package AST;
 
+import com.sun.jdi.VoidType;
 import parser.Scope;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
@@ -22,7 +23,7 @@ public class ASNClassConstructorDec extends ASNFuncDec{
             if(child instanceof ASNIdentifier) {
                 className =  ((ASNIdentifier) child).identifier;
                 entity.functionName ="Constructor";
-                entity.returnType=new ValueType(className);
+                entity.returnType= ValueType.VoidType;
             }
             else if(child instanceof ASNFuncBody) funcBody=(ASNFuncBody) child;
         }

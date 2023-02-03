@@ -81,7 +81,7 @@ public class ASNNewExpr extends ASNExpr {
     IRVar arrayGeneration(IRBuilder irBuilder, IRFunction irFunction, List<ASNExpr> indexes){
         var newType=new IRType(returnType,irBuilder);
         var varSize=new IRVar(newType.deref().getSize(), IRType.Genre.I32 );
-        var arrayDim=indexes.size();
+        var arrayDim=indexes.size()- newArray.newDim;
         if(arrayDim ==1){
             var lengthVar= indexes.get(0).irGeneration(irBuilder,irFunction);
             var callIns=new IRCall("__MALLOC_ARRAY");
@@ -100,6 +100,7 @@ public class ASNNewExpr extends ASNExpr {
             irFunction.addIns(callIns1);
             var srcVar=callIns1.returnVar;
             for(int i=0;i<indexes.size();++i){
+                if(indexes.get(i)==null) break;
                 var getIndexIns=new IRGetPtr();
                 getIndexIns.indexes.add(new IRVar(i, IRType.Genre.I32));
                 getIndexIns.src=srcVar;

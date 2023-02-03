@@ -83,7 +83,7 @@ public class IRFunction {
         }
         var lastBlock=blocks.get(blocks.size()-1).insList;
         if(ifConstructor) {
-            if(! (lastBlock.get(lastBlock.size()-1) instanceof IRRet)) lastBlock.add(new IRRet());
+            if(lastBlock.size()==0||! (lastBlock.get(lastBlock.size()-1) instanceof IRRet)) lastBlock.add(new IRRet());
         }
         else if(funcName.equals("main")) {
             if(lastBlock.size()==0||! (lastBlock.get(lastBlock.size()-1) instanceof IRRet)) lastBlock.add(new IRRet(new IRVar(0, IRType.Genre.I32)));

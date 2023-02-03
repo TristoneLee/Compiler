@@ -32,6 +32,9 @@ public class ASNReturnStmt extends ASNStmt {
             expr.check();
             returnType = expr.returnType;
         } else returnType = VoidType;
+        if(scopeBuffer.searchFuncDec() instanceof ASNClassConstructorDec){
+            if(expr!=null)throw new CompileException("NoReturnInConstructor");
+        }
         if ((scopeBuffer.searchFuncDec() instanceof ASNFuncDec upperFuncDecNode)) {
             if (!upperFuncDecNode.entity.returnType.equals(returnType) && !((upperFuncDecNode.entity.returnType.dimension != 0 || !upperFuncDecNode.entity.returnType.isBasicType()) && returnType.equals(ValueType.NullType)))
                 throw new CompileException("UnmatchedReturnType");

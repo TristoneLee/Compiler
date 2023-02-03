@@ -24,10 +24,10 @@ lambdaReferMark: '&';
 
 postfixExpression:
     primaryExpression   #postfixExpression_miss
-    | postfixExpression  ('[' arrayId ']')+ #arrayAccess
-	| postfixExpression '.'  postfixExpression  #memberAccess
-    | postfixExpression  ('++' | '--')  #postfixExpression_
+    | postfixExpression '.'  postfixExpression  #memberAccess
     | functionName '(' arguementExpressionList? ')'  #functionCall
+    | postfixExpression  ('[' arrayId ']')+ #arrayAccess
+    | postfixExpression  ('++' | '--')  #postfixExpression_
     ;
 
 arrayId: expression;
