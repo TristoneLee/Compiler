@@ -37,6 +37,8 @@ public class ASNNewTypeSpecifier extends ASNExpr {
         if (baseType.equals("void") && dimension != 0) throw new InvalidArrayType();
         boolean flag = false;
         for (ASNExpr dim : indexes) {
+            dim.check();
+            if(!dim.returnType.equals(ValueType.IntegerType)) throw new InvalidArrayType();
             if (dim == null) flag = true;
             else if (flag) throw new InvalidArrayType();
         }

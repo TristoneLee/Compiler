@@ -25,7 +25,7 @@ public class ASNExprStmt extends ASNStmt{
 
     @Override
     public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
-        expr.irGeneration(irBuilder, irFunction);
+        if(expr!=null)expr.irGeneration(irBuilder, irFunction);
         return null;
     }
 }
