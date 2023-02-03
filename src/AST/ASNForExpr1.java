@@ -7,7 +7,7 @@ import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 
 public class ASNForExpr1 extends ASNStmt{
-    ASN expr;
+    public ASN expr;
 
     public ASNForExpr1 (ScopeBuffer scopeBuffer){
         super(scopeBuffer);

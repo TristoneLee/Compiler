@@ -51,7 +51,7 @@ public class ASNIfStmt extends ASNStmt {
             var condVar = ifCondition.irGeneration(irBuilder, irFunction);
             if (falseStmt != null)
                 irFunction.addIns(new IRCondBr(condVar, trueBlock, falseBlock));
-            else irFunction.addIns(new IRCondBr(condVar, trueBlock, falseBlock));
+            else irFunction.addIns(new IRCondBr(condVar, trueBlock, forwardBlock));
 
         }
         irFunction.blocks.add(trueBlock);

@@ -183,10 +183,10 @@ whileCondition:
 	expression;
 
 forCondition:
-	forExpr1  forExpr2? ';' forExpr3?;
+	(forExpr1 |';' ) forExpr2? ';' forExpr3?;
 
 forExpr1:
-    expression? ';'| varDeclaration;
+    expression ';'| varDeclaration;
 
 forExpr2:
 	expression;

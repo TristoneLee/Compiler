@@ -27,7 +27,7 @@ public class ASNForStmt extends ASNStmt {
         for (ASN child : children) {
             if (child instanceof ASNForExpr2) forExpr2 = ((ASNForExpr2) child).expr;
             else if (child instanceof ASNForExpr3) forExpr3 = ((ASNForExpr3) child).expr;
-            else if (child instanceof ASNForExpr1) forExpr1 = (ASNStmt) child;
+            else if (child instanceof ASNForExpr1) forExpr1 = (ASNStmt) ((ASNForExpr1) child).expr;
             else if (child instanceof ASNStmt) forStmt = (ASNStmt) child;
             else throw new InvalidExpression();
         }

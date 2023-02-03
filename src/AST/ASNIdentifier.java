@@ -34,23 +34,23 @@ public class ASNIdentifier extends ASNExpr{
 
     @Override
     public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
-        AtomicReference<IRVar> returnVar= new AtomicReference<>(irBuilder.irScopeStack.searchVar(identifier));
-        if(returnVar.get() ==null&&irFunction.ifMethod){
-            irFunction.struct.memberList.forEach((member,type)->{
-                if(member.equals(identifier)){
+        IRVar returnVar= irBuilder.irScopeStack.searchVar(identifier);
+        if(returnVar ==null&&irFunction.ifMethod){
+            for(var pair:irFunction.struct.memberList.entrySet()){
+                if(pair.getKey().equals(identifier)){
                     var getPtrIns=new IRGetPtr();
                     ++irFunction.localVarIndex;
-                    returnVar.set(getPtrIns.des = new IRVar(type, irFunction.localVarIndex));
+                    returnVar=getPtrIns.des = new IRVar(pair.getValue(), irFunction.localVarIndex);
                     getPtrIns.src=irFunction.paras.get(0);
                     getPtrIns.structOffset=irFunction.struct.getMemberOffset(identifier);
                     getPtrIns.indexes.add(new IRVar(0, IRType.Genre.I32));
                     getPtrIns.indexes.add(new IRVar(irFunction.struct.getMemberIndex(identifier), IRType.Genre.I32));
                     irFunction.addIns( getPtrIns);
                 }
-            });
+            }
         }
         if(ifLoad){
-            var srcVar=returnVar.get();
+            var srcVar=returnVar;
             var loadIns=new IRLoad();
             ++irFunction.localVarIndex;
             loadIns.des= new IRVar(srcVar.type.deref(), irFunction.localVarIndex);
@@ -58,6 +58,6 @@ public class ASNIdentifier extends ASNExpr{
             irFunction.addIns( loadIns);
             return loadIns.des;
         }
-        else return returnVar.get();
+        else return returnVar;
     }
 }

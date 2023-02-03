@@ -35,12 +35,13 @@ public class IRBuilder {
             funcs.put(asnFunc.entity.functionName,new IRFunction(this,asnFunc));
         }
         for (var struct:structs.values()) struct.structBuild(this);
-        for(var func:funcs.values()) func.functionBuild(this);
         for(ASNVarDec asnVarDec:AST.varDecList){
             asnVarDec.globalInitGeneration(this,globalInit);
         }
         globalInit.addIns(new IRRet());
+        for(var func:funcs.values()) func.functionBuild(this);
         funcs.put("__INIT",globalInit);
+
     }
 
     public IRVar getConstString(String srcString){
