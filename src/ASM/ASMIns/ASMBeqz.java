@@ -12,7 +12,7 @@ public class ASMBeqz extends ASMIns {
     }
 
     public String toString() {
-        return String.format("beqz\t%s, %s", rs1, dest);
+        return String.format("beqz\t%s, %s", rs1, dest.id());
     }
 
 }

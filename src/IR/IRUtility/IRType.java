@@ -106,9 +106,9 @@ public class IRType {
         return new IRType(Genre.I1).set_ptr();
     }
 
-    static public int i8_size=2;
+    static public int i8_size=4;
     static public int i32_size=4;
-    static public int i1_size=1;
+    static public int i1_size=4;
     static public int prt_size=4;
 
     public int getSize() {

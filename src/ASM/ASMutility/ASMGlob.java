@@ -8,4 +8,9 @@ public class ASMGlob extends ASMVar{
         id=id_;
         genre=ASMGenre.GLOBAl;
     }
+
+    @Override
+    public String toString() {
+        return id;
+    }
 }

@@ -64,7 +64,7 @@ public class ASNArrayAccess extends ASNExpr {
             ++irFunction.localVarIndex;
             srcVar = new IRVar(new IRType(srcVar.type).deref(), irFunction.localVarIndex);
             getPtrIns.des = srcVar;
-            irFunction.addIns(irFunction.curBlock, getPtrIns);
+            irFunction.addIns( getPtrIns);
         }
         if(ifLoad){
             ++irFunction.localVarIndex;
@@ -72,7 +72,7 @@ public class ASNArrayAccess extends ASNExpr {
             var loadIns =new IRLoad();
             loadIns.src=srcVar;
             loadIns.des=valueVar;
-            irFunction.addIns(irFunction.curBlock, loadIns);
+            irFunction.addIns( loadIns);
             return valueVar;
         }
         else return srcVar;

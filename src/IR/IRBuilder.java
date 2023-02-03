@@ -17,8 +17,8 @@ public class IRBuilder {
     public Map<String,IRFunction> funcs=new LinkedHashMap<>();
     public Map<String,IRStruct> structs=new LinkedHashMap<>();
     public IRScopeStack irScopeStack=new IRScopeStack();
-    public Map<String,IRVar> globVars=new LinkedHashMap<>();
-    public Integer constStringCount=0;
+    public LinkedList<IRVar> globVars=new LinkedList<>();
+    public Integer constStringCount=-1;
     public Map<String,IRVar> constStringMap=new LinkedHashMap<>();
     public IRFunction globalInit;
 
@@ -26,10 +26,8 @@ public class IRBuilder {
     public IRBuilder(ASTbuilder AST) {
         globalInit=new IRFunction();
         globalInit.funcName="__INIT";
-        globalInit.blocks.add(new IRBlock());
-        for(ASNVarDec asnVarDec:AST.varDecList){
-            asnVarDec.globalInitGeneration(this,globalInit);
-        }
+        globalInit.curBlock=new IRBlock();
+        globalInit.blocks.add(globalInit.curBlock);
         for (ASNClassDel asnClassDel:AST.classDelList){
             structs.put(asnClassDel.classEntity.className,new IRStruct(this,asnClassDel.classEntity));
         }
@@ -38,15 +36,19 @@ public class IRBuilder {
         }
         for (var struct:structs.values()) struct.structBuild(this);
         for(var func:funcs.values()) func.functionBuild(this);
-        globalInit.addIns(0,new IRRet());
+        for(ASNVarDec asnVarDec:AST.varDecList){
+            asnVarDec.globalInitGeneration(this,globalInit);
+        }
+        globalInit.addIns(new IRRet());
         funcs.put("__INIT",globalInit);
     }
 
     public IRVar getConstString(String srcString){
+        ++constStringCount;
         if(constStringMap.containsKey(srcString)){
             return constStringMap.get(srcString);
         }else {
-            IRVar newVar=new IRVar(IRType.new_i8_ptr(),srcString);
+            IRVar newVar=new IRVar(IRType.new_i8_ptr(),"str"+constStringCount);
             constStringMap.put(srcString,newVar);
             return newVar;
         }
@@ -69,7 +71,4 @@ public class IRBuilder {
         });
     }
 
-    public void stringInit(IRFunction initFunction){
-
-    }
 }

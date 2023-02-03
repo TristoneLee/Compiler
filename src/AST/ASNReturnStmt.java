@@ -43,10 +43,10 @@ public class ASNReturnStmt extends ASNStmt {
     public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
         if (expr != null) {
             var returnVar = expr.irGeneration(irBuilder, irFunction);
-            irFunction.addIns(irFunction.curBlock, new IRRet(returnVar));
+            irFunction.addIns( new IRRet(returnVar));
         }
         else{
-            irFunction.addIns(irFunction.curBlock,new IRRet());
+            irFunction.addIns(new IRRet());
         }
         return null;
     }

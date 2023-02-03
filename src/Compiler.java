@@ -1,7 +1,6 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
+import ASM.ASMBuilder;
 import IR.IRBuilder;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -12,21 +11,13 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import antlr.MxLexer;
 import antlr.MxParser;
 import parser.ASTbuilder;
+import utility.BuildInPrinter;
 import utility.Exception.CompileException;
 import utility.MxErrorListener;
 
 public class Compiler {
 
     public static void main(String[] args) throws Exception {
-//        FileInputStream fis;
-//        {
-//            try {
-//                fis = new FileInputStream("E:\\课程资料\\大二上\\编译器\\Compiler-Design-Implementation\\Compiler-2021-testcases\\sema\\basic-package\\basic-2.mx");
-//                System.setIn(fis);
-//            } catch (FileNotFoundException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
         try {
             CharStream charStream = CharStreams.fromStream(System.in);
             MxLexer lexer = new MxLexer(charStream);
@@ -43,6 +34,12 @@ public class Compiler {
             astBuilder.check();
             var irBuilder= new IRBuilder(astBuilder);
             irBuilder.print();
+            var output=new PrintStream("test.s");
+            var asmBuilder=new ASMBuilder(irBuilder);
+            asmBuilder.setStream(output);
+            asmBuilder.print();
+            var buildInPrinter=new BuildInPrinter(new PrintStream("build_in.s"));
+            buildInPrinter.print();
 //            System.out.println("Success!");
         }catch (CompileException exception){
             exception.Call();

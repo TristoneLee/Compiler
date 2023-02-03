@@ -43,7 +43,6 @@ public class ASNNewExpr extends ASNExpr {
             ClassEntity classEntity = scopeBuffer.searchClass(newClass.identifier);
             if (classEntity == null) throw new CompileException("UndefinedClass");
             returnType = new ValueType(newClass.identifier);
-            returnType.dimension++;
         }
     }
 
@@ -52,15 +51,26 @@ public class ASNNewExpr extends ASNExpr {
         if (newClass != null) {
             var curStruct = irBuilder.searchStruct(newClass.identifier);
             ++irFunction.localVarIndex;
-            var curVar = new IRVar(new IRType(returnType,irBuilder), irFunction.localVarIndex);
+            var curVar = new IRVar(IRType.new_i8_ptr(), irFunction.localVarIndex);
+            var callIns=new IRCall("__MALLOC");
+            callIns.paras.add(new IRVar(curStruct.getStructSize(), IRType.Genre.I32));
+            callIns.returnVar=curVar;
+            irFunction.addIns(callIns);
+            ++irFunction.localVarIndex;
+            var castIns=new IRBitcast();
+            castIns.srcVar=curVar;
+            castIns.returnVar=new IRVar(new IRType(returnType,irBuilder), irFunction.localVarIndex);
+            irFunction.addIns(castIns);
+            curVar=castIns.returnVar;
             if (curStruct.Constructor != null) {
                 var curIns = new IRCall();
                 curIns.function = curStruct.Constructor;
-                curIns.returnVar = curVar;
-                irFunction.addIns(irFunction.curBlock, curIns);
+                curIns.funcName= curIns.function.funcName;
+                curIns.paras.add(curVar);
+                irFunction.addIns( curIns);
             }else{
                 var curIns= new IRAlloca(curVar);
-                irFunction.addIns(irFunction.curBlock,curIns);
+                irFunction.addIns(curIns);
             }
             return curVar;
         } else {
@@ -79,7 +89,7 @@ public class ASNNewExpr extends ASNExpr {
             callIns.returnVar=new IRVar(new IRType(returnType,irBuilder), irFunction.localVarIndex);
             callIns.paras.add(varSize);
             callIns.paras.add(lengthVar);
-            irFunction.addIns(irFunction.curBlock,callIns);
+            irFunction.addIns(callIns);
             return callIns.returnVar;
         }else {
             ++irFunction.localVarIndex;
@@ -87,7 +97,7 @@ public class ASNNewExpr extends ASNExpr {
             callIns1.returnVar=new IRVar(IRType.new_i32ptr(), irFunction.localVarIndex);
             callIns1.paras.add(new IRVar(4, IRType.Genre.I32));
             callIns1.paras.add(new IRVar(arrayDim, IRType.Genre.I32));
-            irFunction.addIns(irFunction.curBlock,callIns1);
+            irFunction.addIns(callIns1);
             var srcVar=callIns1.returnVar;
             for(int i=0;i<indexes.size();++i){
                 var getIndexIns=new IRGetPtr();
@@ -96,10 +106,10 @@ public class ASNNewExpr extends ASNExpr {
                 ++irFunction.localVarIndex;
                 var desVar=new IRVar(IRType.new_i32(), irFunction.localVarIndex);
                 getIndexIns.des=desVar;
-                irFunction.addIns(irFunction.curBlock,getIndexIns);
+                irFunction.addIns(getIndexIns);
                 var indexVar=indexes.get(i).irGeneration(irBuilder,irFunction);
                 var storeIns=new IRStore(desVar,indexVar);
-                irFunction.addIns(irFunction.curBlock,storeIns);
+                irFunction.addIns(storeIns);
             }
             var callIns2=new IRCall("__MALLOC_ARRAY_MUL");
             ++irFunction.localVarIndex;
@@ -107,13 +117,13 @@ public class ASNNewExpr extends ASNExpr {
             callIns2.paras.add(varSize);
             callIns2.paras.add(new IRVar(arrayDim, IRType.Genre.I32));
             callIns2.paras.add(srcVar);
-            irFunction.addIns(irFunction.curBlock,callIns2);
+            irFunction.addIns(callIns2);
             var castIns=new IRBitcast();
             castIns.srcVar=callIns2.returnVar;
             castIns.desType=new IRType(returnType,irBuilder);
             ++irFunction.localVarIndex;
             castIns.returnVar=new IRVar(castIns.desType, irFunction.localVarIndex);
-            irFunction.addIns(irFunction.curBlock,castIns);
+            irFunction.addIns(castIns);
             return castIns.returnVar;
         }
     }

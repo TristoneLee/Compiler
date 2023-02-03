@@ -3,7 +3,7 @@ package IR.IRIns;
 import IR.IRUtility.IRVar;
 
 public class IRRet extends IRIns{
-    IRVar returnVar;
+    public IRVar returnVar;
 
     public IRRet(IRVar returnVar_){
         returnVar=returnVar_;

@@ -4,7 +4,7 @@ import IR.IRUtility.IRVar;
 
 public class ASMImm extends ASMVar {
     public static int base = 1 << 12;
-    public int imm;
+    public Integer imm;
 
 
     public ASMImm() {
@@ -16,6 +16,10 @@ public class ASMImm extends ASMVar {
         super();
         imm = imm_;
         genre = ASMGenre.IMM;
+    }
+
+    public String toString(){
+        return imm.toString();
     }
 
     public boolean isLow() {

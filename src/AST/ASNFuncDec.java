@@ -14,7 +14,8 @@ import static utility.ValueType.IntegerType;
 import static utility.ValueType.VoidType;
 
 
-public class ASNFuncDec extends ASNStmt {
+public class
+ASNFuncDec extends ASNStmt {
     public FunctionEntity entity = new FunctionEntity();
     public ASNFuncBody funcBody;
 

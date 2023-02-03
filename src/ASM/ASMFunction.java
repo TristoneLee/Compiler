@@ -1,9 +1,6 @@
 package ASM;
 
-import ASM.ASMIns.ASMCalc;
-import ASM.ASMIns.ASMLi;
-import ASM.ASMIns.ASMLw;
-import ASM.ASMIns.ASMSw;
+import ASM.ASMIns.*;
 import ASM.ASMutility.ASMGlob;
 import ASM.ASMutility.ASMImm;
 import ASM.ASMutility.ASMStack;
@@ -11,27 +8,31 @@ import ASM.ASMutility.ASMVar;
 import AST.ASNBinaryExpr;
 import IR.IRBlock;
 import IR.IRFunction;
-import IR.IRIns.IRCalc;
-import IR.IRIns.IRLoad;
-import IR.IRIns.IRRet;
-import IR.IRIns.IRStore;
+import IR.IRIns.*;
 import IR.IRUtility.IRVar;
 
 import java.util.*;
 
 import static ASM.ASMutility.ASMImm.base;
+import static ASM.ASMutility.ASMVar.*;
 import static ASM.ASMutility.ASMVar.regName.*;
-
+import static java.lang.Math.abs;
 
 public class ASMFunction {
     public String funcName;
     public LinkedList<ASMBlock> blocks = new LinkedList<>();
     public Map<IRVar, ASMVar> varMapping = new LinkedHashMap<>();
+    public Map<IRBlock, ASMBlock> blockMapTable = new LinkedHashMap<>();
     public int stackOffset = 0;
     ASMBlock curBlock;
     Random r = new Random();
+    ASMBlock funcEndBlock;
 
-    public List<ASMVar.regName> availableReg = List.of(t0, t1, t2, t3, t4, t5, t6, a0, a1, a2, a3, a4, a5, a6, a7);
+    int lastRename = -1;
+    int sublastRename = -1;
+
+    public List<regName> availableReg = List.of(t0, t1, t2, t3, t4, t5, t6, a0, a1, a2, a3, a4, a5, a6, a7);
+    public List<regName> callSaveReg = List.of(t0, t1, t2, t3, t4, t5, t6);
     public LinkedHashMap<ASMVar.regName, ASMVar> regRenameTable = new LinkedHashMap<>();
 
     public void resetRename() {
@@ -42,7 +43,14 @@ public class ASMFunction {
 
     public void regApply(ASMVar var) {
         if (var.reg == null || !var.equals(regRenameTable.get(var.reg))) {
-            int pos = r.nextInt() % availableReg.size();
+            int pos;
+            do {
+                pos = abs(r.nextInt()) % availableReg.size();
+            } while (pos == lastRename || pos == sublastRename);
+            lastRename = pos;
+            sublastRename = lastRename;
+            var storeVar = regRenameTable.get(availableReg.get(pos));
+            restoreVar(storeVar);
             regRenameTable.put(availableReg.get(pos), var);
             var.reg = availableReg.get(pos);
             if (var instanceof ASMStack) {
@@ -56,6 +64,36 @@ public class ASMFunction {
                 curBlock.addIns(loadIns);
             }
         }
+    }
+
+    public void loadFromMem(ASMVar var, regName des) {
+        var.reg = des;
+        if (var instanceof ASMStack) {
+            curBlock.addIns(new ASMLw(var.reg, sp, new ASMImm(((ASMStack) var).offset)));
+        } else if (var instanceof ASMGlob) {
+            curBlock.addIns(new ASMLw(var.reg, var));
+        } else if (var instanceof ASMImm) {
+            var loadIns = new ASMLi();
+            loadIns.imm = var;
+            loadIns.rd = var.reg;
+            curBlock.addIns(loadIns);
+        }
+    }
+
+    public void restoreVar(ASMVar storeVar) {
+        if (storeVar != null && !storeVar.ifTmp)
+            switch (storeVar.genre) {
+                case STACK -> {
+                    curBlock.addIns(new ASMSw(sp, storeVar.reg, new ASMImm(((ASMStack) storeVar).offset)));
+                }
+                case GLOBAl -> {
+                    var tmpVar = new ASMVar();
+                    tmpVar.ifTmp = true;
+                    regApply(tmpVar);
+                    curBlock.addIns(new ASMLui(tmpVar.reg, storeVar));
+                    curBlock.addIns(new ASMSw(tmpVar.reg, storeVar.reg, storeVar));
+                }
+            }
     }
 
     public int lowTrans(int imm) {
@@ -76,48 +114,67 @@ public class ASMFunction {
                 return curVar;
             }
             default -> {
-                stackOffset += 4;
                 var curVar = new ASMStack();
                 curVar.offset = stackOffset;
+                stackOffset += 4;
                 varMapping.put(var, curVar);
                 return curVar;
             }
         }
     }
 
-
     public ASMFunction(IRFunction irFunc) {
         resetRename();
         funcName = irFunc.funcName;
         int blockCount = 0;
         var initBlock = new ASMBlock(blockCount, this);
-        var insStackPtrMove = new ASMCalc("add", sp, sp, new ASMImm());
-        initBlock.addIns(insStackPtrMove);
-        for (int i = 0; i < irFunc.paras.size(); ++i) {
+        curBlock = initBlock;
+        for (int i = irFunc.paras.size() - 1; i >= 0; --i) {
             var para = irFunc.paras.get(i);
-            var asmPara = getAsmVar(para);
-            if (i < 8) {
-                asmPara.reg = availableReg.get(i + 7);
-                regRenameTable.put(asmPara.reg, asmPara);
+            var curVar = new ASMStack();
+            if (i > 8) {
+                curVar.offset = 4 * (i - 8);
+            } else if (i == 8) {
+                curVar.offset = 0;
+                stackOffset = 4 * (irFunc.paras.size() - 8);
+            } else {
+                curVar.reg = regName.valueOf("a" + i);
+                regRenameTable.put(curVar.reg, curVar);
+                curVar.offset = stackOffset;
+                stackOffset += 4;
             }
+            varMapping.put(para, curVar);
         }
         blocks.add(initBlock);
         ++blockCount;
         for (var irBlock : irFunc.blocks) {
-            blocks.add(blockBuild(irBlock, blockCount, this));
+            var asmBlock = new ASMBlock(blockCount, this);
+            blockMapTable.put(irBlock, asmBlock);
+            blocks.add(asmBlock);
+            ++blockCount;
         }
+        funcEndBlock = new ASMBlock(blockCount, this);
+        for (int i = 0; i < irFunc.blocks.size(); ++i) {
+            curBlock = blocks.get(i + 1);
+            blockBuild(blocks.get(i + 1), irFunc.blocks.get(i));
+        }
+        initBlock.addIns(new ASMCalc("add",sp,sp,new ASMImm(-stackOffset-4)));
+        initBlock.addIns(new ASMSw(sp,ra,new ASMImm(stackOffset)));
+        funcEndBlock.addIns(new ASMLw(ra,sp,new ASMImm(stackOffset)));
+        funcEndBlock.addIns(new ASMCalc("add",sp,sp,new ASMImm(stackOffset+4)));
+        funcEndBlock.addIns(new ASMRet());
+        blocks.add(funcEndBlock);
     }
 
-    public ASMBlock blockBuild(IRBlock irBlock, int index, ASMFunction srcFunc) {
-        var curBlock = new ASMBlock(index, srcFunc);
+    public void blockBuild(ASMBlock curBlock, IRBlock irBlock) {
         for (var irIns : irBlock.insList) {
             if (irIns instanceof IRCalc irCalc) {
                 var rs1 = getAsmVar(irCalc.lhs);
                 var rs2 = getAsmVar(irCalc.rhs);
                 var rd = getAsmVar(irCalc.des);
-                regApply(rs1);
-                regApply(rs2);
-                regApply(rd);
+                loadFromMem(rs1, t0);
+                loadFromMem(rs2, t1);
+                rd.reg = t1;
                 switch (irCalc.op) {
                     case plus, minus, or, and, div, mod, leftShift, rightShift, exclusiveOr -> {
                         curBlock.addIns(new ASMCalc(irOptrans(irCalc.op), rd.reg, rs1.reg, rs2.reg));
@@ -145,23 +202,140 @@ public class ASMFunction {
                         curBlock.addIns(new ASMCalc("xor", rd.reg, rd.reg, new ASMImm(1)));
                     }
                 }
+                restoreVar(rd);
             } else if (irIns instanceof IRLoad irLoad) {
                 var src = getAsmVar(irLoad.src);
                 var des = getAsmVar(irLoad.des);
-                regApply(src);
-                regApply(des);
-                curBlock.addIns(new ASMLw(des.reg, src.reg,new ASMImm(0)));
-            } else if(irIns instanceof IRStore irStore){
-                var src=getAsmVar(irStore.src);
-                var des=getAsmVar(irStore.des);
-                regApply(src);
-                regApply(des);
-                curBlock.addIns(new ASMSw(des.reg, src.reg,new ASMImm(0)));
-            }else if(irIns instanceof IRRet irRet){
-
+                if (!(src instanceof ASMGlob)) loadFromMem(src, t1);
+                loadFromMem(des, t0);
+                if (src.ifAlloca) {
+                    curBlock.addIns(new ASMMv(des.reg, src.reg));
+                } else if (src instanceof ASMGlob) {
+                    curBlock.addIns(new ASMLw(des.reg, src));
+                } else curBlock.addIns(new ASMLw(des.reg, src.reg, new ASMImm(0)));
+                restoreVar(des);
+            } else if (irIns instanceof IRStore irStore) {
+                var src = getAsmVar(irStore.src);
+                var des = getAsmVar(irStore.des);
+                loadFromMem(src, t1);
+                loadFromMem(des, t0);
+                if (des.ifAlloca) {
+                    curBlock.addIns(new ASMMv(des.reg, src.reg));
+                } else if (des instanceof ASMGlob) {
+                    var luiIns = new ASMLui(des.reg, des);
+                    var storeIns = new ASMSw(des.reg, src.reg, des);
+                    curBlock.addIns(luiIns);
+                    curBlock.addIns(storeIns);
+                } else curBlock.addIns(new ASMSw(des.reg, src.reg, new ASMImm(0)));
+                restoreVar(des);
+            } else if (irIns instanceof IRRet irRet) {
+                if (irRet.returnVar != null) {
+                    var ret = getAsmVar(irRet.returnVar);
+                    loadFromMem(ret, a0);
+//                    curBlock.addIns(new ASMMv(a0, ret.reg));
+                }
+                curBlock.addIns(new ASMJ(funcEndBlock));
+            } else if (irIns instanceof IRGetPtr irGetPtr) {
+                var src = getAsmVar(irGetPtr.src);
+                var indexes = irGetPtr.indexes;
+                if (indexes.size() == 1) {
+                    var offset = new ASMImm(irGetPtr.src.type.deref().size);
+                    var loc = getAsmVar(irGetPtr.indexes.get(0));
+//                    regApply(loc);
+//                    regApply(offset);
+                    loadFromMem(loc, t0);
+                    loadFromMem(offset, t1);
+                    curBlock.addIns(new ASMCalc("mul", offset.reg, offset.reg, loc.reg));
+                    loadFromMem(src, t2);
+                    var des = getAsmVar(irGetPtr.des);
+                    des.reg = t0;
+                    curBlock.addIns(new ASMCalc("add", des.reg, src.reg, offset.reg));
+                    restoreVar(des);
+                } else {
+                    assert indexes.size() == 2;
+                    var offset = new ASMImm(irGetPtr.src.type.deref().size);
+                    var loc = getAsmVar(irGetPtr.indexes.get(0));
+                    loadFromMem(loc, t0);
+                    loadFromMem(offset, t1);
+                    curBlock.addIns(new ASMCalc("mul", offset.reg, offset.reg, loc.reg));
+                    loadFromMem(src, t2);
+                    var des = getAsmVar(irGetPtr.des);
+                    des.reg = t0;
+                    curBlock.addIns(new ASMCalc("add", des.reg, src.reg, offset.reg));
+                    var structOffset = new ASMImm(irGetPtr.structOffset);
+                    loadFromMem(structOffset, t1);
+                    curBlock.addIns(new ASMCalc("add", des.reg, des.reg, structOffset.reg));
+                    restoreVar(des);
+                }
+            } else if (irIns instanceof IRAlloca irAlloca) {
+                var asmVar = getAsmVar(irAlloca.irVar);
+                asmVar.ifAlloca = true;
+            } else if (irIns instanceof IRCall irCall) {
+                for (int i = 0; i < irCall.paras.size(); ++i) {
+                    var para = getAsmVar(irCall.paras.get(i));
+                    loadFromMem(para, t0);
+                    if (i <= 7) {
+                        curBlock.addIns((new ASMMv(regName.valueOf("a" + i), para.reg)));
+                    } else {
+                        curBlock.addIns(new ASMSw(sp, para.reg, new ASMImm(-(i - 8) * 4)));
+                    }
+                }
+                curBlock.addIns(new ASMCall(irCall.funcName));
+                if (irCall.returnVar != null) {
+                    var ret = getAsmVar(irCall.returnVar);
+                    ret.reg = a0;
+                    restoreVar(ret);
+                }
+            } else if (irIns instanceof IRBitcast irBitcast) {
+                var src = getAsmVar(irBitcast.srcVar);
+                var des = getAsmVar(irBitcast.returnVar);
+                loadFromMem(src, t1);
+                des.reg = t0;
+                curBlock.addIns(new ASMMv(des.reg, src.reg));
+                restoreVar(des);
+            } else if (irIns instanceof IRBr irBr) {
+                curBlock.addIns(new ASMJ(blockMapTable.get(irBr.des)));
+            } else if (irIns instanceof IRCondBr irCondBr) {
+                var cond = getAsmVar(irCondBr.condition);
+                loadFromMem(cond, t0);
+                curBlock.addIns(new ASMBeqz(cond.reg, blockMapTable.get(irCondBr.des2)));
+                curBlock.addIns(new ASMJ(blockMapTable.get(irCondBr.des1)));
+            } else if (irIns instanceof IRPhi irPhi) {
+                var des = getAsmVar(irPhi.des);
+                var var1 = getAsmVar(irPhi.var1);
+                var var2 = getAsmVar(irPhi.var2);
+                var block = blockMapTable.get(irPhi.block1);
+                var iter = block.block.listIterator(block.block.size());
+                while (iter.hasPrevious()) {
+                    var pr = iter.previous();
+                    if (!(pr instanceof ASMJ || pr instanceof ASMBeqz)) {
+                        iter.next();
+                        break;
+                    }
+                }
+                ASMBlock.insIter = iter;
+                loadFromMem(var1,t1);
+                loadFromMem(des,t0);
+                curBlock.addIns(new ASMMv(des.reg, var1.reg));
+                restoreVar(des);
+                ASMBlock.insIter = null;
+                 block = blockMapTable.get(irPhi.block2);
+                 iter = block.block.listIterator(block.block.size());
+                while (iter.hasPrevious()) {
+                    var pr = iter.previous();
+                    if (!(pr instanceof ASMJ || pr instanceof ASMBeqz)) {
+                        iter.next();
+                        break;
+                    }
+                }
+                ASMBlock.insIter = iter;
+                loadFromMem(var2,t1);
+                loadFromMem(des,t0);
+                curBlock.addIns(new ASMMv(des.reg, var2.reg));
+                restoreVar(des);
+                ASMBlock.insIter = null;
             }
         }
-        return null;
     }
 
     public String irOptrans(IRCalc.IROp op) {
@@ -177,6 +351,31 @@ public class ASMFunction {
             case exclusiveOr -> "xor";
             default -> "";
         };
+    }
+
+    public void callSaveRegApply(ASMVar var) {
+        if (var.reg == null || !var.equals(regRenameTable.get(var.reg))) {
+            int pos;
+            do {
+                pos = abs(r.nextInt()) % callSaveReg.size();
+            } while (pos == lastRename || pos == sublastRename);
+            lastRename = pos;
+            sublastRename = lastRename;
+            var storeVar = regRenameTable.get(availableReg.get(pos));
+            restoreVar(storeVar);
+            regRenameTable.put(availableReg.get(pos), var);
+            var.reg = availableReg.get(pos);
+            if (var instanceof ASMStack) {
+                curBlock.addIns(new ASMLw(var.reg, sp, new ASMImm(((ASMStack) var).offset)));
+            } else if (var instanceof ASMGlob) {
+                curBlock.addIns(new ASMLw(var.reg, var));
+            } else if (var instanceof ASMImm) {
+                var loadIns = new ASMLi();
+                loadIns.imm = var;
+                loadIns.rd = var.reg;
+                curBlock.addIns(loadIns);
+            }
+        }
     }
 
 }

@@ -9,6 +9,6 @@ public class IRBitcast extends IRIns{
     public IRType desType;
 
     public String toString(){
-        return String.format("%s = bitcast %s %s to %s", returnVar, srcVar.type, srcVar, desType);
+        return String.format("%s = bitcast %s %s to %s", returnVar, srcVar.type, srcVar, returnVar.type);
     }
 }

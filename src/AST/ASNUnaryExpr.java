@@ -59,9 +59,9 @@ public class ASNUnaryExpr extends ASNExpr {
             var storeIns = new IRStore();
             storeIns.src = valueVar;
             storeIns.des = srcVar;
-            irFunction.addIns(irFunction.curBlock, loadIns);
-            irFunction.addIns(irFunction.curBlock, calcIns);
-            irFunction.addIns(irFunction.curBlock, storeIns);
+            irFunction.addIns( loadIns);
+            irFunction.addIns( calcIns);
+            irFunction.addIns( storeIns);
             if (ifLoad)
                 return valueVar;
             else return srcVar;
@@ -72,13 +72,13 @@ public class ASNUnaryExpr extends ASNExpr {
         var returnVar = new IRVar(new IRType(returnType, irBuilder), irFunction.localVarIndex);
         if (unaryOp == UnaryOp.not) {
             var curIns = new IRCalc(new IRVar(1, IRType.Genre.I32), rVar, returnVar, IRCalc.IROp.exclusiveOr);
-            irFunction.addIns(irFunction.curBlock, curIns);
+            irFunction.addIns( curIns);
         } else if (unaryOp == UnaryOp.minus) {
             var curIns = new IRCalc(new IRVar(0, IRType.Genre.I32), rVar, returnVar, IRCalc.IROp.minus);
-            irFunction.addIns(irFunction.curBlock, curIns);
+            irFunction.addIns( curIns);
         } else if (unaryOp == UnaryOp.tilde) {
             var curIns = new IRCalc(new IRVar(-1, IRType.Genre.I32), rVar, returnVar, IRCalc.IROp.exclusiveOr);
-            irFunction.addIns(irFunction.curBlock, curIns);
+            irFunction.addIns( curIns);
         }
         return returnVar;
     }

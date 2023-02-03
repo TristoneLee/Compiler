@@ -16,7 +16,7 @@ void *__MALLOC_ARRAY_MUL(int size, int dimension, int *arraySize) {
         ptr = malloc(PTR_SIZE * (*arraySize) + INT_SIZE) + INT_SIZE;
         *(int *)(ptr - INT_SIZE) = *arraySize;
         for (int i = 0; i < *arraySize; i++)
-            ((char **)ptr)[i] = __NEW_ARRAY(size, dimension - 1, arraySize + 1);
+            ((char **)ptr)[i] = __MALLOC_ARRAY_MUL(size, dimension - 1, arraySize + 1);
     }
     return (void *)ptr;
 }
@@ -26,6 +26,12 @@ void *__MALLOC_ARRAY(int size, int arraySize) {
      ptr = malloc(size * (arraySize) + INT_SIZE) + INT_SIZE;
      *(int *)(ptr - INT_SIZE) = arraySize;
      return (void *)ptr;
+ }
+
+ void *__MALLOC(int size){
+    void* ptr;
+    ptr = malloc(size);
+    return ptr;
  }
 
 
@@ -39,8 +45,8 @@ void __PRINT_INT(int val) { printf("%d", val); }
 void __PRINTLN_INT(int val) { printf("%d\n", val); }
 
 int __GET_SIZE(void *ptr){
-    int *ptr_=(int*)(ptr-4);
-    return *ptr;
+    void* ptr_=ptr-4;
+    return *((int*) ptr);
 }
 
 char *__GET_STRING() {
@@ -120,4 +126,5 @@ int __STRING_PARSE_INT(char *str) {
 int __STRING_ORD(char *str, int pos) { return (int)str[pos]; }
 
 int __STRING_LENGTH(char *str) { return strlen(str);}
+
 

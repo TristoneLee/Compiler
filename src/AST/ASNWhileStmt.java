@@ -43,35 +43,30 @@ public class ASNWhileStmt extends ASNStmt{
         scopeBuffer.controlFlow.pop();
     }
 
-    int formerIndex;
-    int conditionIndex;
-    int bodyIndex;
-    int forwardIndex;
+    IRBlock conditionIndex;
+    IRBlock bodyIndex;
+    IRBlock forwardIndex;
 
-    @Override
-    public void controlFlowAnalysis(IRBuilder irBuilder,IRFunction irFunction) {
-        var blocks=irFunction.blocks;
-        formerIndex=blocks.size()-1;
-        blocks.add(new IRBlock());
-        conditionIndex=blocks.size()-1;
-        blocks.add(new IRBlock());
-        bodyIndex=blocks.size()-1;
-        whileStmt.controlFlowAnalysis(irBuilder,irFunction);
-        blocks.add(new IRBlock());
-        forwardIndex= blocks.size()-1;
-        irFunction.setBreakBlock(bodyIndex,forwardIndex);
-        irFunction.setContinueBlock(bodyIndex,conditionIndex);
-    }
 
     @Override
     public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        irFunction.addIns(new IRBr(conditionIndex));
+        irFunction.blocks.add(conditionIndex);
         irFunction.curBlock=conditionIndex;
         var condVar=whileCondition.irGeneration(irBuilder,irFunction);
-        irFunction.addIns(conditionIndex,new IRCondBr(condVar,bodyIndex,forwardIndex));
+        irFunction.addIns(new IRCondBr(condVar,bodyIndex,forwardIndex));
+        irFunction.blocks.add(bodyIndex);
         irFunction.curBlock=bodyIndex;
+        var oldBreak=irFunction.breakBlock;
+        var oldContinue=irFunction.continueBlock;
+        irFunction.setBreakBlock(forwardIndex);
+        irFunction.setContinueBlock(conditionIndex);
         whileStmt.irGeneration(irBuilder,irFunction);
-        irFunction.addIns(bodyIndex,new IRBr(conditionIndex));
+        irFunction.setBreakBlock(oldBreak);
+        irFunction.setContinueBlock(oldContinue);
+        irFunction.addIns(new IRBr(conditionIndex));
         irFunction.curBlock=forwardIndex;
+        irFunction.blocks.add(forwardIndex);
         return null;
     }
 }

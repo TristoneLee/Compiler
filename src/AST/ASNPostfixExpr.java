@@ -48,7 +48,7 @@ public class ASNPostfixExpr extends ASNExpr {
         var valueVar = new IRVar(new IRType(returnType, irBuilder), irFunction.localVarIndex);
         loadIns.des = valueVar;
         loadIns.src = lVar;
-        irFunction.addIns(irFunction.curBlock,loadIns);
+        irFunction.addIns(loadIns);
         ++irFunction.localVarIndex;
         var returnVar = new IRVar(new IRType(returnType, irBuilder), irFunction.localVarIndex);
         var copyIns = new IRCalc(valueVar, new IRVar(0, IRType.Genre.I32), returnVar, IRCalc.IROp.plus);
@@ -56,10 +56,10 @@ public class ASNPostfixExpr extends ASNExpr {
         if (type == PostfixType.plusplus)
             opIns = new IRCalc(valueVar, new IRVar(1, IRType.Genre.I32), valueVar, IRCalc.IROp.plus);
         else opIns = new IRCalc(valueVar, new IRVar(1, IRType.Genre.I32), valueVar, IRCalc.IROp.minus);
-        irFunction.addIns(irFunction.curBlock, copyIns);
-        irFunction.addIns(irFunction.curBlock, opIns);
+        irFunction.addIns( copyIns);
+        irFunction.addIns( opIns);
         var storeIns = new IRStore(lVar, valueVar);
-        irFunction.addIns(irFunction.curBlock, storeIns);
+        irFunction.addIns( storeIns);
         return returnVar;
     }
 }

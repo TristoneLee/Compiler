@@ -7,8 +7,9 @@ import java.util.List;
 
 public class IRBlock {
     public List<IRIns> insList=new ArrayList<>();
-    public int continueBlock;
-    public int breakBlock;
+    public IRBlock continueBlock;
+    public IRBlock breakBlock;
+    public Integer index;
 
     public void add(IRIns irIns){
         insList.add(irIns);

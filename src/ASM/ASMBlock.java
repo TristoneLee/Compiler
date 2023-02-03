@@ -11,7 +11,7 @@ public class ASMBlock {
     public LinkedList<ASMIns> block=new LinkedList<>();
     public LinkedList<ASMBlock> ante=new LinkedList<>();
     public LinkedList<ASMBlock> desc=new LinkedList<>();
-    public ListIterator<ASMIns> insIter= block.listIterator();
+    public static ListIterator<ASMIns> insIter= null;
 
     public ASMBlock(int index_, ASMFunction srcFun_){
         index=index_;
@@ -22,7 +22,8 @@ public class ASMBlock {
         insIter= block.listIterator(0);
     }
     public void addIns(ASMIns ins_){
-        block.add(ins_);
+        if(insIter!=null)insIter.add(ins_);
+        else block.add(ins_);
     }
     public void setAnte(ASMBlock block_){
         ante.add(block_);

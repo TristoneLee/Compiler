@@ -12,16 +12,8 @@ public class IRStruct {
     public LinkedHashMap<String, IRType> memberList = new LinkedHashMap<>();
     public LinkedHashMap<String, Integer> memberNum = new LinkedHashMap<>();
     public int memberCounter = 0;
-    public static Map<String, Integer> structLengthTable;
     public IRFunction Constructor;
     public ClassEntity asnEntity;
-
-    static {
-        structLengthTable = new HashMap<>();
-        structLengthTable.put("int", 4);
-        structLengthTable.put("bool", 1);
-        structLengthTable.put("char", 2);
-    }
 
     public IRStruct(IRBuilder irBuilder, ClassEntity entity) {
         asnEntity=entity;
@@ -31,7 +23,8 @@ public class IRStruct {
         });
         if (asnEntity.classConstructor != null) {
             Constructor = new IRFunction(irBuilder, asnEntity.classConstructor.asnFuncDec, this);
-            irBuilder.funcs.put(structName+".Constructor",Constructor);
+            Constructor.funcName=structName+"_Constructor";
+            irBuilder.funcs.put(structName+"_Constructor",Constructor);
         }
     }
 

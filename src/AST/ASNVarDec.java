@@ -51,7 +51,7 @@ public class ASNVarDec extends ASNStmt {
             irFunction.localVarIndex++;
             IRVar curVar = new IRVar(new IRType(valueType,irBuilder).set_ptr(), irFunction.localVarIndex);
             irBuilder.irScopeStack.scopeStack.peek().indexTable.put(declarator.name, curVar);
-            irFunction.addIns(irFunction.curBlock,new IRAlloca(curVar));
+            irFunction.addIns(new IRAlloca(curVar));
             if (declarator.initor != null) {
                 var rhsVar = declarator.initor.irGeneration(irBuilder, irFunction);
                 if((declarator.initor instanceof ASNMemberAccess&& !( ((ASNMemberAccess) declarator.initor).postfix instanceof ASNFuncCall))||declarator.initor instanceof ASNArrayAccess){
@@ -60,9 +60,9 @@ public class ASNVarDec extends ASNStmt {
                     ++irFunction.localVarIndex;
                     loadIns.des=new IRVar(curVar.type.deref(), irFunction.localVarIndex);
                     rhsVar=loadIns.des;
-                    irFunction.addIns(irFunction.curBlock,loadIns);
+                    irFunction.addIns(loadIns);
                 }
-                irFunction.addIns(0,new IRStore(curVar, rhsVar));
+                irFunction.addIns(new IRStore(curVar, rhsVar));
             }
         }
         return null;
@@ -70,10 +70,11 @@ public class ASNVarDec extends ASNStmt {
 
     public void globalInitGeneration(IRBuilder irBuilder,IRFunction irFunction){
             IRType irType = new IRType(valueType,irBuilder);
+            irType.dim++;
             for (ASNInitDeclarator declarator : declarators) {
-                IRVar curVar = new IRVar(new IRType(valueType,irBuilder), declarator.name);
+                IRVar curVar = new IRVar(irType, declarator.name);
+                irBuilder.globVars.add(curVar);
                 irBuilder.irScopeStack.globScope().indexTable.put(declarator.name, curVar);
-                irFunction.addIns(0,new IRAlloca(curVar));
                 if (declarator.initor != null) {
                     var rhsVar = declarator.initor.irGeneration(irBuilder, irFunction);
                     if((declarator.initor instanceof ASNMemberAccess&& !( ((ASNMemberAccess) declarator.initor).postfix instanceof ASNFuncCall))||declarator.initor instanceof ASNArrayAccess){
@@ -82,9 +83,9 @@ public class ASNVarDec extends ASNStmt {
                         ++irFunction.localVarIndex;
                         loadIns.des=new IRVar(curVar.type.deref(), irFunction.localVarIndex);
                         rhsVar=loadIns.des;
-                        irFunction.addIns(irFunction.curBlock,loadIns);
+                        irFunction.addIns(loadIns);
                     }
-                    irFunction.addIns(0,new IRStore(curVar, rhsVar));
+                    irFunction.addIns(new IRStore(curVar, rhsVar));
                 }
             }
     }

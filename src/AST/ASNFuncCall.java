@@ -65,7 +65,7 @@ public class ASNFuncCall extends ASNExpr {
         }
         curIns.funcName = entity.functionName;
         curIns.function = irBuilder.searchFunction(funcName);
-        irFunction.addIns(irFunction.curBlock,curIns);
+        irFunction.addIns(curIns);
         return curIns.returnVar;
     }
 }

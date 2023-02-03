@@ -1,14 +1,16 @@
 package IR.IRIns;
 
-public class IRBr extends IRIns{
-    int des;
+import IR.IRBlock;
 
-    public IRBr(int des_) {
+public class IRBr extends IRIns{
+    public IRBlock des;
+
+    public IRBr(IRBlock des_) {
         des=des_;
     }
 
     @Override
     public String toString() {
-        return "br "+des+"";
+        return String.format("br block %s",des.index);
     }
 }

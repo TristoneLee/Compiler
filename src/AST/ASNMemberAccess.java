@@ -70,17 +70,18 @@ public class ASNMemberAccess extends ASNExpr {
             ++irFunction.localVarIndex;
             var returnVar = new IRVar(new IRType(returnType, irBuilder), irFunction.localVarIndex);
             var curIns = new IRGetPtr();
+            curIns.structOffset=curStruct.getMemberOffset(varName);
             curIns.des = returnVar;
             curIns.src = srcVar;
             curIns.indexes.add(new IRVar(0, IRType.Genre.I32));
             curIns.indexes.add(new IRVar(curStruct.getMemberIndex(varName), IRType.Genre.I32));
-            irFunction.addIns(irFunction.curBlock, curIns);
+            irFunction.addIns( curIns);
             if(ifLoad){
                 var loadIns=new IRLoad();
                 ++irFunction.localVarIndex;
                 loadIns.des= new IRVar(returnVar.type.deref(), irFunction.localVarIndex);
                 loadIns.src=srcVar;
-                irFunction.addIns(irFunction.curBlock, loadIns);
+                irFunction.addIns( loadIns);
                 return loadIns.des;
             }
             return returnVar;
@@ -91,8 +92,10 @@ public class ASNMemberAccess extends ASNExpr {
             var curIns = new IRGetPtr();
             curIns.des = returnVar;
             curIns.src = srcVar;
+            curIns.structOffset=curStruct.getMemberOffset(varName);
+            curIns.indexes.add(new IRVar(0, IRType.Genre.I32));
             curIns.indexes.add(new IRVar(curStruct.getMemberIndex(varName), IRType.Genre.I32));
-            irFunction.addIns(irFunction.curBlock, curIns);
+            irFunction.addIns( curIns);
             for (var arrayId : arrayIds) {
                 var getPtrIns = new IRGetPtr();
                 getPtrIns.src = new IRVar(returnVar);
@@ -101,14 +104,14 @@ public class ASNMemberAccess extends ASNExpr {
                 getPtrIns.des = returnVar;
                 ++irFunction.localVarIndex;
                 returnVar = new IRVar(IRType.new_i32(), irFunction.localVarIndex);
-                irFunction.addIns(irFunction.curBlock, getPtrIns);
+                irFunction.addIns( getPtrIns);
             }
             if(ifLoad){
                 var loadIns=new IRLoad();
                 ++irFunction.localVarIndex;
                 loadIns.des= new IRVar(returnVar.type.deref(), irFunction.localVarIndex);
                 loadIns.src=srcVar;
-                irFunction.addIns(irFunction.curBlock, loadIns);
+                irFunction.addIns( loadIns);
                 return loadIns.des;
             }
             return returnVar;
@@ -126,7 +129,7 @@ public class ASNMemberAccess extends ASNExpr {
             for (var para : parameters) {
                 curIns.paras.add(para.irGeneration(irBuilder, irFunction));
             }
-            irFunction.addIns(irFunction.curBlock, curIns);
+            irFunction.addIns( curIns);
             return curIns.returnVar;
         }
         return null;

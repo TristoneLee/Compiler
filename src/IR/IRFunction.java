@@ -1,5 +1,6 @@
 package IR;
 
+import AST.ASNClassConstructorDec;
 import AST.ASNFuncDec;
 import IR.IRIns.IRCall;
 import IR.IRIns.IRIns;
@@ -24,9 +25,12 @@ public class IRFunction {
     public List<IRBlock> blocks = new ArrayList<>();
     FunctionEntity asnEntity;
     ASNFuncDec asnFuncDec;
-    public Integer curBlock = 0;
+    public IRBlock curBlock;
     public boolean ifMethod;
+    public boolean ifConstructor;
     public IRStruct struct;
+    public IRBlock breakBlock;
+    public IRBlock continueBlock;
 
     public IRFunction() {
     }
@@ -44,9 +48,10 @@ public class IRFunction {
         ifMethod = true;
         struct = struct_;
         asnFuncDec = asnFuncDec_;
+        if(asnFuncDec_ instanceof ASNClassConstructorDec) ifConstructor=true;
         localVarIndex = -1;
         paras = new ArrayList<>();
-        funcName = struct.structName + "." + asnFuncDec.entity.functionName;
+        funcName = struct.structName + "_" + asnFuncDec.entity.functionName;
 //        if(funcName.equals("main")){
 //            blocks.get(blocks.size()-1).insList.add(new IRRet())
 //        }
@@ -54,13 +59,13 @@ public class IRFunction {
 
     public void functionBuild(IRBuilder irBuilder) {
         irBuilder.irScopeStack.push();
-        blocks.add(new IRBlock());
+        curBlock=new IRBlock();
+        blocks.add(curBlock);
         if (funcName.equals("main")) {
-            addIns(0, new IRCall("__INIT"));
+            addIns( new IRCall("__INIT"));
         }
         if (ifMethod) {
             irBuilder.irScopeStack.push();
-            blocks.add(new IRBlock());
             var thisVar = new IRVar(new IRType(new ValueType(struct.structName), irBuilder), ++localVarIndex);
             paras.add(thisVar);
             for (Parameter para : asnFuncDec.entity.paraList) {
@@ -74,6 +79,16 @@ public class IRFunction {
             irBuilder.irScopeStack.peek().put(para.name, tmpVar);
         }
         asnFuncDec.funcBody.irGeneration(irBuilder, this);
+        for(int i=0;i<blocks.size();++i){
+            blocks.get(i).index=i;
+        }
+        var lastBlock=blocks.get(blocks.size()-1).insList;
+        if(ifConstructor) {
+            if(! (lastBlock.get(lastBlock.size()-1) instanceof IRRet)) lastBlock.add(new IRRet());
+        }
+        else if(funcName.equals("main")) {
+            if(! (lastBlock.get(lastBlock.size()-1) instanceof IRRet)) lastBlock.add(new IRRet(new IRVar(0, IRType.Genre.I32)));
+        }
     }
 
 
@@ -83,16 +98,16 @@ public class IRFunction {
         return funcs;
     }
 
-    public void addIns(int blockId, IRIns ins) {
-        blocks.get(blockId).add(ins);
+    public void addIns( IRIns ins) {
+        curBlock.add(ins);
     }
 
-    public void setContinueBlock(int blockIndex, int continueBlock_) {
-        blocks.get(blockIndex).continueBlock = continueBlock_;
+    public void setContinueBlock( IRBlock continueBlock_) {
+        continueBlock = continueBlock_;
     }
 
-    public void setBreakBlock(int blockIndex, int breakBlock_) {
-        blocks.get(blockIndex).breakBlock = breakBlock_;
+    public void setBreakBlock( IRBlock breakBlock_) {
+        breakBlock = breakBlock_;
     }
 
     public void print() {

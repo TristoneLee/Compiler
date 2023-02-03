@@ -42,9 +42,10 @@ public class ASNIdentifier extends ASNExpr{
                     ++irFunction.localVarIndex;
                     returnVar.set(getPtrIns.des = new IRVar(type, irFunction.localVarIndex));
                     getPtrIns.src=irFunction.paras.get(0);
+                    getPtrIns.structOffset=irFunction.struct.getMemberOffset(identifier);
                     getPtrIns.indexes.add(new IRVar(0, IRType.Genre.I32));
                     getPtrIns.indexes.add(new IRVar(irFunction.struct.getMemberIndex(identifier), IRType.Genre.I32));
-                    irFunction.addIns(irFunction.curBlock, getPtrIns);
+                    irFunction.addIns( getPtrIns);
                 }
             });
         }
@@ -54,7 +55,7 @@ public class ASNIdentifier extends ASNExpr{
             ++irFunction.localVarIndex;
             loadIns.des= new IRVar(srcVar.type.deref(), irFunction.localVarIndex);
             loadIns.src=srcVar;
-            irFunction.addIns(irFunction.curBlock, loadIns);
+            irFunction.addIns( loadIns);
             return loadIns.des;
         }
         else return returnVar.get();

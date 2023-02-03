@@ -45,64 +45,49 @@ public class ASNForStmt extends ASNStmt {
         scopeBuffer.pop();
     }
 
-    int formerIndex;
-    int expr2Index;
-    int expr3Index;
-    int bodyIndex;
-    int forwardIndex;
+    IRBlock expr2Index = new IRBlock();
+    IRBlock expr3Index = new IRBlock();
+    IRBlock bodyIndex = new IRBlock();
+    IRBlock forwardIndex = new IRBlock();
 
-    @Override
-    public void controlFlowAnalysis(IRBuilder irBuilder, IRFunction irFunction) {
-        var blocks = irFunction.blocks;
-        formerIndex = irFunction.blocks.size() - 1;
-        if (forExpr2 != null) {
-            blocks.add(new IRBlock());
-            expr2Index = blocks.size() - 1;
-        }
-        if (forExpr3 != null) {
-            blocks.add(new IRBlock());
-            expr3Index = blocks.size() - 1;
-        }
-        if (forStmt != null) {
-            var bodyBlock = new IRBlock();
-            blocks.add(bodyBlock);
-            bodyIndex = blocks.size() - 1;
-            forStmt.controlFlowAnalysis(irBuilder, irFunction);
-        }
-        blocks.add(new IRBlock());
-        forwardIndex = blocks.size() - 1;
-        irFunction.setBreakBlock(bodyIndex, forwardIndex);
-        if (forExpr3 != null) irFunction.setContinueBlock(bodyIndex, expr3Index);
-        else irFunction.setContinueBlock(bodyIndex, bodyIndex);
-    }
 
     @Override
     public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
         if (forExpr1 != null) {
-            irFunction.curBlock=formerIndex;
             forExpr1.irGeneration(irBuilder, irFunction);
-            if (forExpr2 != null) irFunction.addIns(formerIndex, new IRBr(expr2Index));
-            else irFunction.addIns(formerIndex, new IRBr(bodyIndex));
         }
+        if (forExpr2 != null) irFunction.addIns(new IRBr(expr2Index));
+        else irFunction.addIns(new IRBr(bodyIndex));
+
         if (forExpr2 != null) {
-            irFunction.curBlock=expr2Index;
+            irFunction.curBlock = expr2Index;
+            irFunction.blocks.add(expr2Index);
             var condVar = forExpr2.irGeneration(irBuilder, irFunction);
-            irFunction.addIns(expr2Index, new IRCondBr(condVar, bodyIndex, forwardIndex));
+            irFunction.addIns(new IRCondBr(condVar, bodyIndex, forwardIndex));
         }
         if (forExpr3 != null) {
-            irFunction.curBlock=expr3Index;
+            irFunction.curBlock = expr3Index;
+            irFunction.blocks.add(expr3Index);
             forExpr3.irGeneration(irBuilder, irFunction);
-            if (forExpr2 != null) irFunction.addIns(expr3Index, new IRBr(expr2Index));
-            else irFunction.addIns(expr3Index, new IRBr(bodyIndex));
+            if (forExpr2 != null) irFunction.addIns(new IRBr(expr2Index));
+            else irFunction.addIns(new IRBr(bodyIndex));
         }
-        if (forStmt != null) {
-            irFunction.curBlock=bodyIndex;
-            forStmt.irGeneration(irBuilder, irFunction);
-            if (forExpr3 != null) irFunction.addIns(bodyIndex, new IRBr(expr3Index));
-            else if(forExpr2!=null) irFunction.addIns(bodyIndex, new IRBr(expr2Index));
-            else irFunction.addIns(bodyIndex, new IRBr(bodyIndex));
-        }
+        irFunction.curBlock = bodyIndex;
+        var oldBreak=irFunction.breakBlock;
+        var oldContinue=irFunction.continueBlock;
+        irFunction.setBreakBlock(forwardIndex);
+        if(forExpr3!=null)irFunction.setContinueBlock(expr3Index);
+        else if(forExpr2!=null) irFunction.setContinueBlock(expr2Index);
+        else irFunction.setContinueBlock(bodyIndex);
+        irFunction.blocks.add(bodyIndex);
+        forStmt.irGeneration(irBuilder, irFunction);
+        irFunction.setContinueBlock(oldContinue);
+        irFunction.setBreakBlock(oldBreak);
+        if (forExpr3 != null) irFunction.addIns(new IRBr(expr3Index));
+        else if (forExpr2 != null) irFunction.addIns(new IRBr(expr2Index));
+        else irFunction.addIns(new IRBr(bodyIndex));
         irFunction.curBlock = forwardIndex;
+        irFunction.blocks.add(forwardIndex);
         return null;
     }
 }

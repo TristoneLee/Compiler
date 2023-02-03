@@ -41,47 +41,31 @@ public class ASNIfStmt extends ASNStmt {
         if (!ifCondition.returnType.equals(BooleanType)) throw new InvalidStmt();
     }
 
-    int formerIndex;
-    int trueStmtIndex;
-    int falseStmtIndex;
-    int forwardIndex;
-
-    @Override
-    public void controlFlowAnalysis(IRBuilder irBuilder,IRFunction irFunction) {
-        var blocks = irFunction.blocks;
-        formerIndex = blocks.size() - 1;
-        if (trueStmt != null) {
-            blocks.add(new IRBlock());
-            trueStmtIndex = blocks.size() - 1;
-        }
-        if (falseStmt != null) {
-            blocks.add(new IRBlock());
-            falseStmtIndex = blocks.size() - 1;
-        }
-        blocks.add(new IRBlock());
-        forwardIndex = blocks.size() - 1;
-    }
 
     @Override
     public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
+        var trueBlock = new IRBlock();
+        var falseBlock = new IRBlock();
+        var forwardBlock = new IRBlock();
         if (ifCondition != null) {
             var condVar = ifCondition.irGeneration(irBuilder, irFunction);
             if (falseStmt != null)
-                irFunction.addIns(irFunction.curBlock, new IRCondBr(condVar, trueStmtIndex, falseStmtIndex));
-            else irFunction.addIns(irFunction.curBlock, new IRCondBr(condVar, trueStmtIndex, forwardIndex));
+                irFunction.addIns(new IRCondBr(condVar, trueBlock, falseBlock));
+            else irFunction.addIns(new IRCondBr(condVar, trueBlock, falseBlock));
 
         }
-        if (trueStmt != null) {
-            irFunction.curBlock=trueStmtIndex;
-            trueStmt.irGeneration(irBuilder, irFunction);
-            irFunction.addIns(trueStmtIndex, new IRBr(forwardIndex));
-        }
+        irFunction.blocks.add(trueBlock);
+        irFunction.curBlock = trueBlock;
+        trueStmt.irGeneration(irBuilder, irFunction);
+        irFunction.addIns(new IRBr(forwardBlock));
         if (falseStmt != null) {
-            irFunction.curBlock=falseStmtIndex;
+            irFunction.curBlock = falseBlock;
+            irFunction.blocks.add(falseBlock);
             falseStmt.irGeneration(irBuilder, irFunction);
-            irFunction.addIns(falseStmtIndex, new IRBr(forwardIndex));
+            irFunction.addIns(new IRBr(forwardBlock));
         }
-        irFunction.curBlock = forwardIndex;
+        irFunction.curBlock = forwardBlock;
+        irFunction.blocks.add(forwardBlock);
         return null;
     }
 }

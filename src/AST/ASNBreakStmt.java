@@ -24,7 +24,7 @@ public class ASNBreakStmt extends ASNStmt{
 
     @Override
     public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
-        irFunction.addIns(irFunction.curBlock,new IRBr(irFunction.blocks.get(irFunction.curBlock).breakBlock));
+        irFunction.addIns(new IRBr(irFunction.breakBlock));
         return null;
     }
 }

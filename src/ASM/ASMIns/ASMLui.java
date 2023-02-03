@@ -2,10 +2,13 @@ package ASM.ASMIns;
 
 import ASM.ASMutility.ASMGlob;
 import ASM.ASMutility.ASMVar;
+import ASM.ASMutility.ASMVar.*;
 
 public class ASMLui extends ASMIns {
 
-    public ASMLui() {
+    public ASMLui(regName rd_, ASMVar imm_) {
+        rd=rd_;
+        imm=imm_;
     }
 
     public String toString() {

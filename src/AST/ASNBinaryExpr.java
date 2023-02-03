@@ -1,11 +1,9 @@
 package AST;
 
+import IR.IRBlock;
 import IR.IRBuilder;
 import IR.IRFunction;
-import IR.IRIns.IRCalc;
-import IR.IRIns.IRCall;
-import IR.IRIns.IRLoad;
-import IR.IRIns.IRStore;
+import IR.IRIns.*;
 import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
 import parser.ScopeBuffer;
@@ -22,6 +20,9 @@ public class ASNBinaryExpr extends ASNExpr {
     }
 
     public ASNExpr lhs, rhs;
+    IRBlock formerIndex;
+    IRBlock rhsIndex;
+    IRBlock endIndex;
 
     Operate op;
 
@@ -77,6 +78,7 @@ public class ASNBinaryExpr extends ASNExpr {
         }
     }
 
+
     @Override
     public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
         if (returnType != StringType) {
@@ -94,8 +96,30 @@ public class ASNBinaryExpr extends ASNExpr {
 //                    return null;
 //                }
                 var curIns = new IRStore(lhsVar, rhsVar);
-                irFunction.addIns(irFunction.curBlock, curIns);
+                irFunction.addIns(curIns);
                 return null;
+            }
+            if (op == Operate.logicalOr || op == Operate.logicalAnd) {
+                rhsIndex = new IRBlock();
+                endIndex = new IRBlock();
+                formerIndex= irFunction.curBlock;
+                var ifAnd = op == Operate.logicalAnd;
+                var lvar = lhs.irGeneration(irBuilder, irFunction);
+                if (ifAnd) {
+                    irFunction.addIns( new IRCondBr(lvar, rhsIndex, endIndex));
+                } else irFunction.addIns( new IRCondBr(lvar, endIndex, rhsIndex));
+                irFunction.curBlock=rhsIndex;
+                irFunction.blocks.add(rhsIndex);
+                var rvar=rhs.irGeneration(irBuilder,irFunction);
+                irFunction.addIns(new IRBr(endIndex));
+                irFunction.curBlock=endIndex;
+                irFunction.blocks.add(endIndex);
+                ++irFunction.localVarIndex;
+                var returnVar=new IRVar(IRType.new_i1(), irFunction.localVarIndex);
+                if(ifAnd)
+                    irFunction.addIns(new IRPhi(returnVar,formerIndex,new IRVar(0, IRType.Genre.I1),rhsIndex,rvar));
+                else irFunction.addIns(new IRPhi(returnVar,formerIndex,new IRVar(1, IRType.Genre.I1),rhsIndex,rvar));
+                return returnVar;
             }
             var rhsVar = rhs.irGeneration(irBuilder, irFunction);
             var lhsVar = lhs.irGeneration(irBuilder, irFunction);
@@ -103,7 +127,7 @@ public class ASNBinaryExpr extends ASNExpr {
             IRVar returnVar;
             if (returnType.equals(IntegerType)) returnVar = new IRVar(IRType.new_i32(), irFunction.localVarIndex);
             else returnVar = new IRVar(IRType.new_i1(), irFunction.localVarIndex);
-            irFunction.addIns(irFunction.curBlock, new IRCalc(lhsVar, rhsVar, returnVar, IRCalc.IROp.valueOf(op.name())));
+            irFunction.addIns( new IRCalc(lhsVar, rhsVar, returnVar, IRCalc.IROp.valueOf(op.name())));
             return returnVar;
         } else {
             var callIns = new IRCall();
@@ -124,7 +148,7 @@ public class ASNBinaryExpr extends ASNExpr {
             callIns.returnVar = returnvar;
             callIns.paras.add(lhsVar);
             callIns.paras.add(rhsVar);
-            irFunction.addIns(irFunction.curBlock, callIns);
+            irFunction.addIns( callIns);
             return returnvar;
         }
     }
