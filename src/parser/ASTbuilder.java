@@ -24,9 +24,9 @@ public class ASTbuilder extends MxParserBaseListener {
     public ASTbuilder() {
         buffer = new Stack<>();
         scopeBuffer = new ScopeBuffer();
-        varDecList=new ArrayList<>();
-        classDelList=new ArrayList<>();
-        funcDecList=new ArrayList<>();
+        varDecList = new ArrayList<>();
+        classDelList = new ArrayList<>();
+        funcDecList = new ArrayList<>();
     }
 
     private void push(ASN node) {
@@ -52,7 +52,7 @@ public class ASTbuilder extends MxParserBaseListener {
             } else if (child instanceof ASNClassDel) {
                 scopeBuffer.addClass(((ASNClassDel) child).classEntity.className, ((ASNClassDel) child).classEntity);
                 classDelList.add((ASNClassDel) child);
-            } else if (child instanceof ASNVarDec){
+            } else if (child instanceof ASNVarDec) {
                 varDecList.add((ASNVarDec) child);
             }
         }
@@ -149,11 +149,11 @@ public class ASTbuilder extends MxParserBaseListener {
         buffer.pop();
     }
 
-    public void enterNewTypeSpecifier(MxParser.NewTypeSpecifierContext cxt){
+    public void enterNewTypeSpecifier(MxParser.NewTypeSpecifierContext cxt) {
         push(new ASNNewTypeSpecifier(scopeBuffer));
     }
 
-    public void exitNewTypeSpecifier(MxParser.NewTypeSpecifierContext cxt) throws CompileException{
+    public void exitNewTypeSpecifier(MxParser.NewTypeSpecifierContext cxt) throws CompileException {
         buffer.peek().build();
         buffer.pop();
     }
@@ -338,13 +338,10 @@ public class ASTbuilder extends MxParserBaseListener {
     }
 
     public void enterMultiplicativeExpression_(MxParser.MultiplicativeExpression_Context cxt) {
-        switch (cxt.multiplicativeOp().getStop().getTokenIndex()) {
-            case MxParser.Star:
-                push(new ASNBinaryExpr(ASNBinaryExpr.Operate.star, scopeBuffer));
-            case MxParser.Div:
-                push(new ASNBinaryExpr(ASNBinaryExpr.Operate.div, scopeBuffer));
-            default:
-                push(new ASNBinaryExpr(ASNBinaryExpr.Operate.mod, scopeBuffer));
+        switch (cxt.multiplicativeOp().getStop().getType()) {
+            case MxParser.Star -> push(new ASNBinaryExpr(ASNBinaryExpr.Operate.star, scopeBuffer));
+            case MxParser.Div -> push(new ASNBinaryExpr(ASNBinaryExpr.Operate.div, scopeBuffer));
+            default -> push(new ASNBinaryExpr(ASNBinaryExpr.Operate.mod, scopeBuffer));
         }
     }
 
@@ -377,7 +374,9 @@ public class ASTbuilder extends MxParserBaseListener {
 
     public void enterRelationalExpression_(MxParser.RelationalExpression_Context cxt) {
         switch (cxt.relationOp().getStop().getType()) {
-            case MxParser.Greater -> push(new ASNBinaryExpr(ASNBinaryExpr.Operate.greater, scopeBuffer));
+            case MxParser.Greater -> {
+                push(new ASNBinaryExpr(ASNBinaryExpr.Operate.greater, scopeBuffer));
+            }
             case MxParser.GreaterEqual -> push(new ASNBinaryExpr(ASNBinaryExpr.Operate.greaterEqual, scopeBuffer));
             case MxParser.Less -> push(new ASNBinaryExpr(ASNBinaryExpr.Operate.less, scopeBuffer));
             case MxParser.LessEqual -> push(new ASNBinaryExpr(ASNBinaryExpr.Operate.lessEqual, scopeBuffer));

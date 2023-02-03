@@ -833,7 +833,7 @@ public class BuildInPrinter {
                 	tail	strlen
                 	.size	__STRING_LENGTH, .-__STRING_LENGTH
                 	.section	.text.startup,"ax",@progbits
-                	.align	2
+
                 	.ident	"GCC: (GNU) 10.1.0"
                 """);
     }

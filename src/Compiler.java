@@ -34,7 +34,7 @@ public class Compiler {
             astBuilder.check();
             var irBuilder= new IRBuilder(astBuilder);
             irBuilder.print();
-            var output=new PrintStream("test.s");
+            var output=new PrintStream("output.s");
             var asmBuilder=new ASMBuilder(irBuilder);
             asmBuilder.setStream(output);
             asmBuilder.print();
