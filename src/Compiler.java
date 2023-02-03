@@ -45,10 +45,9 @@ public class Compiler {
             exception.Call();
             throw new Exception();
         }
-//        catch (RuntimeException e){
-//            System.err.println(e.getMessage());
-//            throw new Exception();
-//
-//        }
+        catch (RuntimeException e){
+            System.err.println(e.getMessage());
+            throw new Exception();
+        }
     }
 }
