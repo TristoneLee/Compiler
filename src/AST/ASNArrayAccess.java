@@ -6,7 +6,6 @@ import IR.IRIns.IRGetPtr;
 import IR.IRIns.IRLoad;
 import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
-import org.intellij.lang.annotations.Identifier;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidExpression;
