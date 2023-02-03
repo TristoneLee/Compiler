@@ -33,13 +33,13 @@ public class Compiler {
             walker.walk(astBuilder, tree);
             astBuilder.check();
             var irBuilder= new IRBuilder(astBuilder);
-//            irBuilder.print();
-//            var output=new PrintStream("test.s");
+            irBuilder.print();
+            var output=new PrintStream("test.s");
             var asmBuilder=new ASMBuilder(irBuilder);
-//            asmBuilder.setStream(output);
-//            asmBuilder.print();
-//            var buildInPrinter=new BuildInPrinter(new PrintStream("buildin.s"));
-//            buildInPrinter.print();
+            asmBuilder.setStream(output);
+            asmBuilder.print();
+            var buildInPrinter=new BuildInPrinter(new PrintStream("buildin.s"));
+            buildInPrinter.print();
 //            System.out.println("Success!");
         }catch (CompileException exception){
             exception.Call();
