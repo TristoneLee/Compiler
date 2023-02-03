@@ -43,9 +43,9 @@ public class ASNWhileStmt extends ASNStmt{
         scopeBuffer.controlFlow.pop();
     }
 
-    IRBlock conditionIndex;
-    IRBlock bodyIndex;
-    IRBlock forwardIndex;
+    IRBlock conditionIndex=new IRBlock();
+    IRBlock bodyIndex=new IRBlock();
+    IRBlock forwardIndex=new IRBlock();
 
 
     @Override

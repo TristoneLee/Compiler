@@ -38,16 +38,16 @@ public class Compiler {
             var asmBuilder=new ASMBuilder(irBuilder);
 //            asmBuilder.setStream(output);
 //            asmBuilder.print();
-//            var buildInPrinter=new BuildInPrinter(new PrintStream("build_in.s"));
+//            var buildInPrinter=new BuildInPrinter(new PrintStream("buildin.s"));
 //            buildInPrinter.print();
 //            System.out.println("Success!");
         }catch (CompileException exception){
             exception.Call();
             throw new Exception();
         }
-        catch (RuntimeException e){
-            System.err.println(e.getMessage());
-            throw new Exception();
-        }
+//        catch (RuntimeException e){
+//            System.err.println(e.getMessage());
+//            throw new Exception();
+//        }
     }
 }

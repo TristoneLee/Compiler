@@ -6,6 +6,7 @@ import IR.IRIns.IRGetPtr;
 import IR.IRIns.IRLoad;
 import IR.IRUtility.IRType;
 import IR.IRUtility.IRVar;
+import org.intellij.lang.annotations.Identifier;
 import parser.ScopeBuffer;
 import utility.Exception.CompileException;
 import utility.Exception.InvalidExpression;
@@ -20,7 +21,7 @@ import static utility.ValueType.IntegerType;
 public class ASNArrayAccess extends ASNExpr {
 
     List<ASNExpr> arrayIds = new ArrayList<>();
-    ASNIdentifier idNode;
+    ASNExpr idNode;
     String arrayIden;
 
     public ASNArrayAccess(ScopeBuffer scopeBuffer) {
@@ -34,7 +35,8 @@ public class ASNArrayAccess extends ASNExpr {
             if (child instanceof ASNArrayId) {
                 arrayIds.add(((ASNArrayId) child).expr);
             } else if (child instanceof ASNExpr) {
-                idNode = (ASNIdentifier) child;
+                if(child instanceof ASNIdentifier) arrayIden= ((ASNIdentifier) child).identifier;
+                idNode = (ASNExpr) child;
             }
         }
     }
@@ -52,11 +54,11 @@ public class ASNArrayAccess extends ASNExpr {
         returnType = new ValueType(valueType.baseType);
         returnType.dimensions = valueType.dimensions.subList(arrayIds.size(), valueType.dimensions.size());
         returnType.dimension = returnType.dimensions.size();
-        arrayIden = idNode.identifier;
     }
 
     public IRVar irGeneration(IRBuilder irBuilder, IRFunction irFunction) {
-        var srcVar = irBuilder.irScopeStack.searchVar(arrayIden);
+        idNode.ifLoad=false;
+        var srcVar = idNode.irGeneration(irBuilder,irFunction);
         for (var arrayId : arrayIds) {
             var getPtrIns = new IRGetPtr();
             getPtrIns.src = new IRVar(srcVar);

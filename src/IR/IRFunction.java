@@ -65,7 +65,6 @@ public class IRFunction {
             addIns( new IRCall("__INIT"));
         }
         if (ifMethod) {
-            irBuilder.irScopeStack.push();
             var thisVar = new IRVar(new IRType(new ValueType(struct.structName), irBuilder), ++localVarIndex);
             paras.add(thisVar);
             for (Parameter para : asnFuncDec.entity.paraList) {
@@ -87,8 +86,9 @@ public class IRFunction {
             if(! (lastBlock.get(lastBlock.size()-1) instanceof IRRet)) lastBlock.add(new IRRet());
         }
         else if(funcName.equals("main")) {
-            if(! (lastBlock.get(lastBlock.size()-1) instanceof IRRet)) lastBlock.add(new IRRet(new IRVar(0, IRType.Genre.I32)));
+            if(lastBlock.size()==0||! (lastBlock.get(lastBlock.size()-1) instanceof IRRet)) lastBlock.add(new IRRet(new IRVar(0, IRType.Genre.I32)));
         }
+        irBuilder.irScopeStack.pop();
     }
 
 
