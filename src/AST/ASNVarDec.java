@@ -52,6 +52,7 @@ public class ASNVarDec extends ASNStmt {
             IRVar curVar = new IRVar(new IRType(valueType,irBuilder).set_ptr(), irFunction.localVarIndex);
             irBuilder.irScopeStack.scopeStack.peek().indexTable.put(declarator.name, curVar);
             irFunction.addIns(new IRAlloca(curVar));
+            irFunction.allocaCnt++;
             if (declarator.initor != null) {
                 var rhsVar = declarator.initor.irGeneration(irBuilder, irFunction);
                 if((declarator.initor instanceof ASNMemberAccess&& !( ((ASNMemberAccess) declarator.initor).postfix instanceof ASNFuncCall))||declarator.initor instanceof ASNArrayAccess){

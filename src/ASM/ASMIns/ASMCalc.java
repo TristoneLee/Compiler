@@ -1,5 +1,6 @@
 package ASM.ASMIns;
 
+import ASM.ASMutility.ASMGlob;
 import ASM.ASMutility.ASMImm;
 import ASM.ASMutility.ASMVar;
 import ASM.ASMutility.ASMVar.*;
@@ -30,7 +31,11 @@ public class ASMCalc extends ASMIns {
 
 
     public String toString() {
-        if (imm != null) return String.format("%si\t%s, %s, %s", op, rd, rs1, imm);
+        if (imm != null) {
+            if(imm instanceof ASMGlob)
+                return String.format("%si\t%s, %s, %%lo(%s)", op, rd, rs1, imm);
+            return String.format("%si\t%s, %s, %s", op, rd, rs1, imm);
+        }
         else if (rs2 != null) return String.format("%s\t%s, %s, %s", op, rd, rs1, rs2);
         else return String.format("%s\t%s, %s", op, rd, rs1);
     }

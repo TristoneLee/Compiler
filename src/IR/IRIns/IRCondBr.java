@@ -9,7 +9,7 @@ public class IRCondBr extends IRIns{
     public IRBlock des2;
 
     public IRCondBr(IRVar cond,IRBlock des1_,IRBlock des2_){
-        condition=new IRVar(cond);
+        condition=cond;
         des1=des1_;
         des2=des2_;
     }

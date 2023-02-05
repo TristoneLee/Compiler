@@ -1,5 +1,6 @@
 package AST;
 
+import IR.IRBlock;
 import IR.IRBuilder;
 import IR.IRFunction;
 import IR.IRIns.*;
@@ -68,64 +69,65 @@ public class ASNNewExpr extends ASNExpr {
                 curIns.funcName= curIns.function.funcName;
                 curIns.paras.add(curVar);
                 irFunction.addIns( curIns);
-            }else{
-                var curIns= new IRAlloca(curVar);
-                irFunction.addIns(curIns);
             }
             return curVar;
         } else {
-            return arrayGeneration(irBuilder, irFunction, newArray.indexes);
+            return arrayGeneration(irBuilder, irFunction,new IRType(new ValueType(newArray.baseType),irBuilder), newArray.dimension- newArray.newDim, newArray.indexes,0);
         }
     }
 
-    IRVar arrayGeneration(IRBuilder irBuilder, IRFunction irFunction, List<ASNExpr> indexes){
-        var newType=new IRType(returnType,irBuilder);
-        var varSize=new IRVar(newType.deref().getSize(), IRType.Genre.I32 );
-        var arrayDim=indexes.size()- newArray.newDim;
-        if(arrayDim ==1){
-            var lengthVar= indexes.get(0).irGeneration(irBuilder,irFunction);
-            var callIns=new IRCall("__MALLOC_ARRAY");
+    IRVar arrayGeneration(IRBuilder irBuilder, IRFunction irFunction,IRType baseType,int dim, List<ASNExpr> indexes,int startIndex){
+        var widthVar=new IRVar(baseType.getSize(), IRType.Genre.I32);
+        var sizeVar = indexes.get(startIndex).irGeneration(irBuilder,irFunction);
+        ++irFunction.localVarIndex;
+        var lenVar=new IRVar(IRType.new_i32(), irFunction.localVarIndex);
+        irFunction.addIns(new IRCalc(widthVar,sizeVar,lenVar, IRCalc.IROp.star));
+        irFunction.addIns(new IRCalc(lenVar,new IRVar(4, IRType.Genre.I32),lenVar, IRCalc.IROp.plus));
+        var callIns=new IRCall("__MALLOC");
+        ++irFunction.localVarIndex;
+        var mallocPtr=new IRVar(IRType.new_i8_ptr(), irFunction.localVarIndex);
+        callIns.paras.add(lenVar);
+        callIns.returnVar=mallocPtr;
+        irFunction.addIns(callIns);
+        ++irFunction.localVarIndex;
+        var intPtr=new IRVar(IRType.new_i32ptr(), irFunction.localVarIndex);
+        irFunction.addIns(new IRBitcast(intPtr,mallocPtr));
+        irFunction.addIns(new IRStore(intPtr,sizeVar));
+        irFunction.addIns(new IRCalc(intPtr,new IRVar(4, IRType.Genre.I32),intPtr, IRCalc.IROp.plus));
+        ++irFunction.localVarIndex;
+        var srcVar=new IRVar(new IRType(baseType), irFunction.localVarIndex);
+        srcVar.type.dim+=dim+ newArray.newDim;
+        irFunction.addIns(new IRBitcast(srcVar,intPtr));
+        if(dim>1){
+            IRBlock conditionBlock=new IRBlock();
+            IRBlock bodyBlock=new IRBlock();
+            IRBlock forwardBlock=new IRBlock();
             ++irFunction.localVarIndex;
-            callIns.returnVar=new IRVar(new IRType(returnType,irBuilder), irFunction.localVarIndex);
-            callIns.paras.add(varSize);
-            callIns.paras.add(lengthVar);
-            irFunction.addIns(callIns);
-            return callIns.returnVar;
-        }else {
+            var iter=new IRVar(IRType.new_i32(), irFunction.localVarIndex);
+            irFunction.addIns(new IRLoad(iter,new IRVar(0, IRType.Genre.I32)));
+            irFunction.addIns(new IRBr(conditionBlock));
+            irFunction.curBlock=conditionBlock;
+            irFunction.blocks.add(conditionBlock);
             ++irFunction.localVarIndex;
-            var callIns1=new IRCall("__MALLOC_ARRAY");
-            callIns1.returnVar=new IRVar(IRType.new_i32ptr(), irFunction.localVarIndex);
-            callIns1.paras.add(new IRVar(4, IRType.Genre.I32));
-            callIns1.paras.add(new IRVar(arrayDim, IRType.Genre.I32));
-            irFunction.addIns(callIns1);
-            var srcVar=callIns1.returnVar;
-            for(int i=0;i<indexes.size();++i){
-                if(indexes.get(i)==null) break;
-                var getIndexIns=new IRGetPtr();
-                getIndexIns.indexes.add(new IRVar(i, IRType.Genre.I32));
-                getIndexIns.src=srcVar;
-                ++irFunction.localVarIndex;
-                var desVar=new IRVar(IRType.new_i32(), irFunction.localVarIndex);
-                getIndexIns.des=desVar;
-                irFunction.addIns(getIndexIns);
-                var indexVar=indexes.get(i).irGeneration(irBuilder,irFunction);
-                var storeIns=new IRStore(desVar,indexVar);
-                irFunction.addIns(storeIns);
-            }
-            var callIns2=new IRCall("__MALLOC_ARRAY_MUL");
+            var condVar=new IRVar(IRType.new_i1(), irFunction.localVarIndex);
+            irFunction.addIns(new IRCalc(iter,sizeVar,condVar, IRCalc.IROp.less));
+            irFunction.addIns(new IRCondBr(condVar,bodyBlock,forwardBlock));
+            irFunction.blocks.add(bodyBlock);
+            irFunction.curBlock=bodyBlock;
             ++irFunction.localVarIndex;
-            callIns2.returnVar= new IRVar(IRType.new_i8_ptr(), irFunction.localVarIndex);
-            callIns2.paras.add(varSize);
-            callIns2.paras.add(new IRVar(arrayDim, IRType.Genre.I32));
-            callIns2.paras.add(srcVar);
-            irFunction.addIns(callIns2);
-            var castIns=new IRBitcast();
-            castIns.srcVar=callIns2.returnVar;
-            castIns.desType=new IRType(returnType,irBuilder);
-            ++irFunction.localVarIndex;
-            castIns.returnVar=new IRVar(castIns.desType, irFunction.localVarIndex);
-            irFunction.addIns(castIns);
-            return castIns.returnVar;
+            var ptrVar=new IRVar(new IRType(srcVar.type), irFunction.localVarIndex);
+            ptrVar.type.dim--;
+            var getPtrIns=new IRGetPtr();
+            getPtrIns.src=srcVar;
+            getPtrIns.des=ptrVar;
+            getPtrIns.indexes.add(iter);
+            irFunction.addIns(getPtrIns);
+            irFunction.addIns(new IRStore(ptrVar,arrayGeneration(irBuilder,irFunction,baseType,dim-1,indexes,startIndex+1)));
+            irFunction.addIns(new IRCalc(iter,new IRVar(1, IRType.Genre.I32),iter, IRCalc.IROp.plus));
+            irFunction.addIns(new IRBr(conditionBlock));
+            irFunction.curBlock=forwardBlock;
+            irFunction.blocks.add(forwardBlock);
         }
+        return srcVar;
     }
 }

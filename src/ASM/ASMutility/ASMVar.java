@@ -13,8 +13,7 @@ public class ASMVar {
     public ASMGenre genre;
     public regName reg;
     int cnt;
-    public boolean ifAlloca=false;
-    public boolean ifTmp;
+    public boolean ifTmp=false;
 
     public ASMVar(){
         cnt=++gCnt;

@@ -9,7 +9,7 @@ public class IRAlloca extends IRIns{
     public IRType allocaType;
 
     public IRAlloca(IRVar irVar_) {
-        irVar = new IRVar(irVar_);
+        irVar=irVar_;
         allocaType=irVar.type.deref();
     }
 

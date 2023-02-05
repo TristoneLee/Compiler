@@ -12,6 +12,6 @@ public class ASMJ extends ASMIns {
     }
 
     public String toString(){
-        return String.format("j\t%s",dest.id());
+        return String.format("j\t.%s",dest.id());
     }
 }

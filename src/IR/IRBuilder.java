@@ -50,6 +50,7 @@ public class IRBuilder {
             return constStringMap.get(srcString);
         }else {
             IRVar newVar=new IRVar(IRType.new_i8_ptr(),"str"+constStringCount);
+            newVar.ifStr=true;
             constStringMap.put(srcString,newVar);
             return newVar;
         }

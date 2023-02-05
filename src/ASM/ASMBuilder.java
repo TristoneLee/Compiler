@@ -45,13 +45,13 @@ public class ASMBuilder {
             }
             out.print('\n');
         }
-        out.print("\t.section\t.sbss\n");
+        out.print("\t.section\t.data\n");
         for(var globVar:globVars){
             out.printf("\t.globl %s\n%s:\n\t.word\t0\n",globVar.name,globVar.name);
         }
         out.print("\t.section .rodata\n");
         constStringMap.forEach((s,var)->{
-            out.printf("%s:\n\t.asciz\t%s\n", toLiteral(var.name),s);
+            out.printf("%s:\n\t.string\t%s\n", toLiteral(var.name),s);
         });
     }
 

@@ -34,11 +34,11 @@ public class Compiler {
             astBuilder.check();
             var irBuilder= new IRBuilder(astBuilder);
             irBuilder.print();
-            var output=new PrintStream("output.s");
+            var output=new PrintStream("test.s");
             var asmBuilder=new ASMBuilder(irBuilder);
             asmBuilder.setStream(output);
             asmBuilder.print();
-            var buildInPrinter=new BuildInPrinter(new PrintStream("buildin.s"));
+            var buildInPrinter=new BuildInPrinter(new PrintStream("builtin.s"));
             buildInPrinter.print();
 //            System.out.println("Success!");
         }catch (CompileException exception){
@@ -51,3 +51,5 @@ public class Compiler {
 //        }
     }
 }
+
+

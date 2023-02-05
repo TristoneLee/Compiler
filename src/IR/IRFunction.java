@@ -21,16 +21,17 @@ import java.util.List;
 public class IRFunction {
     public String funcName;
     public List<IRVar> paras = new ArrayList<>();
-    public Integer localVarIndex = 0;
+    public Integer localVarIndex = -1;
     public List<IRBlock> blocks = new ArrayList<>();
-    FunctionEntity asnEntity;
-    ASNFuncDec asnFuncDec;
+    public FunctionEntity asnEntity;
+    public ASNFuncDec asnFuncDec;
     public IRBlock curBlock;
     public boolean ifMethod;
     public boolean ifConstructor;
     public IRStruct struct;
     public IRBlock breakBlock;
     public IRBlock continueBlock;
+    public int allocaCnt=0;
 
     public IRFunction() {
     }
@@ -48,6 +49,7 @@ public class IRFunction {
         ifMethod = true;
         struct = struct_;
         asnFuncDec = asnFuncDec_;
+        asnEntity=asnFuncDec_.entity;
         if(asnFuncDec_ instanceof ASNClassConstructorDec) ifConstructor=true;
         localVarIndex = -1;
         paras = new ArrayList<>();

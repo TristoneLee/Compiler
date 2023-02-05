@@ -5,6 +5,8 @@ A pair used to denote the value in IR distinguishing immediate number and value 
  */
 
 
+import java.util.Objects;
+
 public class IRVar {
     public enum IRVarGenre {GLOBAL, LOCAL, LITERAL}
 
@@ -14,6 +16,7 @@ public class IRVar {
     public String name = null;
     public int index = -1;
     public Integer literal = null;
+    public boolean ifStr;
 
 
     public IRVar(IRVarGenre genre_) {
@@ -44,13 +47,30 @@ public class IRVar {
         literal = literal_;
     }
 
-    public IRVar(IRVar rhs) {
-        if(rhs==null) return;
-        type = new IRType(rhs.type, false);
-        genre = rhs.genre;
-        name = rhs.name;
-        index = rhs.index;
-        literal = rhs.literal;
+//    public IRVar(IRVar rhs) {
+//        if(rhs==null) return;
+//        type = new IRType(rhs.type, false);
+//        genre = rhs.genre;
+//        name = rhs.name;
+//        index = rhs.index;
+//        literal = rhs.literal;
+//        ifStr= rhs.ifStr;
+//    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof IRVar)) return false;
+        else switch (genre){
+            case LOCAL -> {
+                return this.index == ((IRVar) obj).index;
+            }
+            case GLOBAL -> {
+                return this.name.equals(((IRVar) obj).name);
+            }
+            default -> {
+                return false;
+            }
+        }
     }
 
     public String toString() {

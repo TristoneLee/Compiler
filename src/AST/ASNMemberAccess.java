@@ -98,12 +98,10 @@ public class ASNMemberAccess extends ASNExpr {
             irFunction.addIns( curIns);
             for (var arrayId : arrayIds) {
                 var getPtrIns = new IRGetPtr();
-                getPtrIns.src = new IRVar(returnVar);
+                getPtrIns.src = returnVar;
                 returnVar = new IRVar(IRType.new_i32(), irFunction.localVarIndex);
                 getPtrIns.indexes.add(arrayId.irGeneration(irBuilder, irFunction));
                 getPtrIns.des = returnVar;
-                ++irFunction.localVarIndex;
-                returnVar = new IRVar(IRType.new_i32(), irFunction.localVarIndex);
                 irFunction.addIns( getPtrIns);
             }
             if(ifLoad){
@@ -119,11 +117,11 @@ public class ASNMemberAccess extends ASNExpr {
             var curIns = new IRCall();
             ++irFunction.localVarIndex;
             curIns.returnVar = new IRVar(new IRType(returnType, irBuilder), irFunction.localVarIndex);
-            if (funcName.equals("size") ) curIns.funcName = "__GET__SIZE";
+            if (funcName.equals("size") ) curIns.funcName = "__GET_SIZE";
             else if(funcName.equals("length")) curIns.funcName="__STRING_LENGTH";
             else if (funcName.equals("parseInt")) curIns.funcName = "__STRING_PARSE_INT";
             else if (funcName.equals("ord")) curIns.funcName = "__STRING_ORD";
-            else if (funcName.equals("substring")) curIns.funcName = "__SUBSTRING";
+            else if (funcName.equals("substring")) curIns.funcName = "__STRING__SUBSTRING";
             else curIns.funcName = funcName;
             curIns.paras.add(srcVar);
             for (var para : parameters) {

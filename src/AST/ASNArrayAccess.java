@@ -60,7 +60,7 @@ public class ASNArrayAccess extends ASNExpr {
         var srcVar = idNode.irGeneration(irBuilder,irFunction);
         for (var arrayId : arrayIds) {
             var getPtrIns = new IRGetPtr();
-            getPtrIns.src = new IRVar(srcVar);
+            getPtrIns.src = srcVar;
             getPtrIns.indexes.add(arrayId.irGeneration(irBuilder, irFunction));
             ++irFunction.localVarIndex;
             srcVar = new IRVar(new IRType(srcVar.type).deref(), irFunction.localVarIndex);

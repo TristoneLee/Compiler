@@ -9,8 +9,8 @@ public class IRStore extends IRIns{
     public IRStore(){};
 
     public IRStore(IRVar des_,IRVar src_){
-        des=new IRVar(des_);
-        src=new IRVar(src_);
+        des=des_;
+        src=src_;
     }
 
     public String toString(){

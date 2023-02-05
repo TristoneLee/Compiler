@@ -14,9 +14,9 @@ public class IRCalc extends IRIns{
     public IRVar des;
 
     public IRCalc(IRVar lhsVar_, IRVar rhsVar_, IRVar desVar_,IROp op_) {
-        rhs=new IRVar(rhsVar_);
-        lhs=new IRVar(lhsVar_);
-        des=new IRVar(desVar_);
+        rhs=rhsVar_;
+        lhs=lhsVar_;
+        des=desVar_;
         op=op_;
     }
 
